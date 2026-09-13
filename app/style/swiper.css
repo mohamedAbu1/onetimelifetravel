@@ -1,0 +1,26 @@
+/* =========================
+   Swiper Customization (Theme-based)
+   ========================= */
+
+/* ✅ تغيير لون الأسهم */
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--title) !important; /* اللون من الثيم */
+  transition: all 0.3s ease !important;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: var(--color-hover) !important; /* اللون عند hover من الثيم */
+}
+
+/* ✅ تغيير لون النقاط */
+.swiper-pagination-bullet {
+  background: var(--title) !important; /* اللون من الثيم */
+  opacity: 0.6; /* شفافية بسيطة */
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--color-hover) !important; /* نفس اللون لكن أوضح */
+  opacity: 1;
+}

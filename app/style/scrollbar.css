@@ -1,0 +1,21 @@
+/* =========================
+   Scrollbar Styles (Theme-based)
+   ========================= */
+::-webkit-scrollbar {
+  width: 8px;              /* عرض الشريط */
+  height: 8px;             /* لو فيه scroll أفقي */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important; /* خلفية الشريط */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sub-text) !important;     /* اللون من الثيم */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hover) !important; /* اللون عند hover من الثيم */
+}

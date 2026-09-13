@@ -1,0 +1,95 @@
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useTheme } from "@/context/ThemeContext";
+import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
+
+// دالة بسيطة لتحويل النص لـ Base64
+const encodeQuery = (queryObj) => {
+  const str = JSON.stringify(queryObj);
+  return Buffer.from(str).toString("base64");
+};
+
+export default function NavBar() {
+  const { theme, themeName } = useTheme();
+  const pathname = usePathname();
+  const { t } = useTranslation("header");
+
+  const navItems = ["home", "trips", "about", "contact", "privacyPolicy"];
+
+  const segments = pathname.split("/").filter(Boolean);
+  const langPrefix = segments[0];
+  const normalizedPath = "/" + segments.slice(1).join("/");
+
+  return (
+    <motion.nav
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+      }}
+      className="hidden items-center gap-2 rounded-full border border-[var(--logo-border)]/20 bg-black/5 p-1 lg:flex"
+    >
+      {navItems.map((item) => {
+        let path;
+        if (item === "home") {
+          path = "/";
+        } else if (item === "trips") {
+          const encoded = encodeQuery({
+            city: "all",
+            category: "all",
+            group_price: "All",
+            popular: true,
+          });
+          path = `/trips?data=${encoded}`;
+        } else {
+          path = `/${item}`;
+        }
+
+        const isActive =
+          (item === "home" && normalizedPath === "/") ||
+          (item === "privacyPolicy" &&
+            (normalizedPath.startsWith("/privacyPolicy") ||
+              normalizedPath.startsWith("/cancellationPolicy"))) ||
+          (item !== "home" &&
+            item !== "privacyPolicy" &&
+            normalizedPath.startsWith(`/${item}`));
+
+        return (
+          <motion.div
+            key={item}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <Link
+              href={`/${langPrefix}${path}`}
+              className={`relative group px-4 py-2 rounded-lg transition-all duration-300 ${
+                isActive
+                ? "bg-[var(--logo-border)] text-[#17343d] font-bold shadow-sm"
+                : themeName === "dark"
+                    ? "text-white/70 hover:bg-white/10 hover:text-white"
+                    : "text-[#52666b] hover:bg-white/60 hover:text-[#17343d]"
+              }`}
+            >
+              <span>{t(item)}</span>
+              <span
+                className={`absolute left-0 -bottom-1 h-[3px] ${theme.iconInactive} rounded-full transition-all duration-300 ${
+                  isActive ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
+              {isActive && (
+                <span
+                className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-[var(--logo-border)] shadow-md animate-pulse"
+                ></span>
+              )}
+            </Link>
+          </motion.div>
+        );
+      })}
+    </motion.nav>
+  );
+}

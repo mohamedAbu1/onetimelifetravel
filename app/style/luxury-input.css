@@ -1,0 +1,115 @@
+/* =========================
+   Luxury Input Styles (Theme-based)
+   ========================= */
+.luxury-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 14px;
+  padding: 19px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--title); /* النص الذهبي من الثيم */
+  background: var(--input-hover-bg); /* خلفية زجاجية من الثيم */
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--title); /* حدود ذهبية من الثيم */
+  transition: all 0.3s ease;
+}
+
+.luxury-input:hover {
+  border-color: var(--title);
+  box-shadow: 0 0 12px var(--focus-ring); /* ظل من الثيم */
+}
+
+.luxury-label {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--title); /* لون من الثيم */
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+.luxury-label.active {
+  top: 6px;
+  font-size: 12px;
+  color: var(--title);
+}
+
+.luxury-value {
+  flex: 1;
+  color: var(--color); /* النص الأساسي من الثيم */
+  font-weight: 600;
+}
+
+.luxury-icon {
+  margin-left: auto;
+  font-size: 18px;
+  color: var(--icon); /* أيقونة من الثيم */
+}
+
+
+.luxury-value {
+  flex: 1;
+  color: var(--color);
+  font-weight: 600;
+}
+
+.luxury-icon {
+  margin-left: auto;
+  font-size: 18px;
+  color: var(--color);
+}
+.hero-text {
+  font-size: 5rem;
+  font-weight: 800;
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--title); /* بدل الأبيض الثابت */
+  text-shadow: 2px 2px 6px var(--shadow);
+}
+
+/* حجم أصغر في اللاب توب */
+@media (max-width: 1408px) {
+  .hero-text {
+    font-size: 3.5rem;
+  }
+}
+
+.hero-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  -webkit-text-stroke: 1px var(--title);
+  text-shadow: 2px 2px 6px var(--shadow);
+}
+
+.hero-p {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  -webkit-text-stroke: 1px var(--heading);
+  text-shadow: 2px 2px 6px var(--shadow);
+}
+
+.sc-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-align: left;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  -webkit-text-stroke: 1px var(--heading);
+  text-shadow: 2px 2px 6px var(--shadow);
+}

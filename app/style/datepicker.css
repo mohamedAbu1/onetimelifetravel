@@ -1,0 +1,105 @@
+/* =========================
+   React DatePicker Customization (Theme-based)
+   ========================= */
+
+/* خلفية الجدول */
+.react-datepicker {
+  background: var(--card-bg) !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--card-border) !important;
+  backdrop-filter: blur(var(--card-blur)) !important;
+  padding: 12px !important;
+  z-index: 999 !important;
+  box-shadow: var(--shadow) !important;
+}
+
+/* رأس الجدول (الشهور والسنة) */
+.react-datepicker__header {
+  background: var(--background) !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--title) !important;
+  border-radius: 12px !important;
+  padding: 8px !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+/* أسماء الأيام */
+.react-datepicker__day-name {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--title) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  background: var(--input-hover-bg) !important;
+  border-radius: 6px !important;
+  padding: 4px !important;
+}
+
+/* الأيام */
+.react-datepicker__day {
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--text) !important;
+  transition: all 0.25s ease !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* اليوم الحالي */
+.react-datepicker__day--today {
+  border: 1px solid var(--border) !important;
+  color: var(--title) !important;
+  font-weight: 700 !important;
+  background: var(--input-hover-bg) !important;
+}
+
+/* اليوم المختار */
+.react-datepicker__day--selected {
+  background: linear-gradient(to right, var(--title), var(--button-primary-hover-bg)) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0 12px var(--focus-ring) !important;
+}
+
+/* Hover */
+.react-datepicker__day:hover {
+  background: var(--button-primary-hover-bg) !important;
+  color: var(--button-primary-hover-text) !important;
+  transform: scale(1.05) !important;
+}
+
+/* الأيام الخاصة */
+.special-day {
+  background: linear-gradient(to right, var(--title), var(--button-primary-hover-bg)) !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  position: relative;
+}
+.special-day::after {
+  content: "★";
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 12px;
+  color: #fff;
+}
+
+/* الأيام الممنوعة */
+.react-datepicker__day--disabled {
+  color: var(--icon-inactive) !important;
+  background: rgba(0,0,0,0.1) !important;
+  border-radius: 8px;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+.react-datepicker__day--disabled:hover {
+  background: rgba(0,0,0,0.15) !important;
+  color: #aaa !important;
+  transform: none !important;
+  box-shadow: none !important;
+}

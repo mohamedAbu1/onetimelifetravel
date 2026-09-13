@@ -1,0 +1,37 @@
+/* =========================
+   MUI Select Styles (Theme-based)
+   ========================= */
+
+/* النص داخل الـ Select */
+.MuiSelect-select {
+  color: var(--title) !important; /* النص من الثيم */
+  font-weight: 600 !important;
+}
+
+/* السهم */
+.MuiSelect-icon {
+  color: var(--icon-inactive) !important; /* أيقونة غير نشطة من الثيم */
+  transition: all 0.3s ease !important;
+}
+.MuiSelect-icon:hover {
+  color: var(--icon-hover) !important; /* أيقونة عند hover من الثيم */
+}
+
+/* القائمة المنسدلة (MenuItem) */
+.MuiMenuItem-root {
+  color: var(--input-text) !important; /* النص داخل القائمة من الثيم */
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+.MuiMenuItem-root:hover {
+  background: var(--input-hover-bg) !important; /* خلفية عند hover من الثيم */
+  color: var(--color-hover) !important; /* لون النص عند hover من الثيم */
+}
+.MuiMenuItem-root.Mui-selected {
+  background: linear-gradient(to right, var(--title), var(--color-hover)) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+.MuiMenuItem-root.Mui-selected:hover {
+  background: linear-gradient(to right, var(--color-hover), var(--heading)) !important;
+}
