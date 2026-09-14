@@ -61,6 +61,12 @@ export async function POST(req) {
         [messagesId, user_id, baseUrl, sender_type, user_name, user_image, reply_to ?? null, admin_id],
       );
 
+      await db.query(
+        `INSERT INTO notifications (id, event_type, message, user_id, user_name, user_image, type, created_at, is_read)
+         VALUES (?, 'message', ?, ?, ?, ?, 'message', NOW(), 0)`,
+        [uuidv4(), sender_type === "admin" ? `New reply from One Time Life Travel` : `New message from ${user_name}`, user_id, user_name, user_image],
+      );
+
       const newMessage = {
         id: messagesId,
         user_id,
@@ -79,9 +85,10 @@ export async function POST(req) {
 
     // 📌 لو الرسالة نصية
     const body = await req.json();
-    const { content, sender_type = "user", reply_to = null } = body;
-    const user_id = user.id;
-    const user_name = user.name || "Unknown User";
+    const { content, sender_type: requestedSenderType = "user", reply_to = null } = body;
+    const sender_type = isAdmin(user) ? (requestedSenderType === "admin" ? "admin" : "user") : "user";
+    const user_id = isAdmin(user) ? body.user_id : user.id;
+    const user_name = sender_type === "admin" ? (user.name || "One Time Life Travel") : (user.name || "Unknown User");
     const user_image = user.avatar_url || "/default-avatar.png";
     const admin_id = isAdmin(user) ? user.id : null;
 
@@ -96,6 +103,12 @@ export async function POST(req) {
        (id, user_id, content, sender_type, user_name, user_image, reply_to, admin_id, status, created_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'sent', NOW())`,
       [messagesId, user_id, content, sender_type, user_name, user_image, reply_to, admin_id],
+    );
+
+    await db.query(
+      `INSERT INTO notifications (id, event_type, message, user_id, user_name, user_image, type, created_at, is_read)
+       VALUES (?, 'message', ?, ?, ?, ?, 'message', NOW(), 0)`,
+      [uuidv4(), sender_type === "admin" ? "New reply from One Time Life Travel" : `New message from ${user_name}`, user_id, user_name, user_image],
     );
 
     const newMessage = {

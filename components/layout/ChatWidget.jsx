@@ -12,7 +12,7 @@ import { useChat } from "@/context/ChatContext";
 import { useTranslation } from "react-i18next";
 export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
   const { theme, themeName } = useTheme();
-  const { messages, sendMessage, fetchMessages, markMessageSeen } =
+  const { messages, sendMessage, fetchMessages, markMessageSeen, setMessages } =
     useMessages();
   const [text, setText] = useState("");
   const { userData } = useAuth(); // ✅ بيانات من AuthContext
@@ -128,16 +128,8 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     const data = await res.json();
     if (!data.content) return;
 
-    // ✅ الرسالة الجديدة تدخل في الـ context
-    await sendMessage({
-      user_id: userData?.id,
-      user_name: userData?.name,
-      user_image:
-        userData?.avatar_url || userData?.image || "/default-avatar.png",
-      content: data.content, // الرابط النهائي للصورة
-      sender_type: "user",
-      status: "sent",
-    });
+    // The multipart API already stores and returns the message; do not send it again.
+    setMessages((prev) => [...prev.filter((message) => String(message.id) !== String(data.id)), data]);
   };
 
   return (
@@ -149,7 +141,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label={tc("openChat")}
-          className={`chat-fab fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full border border-[#e0bf78]/70 shadow-[0_16px_45px_rgba(0,0,0,.4)] transition sm:bottom-6 sm:right-6 ${theme.buttonPrimary}`}
+          className={`chat-fab fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-full border border-[#e0bf78]/70 shadow-[0_16px_45px_rgba(0,0,0,.4)] transition sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-6 ${theme.buttonPrimary}`}
         >
           <span className="chat-fab-ring" />
           <FaComments size={22} color="#fff" />

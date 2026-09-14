@@ -23,10 +23,11 @@ export function MessageProvider({ children }) {
         return;
       }
       const data = await res.json();
+      const incoming = Array.isArray(data) ? data : data.messages || [];
       setMessages((prev) => {
-        const ids = new Set(prev.map((m) => m.id));
-        const merged = [...prev, ...data.filter((m) => !ids.has(m.id))];
-        return merged;
+        const merged = new Map(prev.map((message) => [String(message.id), message]));
+        incoming.forEach((message) => merged.set(String(message.id), { ...merged.get(String(message.id)), ...message }));
+        return Array.from(merged.values()).sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
       });
     } catch (err) {
       console.error("❌ Error fetching messages:", err.message);
@@ -112,13 +113,7 @@ export function MessageProvider({ children }) {
           ),
         );
       } else {
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === tempMessage.id
-              ? { ...msg, ...data, status: "sent" }
-              : msg,
-          ),
-        );
+        setMessages((prev) => [...prev.filter((msg) => msg.id !== tempMessage.id && String(msg.id) !== String(data.id)), { ...data, status: "sent" }]);
       }
 
       return data;
@@ -165,6 +160,8 @@ export function MessageProvider({ children }) {
   useEffect(() => {
     if (userData?.id) {
       fetchMessages(userData.id);
+      const interval = setInterval(() => fetchMessages(userData.id), 5000);
+      return () => clearInterval(interval);
     }
   }, [userData?.id,open]);
 

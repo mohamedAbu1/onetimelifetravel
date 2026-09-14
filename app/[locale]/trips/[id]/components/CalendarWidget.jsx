@@ -4,11 +4,12 @@ import { useState } from "react";
 import CalendarBooking from "./components/CalendarBooking";
 import BookingSummaryCard from "./components/BookingSummaryCard";
 import { useTranslation } from "react-i18next";
-import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { applySeasonalDiscount } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 export default function CalendarWidget({ trip, id }) {
   const { t } = useTranslation("common");
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
   const [participants, setParticipants] = useState(0);
   const [childrenCount, setChildrenCount] = useState(0);
   const [checkInPrice, setCheckInPrice] = useState(null);

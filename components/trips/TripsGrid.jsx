@@ -9,7 +9,8 @@ import { usePurchase } from "@/context/PurchaseContext";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/context/LanguageContext";
 import { useCurrency } from "@/context/CurrencyContext";
-import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { applySeasonalDiscount } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
   const { rates } = useCurrency();
   const { t } = useTranslation("trips");
   const { lang } = useLanguage();
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
 
   const convertPrice = (price, tripCurrency) => {
     const amount = Number(price) || 0;

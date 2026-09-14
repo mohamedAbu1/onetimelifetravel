@@ -3,7 +3,8 @@ import { FaShoppingCart, FaMoneyBillWave, FaUsers } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import { usePurchase } from "@/context/PurchaseContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { applySeasonalDiscount } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 export default function TripDetails({ trip, groupSize }) {
   const { theme } = useTheme(); // ✅ جلب الثيم
@@ -11,7 +12,7 @@ export default function TripDetails({ trip, groupSize }) {
   const { lang } = useLanguage(); // ✅ اللغة الحالية
 
   // ✅ حساب السعر للفرد حسب العملة
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
   let pricePerPerson = applySeasonalDiscount(trip.group_price, seasonalEvent);
   if (currency === "EUR" && trip.currency === "USD") {
     pricePerPerson = (pricePerPerson * 0.85).toFixed(2);

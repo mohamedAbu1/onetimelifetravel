@@ -15,7 +15,7 @@ export function MessageProvider({ children }) {
     try {
       const res = await fetch(`/api/messages?userId=${userId}`);
       const data = await res.json();
-      setMessages(Array.isArray(data) ? data : []);
+      setMessages(Array.isArray(data) ? data : data.messages || []);
     } catch (err) {
       console.error("❌ Error fetching messages:", err.message);
     } finally {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
-import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
+import { getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 // ✅ تحديث حالة الإشعار إلى مقروء
 export async function PUT(req, { params }) {
@@ -10,7 +10,10 @@ export async function PUT(req, { params }) {
     const db = await connectDB();
     const { id } = await params; // نأخذ id من الرابط
 
-    await db.execute("UPDATE notifications SET is_read = 1 WHERE id = ?", [id]);
+    await db.execute(
+      isAdmin(user) ? "UPDATE notifications SET is_read = 1 WHERE id = ?" : "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?",
+      isAdmin(user) ? [id] : [id, user.id],
+    );
 
     return NextResponse.json({ success: true, message: "تم تحديث الإشعار إلى مقروء" });
   } catch (error) {

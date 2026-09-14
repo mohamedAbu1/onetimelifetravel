@@ -10,7 +10,8 @@ import { useTrip } from "@/context/TripContext";
 import { usePurchase } from "@/context/PurchaseContext";
 import { useAuth } from "@/context/AuthContext";
 import { useCurrency } from "@/context/CurrencyContext";
-import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { applySeasonalDiscount } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 export default function TopTripsSection() {
   const { theme } = useTheme();
@@ -19,7 +20,7 @@ export default function TopTripsSection() {
   const { trips, fetchTrips, loadingTrips } = useTrip();
   const { currency, purchases = [] } = usePurchase();
   const { rates } = useCurrency();
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();

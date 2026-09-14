@@ -1,15 +1,18 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 const NotificationsContext = createContext();
 
 export function NotificationsProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { userData } = useAuth();
 
   // استدعاء API لجلب الإشعارات
   useEffect(() => {
     async function fetchNotifications() {
+      if (!userData?.id) { setNotifications([]); setLoading(false); return; }
       try {
         const res = await fetch("/api/notifications");
         const data = await res.json();
@@ -23,7 +26,9 @@ export function NotificationsProvider({ children }) {
       }
     }
     fetchNotifications();
-  }, [notifications]);
+    const interval = setInterval(fetchNotifications, 15000);
+    return () => clearInterval(interval);
+  }, [userData?.id, userData?.role]);
 
   // تحديث حالة الإشعار إلى مقروء
 const markAsRead = async (id) => {

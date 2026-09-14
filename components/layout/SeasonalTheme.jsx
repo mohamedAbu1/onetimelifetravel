@@ -31,12 +31,13 @@ export default function SeasonalTheme() {
       setEvent(active);
       setPreviewMode(Boolean(previewEvent || previewKey === "picker"));
       document.documentElement.dataset.season = active?.theme || "default";
+      window.dispatchEvent(new Event("seasonal-theme-change"));
     };
     try {
       const cached = window.localStorage.getItem("seasonal-events-settings");
       if (cached) apply(JSON.parse(cached)); else apply(null);
     } catch { apply(null); }
-    fetch("/api/seasonal-events").then((response) => response.json()).then((data) => apply(data.events)).catch(() => {});
+    fetch(`/api/seasonal-events?_=${Date.now()}`, { cache: "no-store" }).then((response) => response.json()).then((data) => apply(data.events)).catch(() => {});
     return () => { cancelled = true; delete document.documentElement.dataset.season; };
   }, [pathname]);
 

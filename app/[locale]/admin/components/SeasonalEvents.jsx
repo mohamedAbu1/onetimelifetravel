@@ -13,7 +13,7 @@ export default function SeasonalEvents({ themeName = "dark" }) {
   const [status, setStatus] = useState({ loading: true, saving: "", message: "" });
 
   useEffect(() => {
-    fetch("/api/seasonal-events")
+    fetch(`/api/seasonal-events?_=${Date.now()}`, { cache: "no-store" })
       .then((response) => response.json())
       .then((data) => setEvents(data.events || []))
       .catch(() => setStatus({ loading: false, saving: "", message: "Unable to load seasonal settings." }))

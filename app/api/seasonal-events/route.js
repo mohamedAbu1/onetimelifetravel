@@ -3,6 +3,8 @@ import { connectDB } from "@/lib/db";
 import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 import { getSeasonalEvents } from "@/lib/seasonalEvents";
 
+export const dynamic = "force-dynamic";
+
 const table = `
   CREATE TABLE IF NOT EXISTS seasonal_events (
     event_key VARCHAR(64) PRIMARY KEY,

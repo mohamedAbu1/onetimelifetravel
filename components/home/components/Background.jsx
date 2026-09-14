@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
-import { getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 export default function Background() {
   const { themeName } = useTheme();
   const [index, setIndex] = useState(0);
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
 
   const darkImages = [
     "/HomePageImage/banner.62f1bfcb.jpg",

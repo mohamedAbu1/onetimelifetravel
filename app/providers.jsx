@@ -31,12 +31,12 @@ export default function Providers({ children }) {
         <ThemeProvider>
           <SeasonalTheme />
           <Suspense fallback={<div>Loading…</div>}>
-            <NotificationsProvider>
-              <CurrencyProvider>
+            <CurrencyProvider>
                 <QueryProvider>
                   <DataProvider>
                     <AuthProvider>
-                      <UserProvider>
+                      <NotificationsProvider>
+                        <UserProvider>
                         <SecurityProvider>
                           <TripProvider>
                             <CitiesCategoriesProvider>
@@ -61,12 +61,12 @@ export default function Providers({ children }) {
                             </CitiesCategoriesProvider>
                           </TripProvider>
                         </SecurityProvider>
-                      </UserProvider>
+                        </UserProvider>
+                      </NotificationsProvider>
                     </AuthProvider>
                   </DataProvider>
                 </QueryProvider>
-              </CurrencyProvider>
-            </NotificationsProvider>
+                </CurrencyProvider>
           </Suspense>
         </ThemeProvider>
       </I18nextProvider>

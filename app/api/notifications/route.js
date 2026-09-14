@@ -62,12 +62,12 @@ export async function GET(req) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return unauthorized();
-    if (!isAdmin(user)) return forbidden();
     const db = await connectDB();
     const [rows] = await db.execute(
-      `SELECT id, admin_id, event_type, user_id, message, type, user_name, user_email, user_image, created_at, is_read, trip_id 
-       FROM notifications 
-       ORDER BY created_at DESC`
+      isAdmin(user)
+        ? `SELECT id, admin_id, event_type, user_id, message, type, user_name, user_email, user_image, created_at, is_read, trip_id FROM notifications ORDER BY created_at DESC`
+        : `SELECT id, admin_id, event_type, user_id, message, type, user_name, user_email, user_image, created_at, is_read, trip_id FROM notifications WHERE user_id = ? ORDER BY created_at DESC`,
+      isAdmin(user) ? [] : [user.id],
     );
 
     return NextResponse.json({ success: true, notifications: rows });

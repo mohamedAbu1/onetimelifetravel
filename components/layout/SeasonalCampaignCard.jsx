@@ -4,12 +4,12 @@ import Link from "next/link";
 import { FaArrowRight, FaCompass } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "./useSeasonalEvent";
 
 export default function SeasonalCampaignCard() {
   const pathname = usePathname();
   const { i18n } = useTranslation();
-  const event = getSeasonalEventForDisplay();
+  const event = useSeasonalEvent();
 
   if (!event || pathname.includes("/admin")) return null;
 

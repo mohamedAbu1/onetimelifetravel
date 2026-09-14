@@ -5,7 +5,8 @@ import { usePurchase } from "@/context/PurchaseContext";
 import { motion } from "framer-motion";
 import { useCurrency } from "@/context/CurrencyContext"; // ✅ استدعاء الكونتكست
 import { useTranslation } from "react-i18next";
-import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
+import { applySeasonalDiscount } from "@/lib/seasonalEvents";
+import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
 
 const translations = {
   en: {
@@ -69,7 +70,7 @@ export default function TripInfo({ trip, lang }) {
   const { currency } = usePurchase();
   const { rates, loading, error } = useCurrency(); // ✅ جلب أسعار العملات
   const { t: tc } = useTranslation("common");
-  const seasonalEvent = getSeasonalEventForDisplay();
+  const seasonalEvent = useSeasonalEvent();
   const t = translations[lang] || translations.en;
 
   if (loading) return <p className="text-center">⏳ {tc("loadingCurrency")}</p>;

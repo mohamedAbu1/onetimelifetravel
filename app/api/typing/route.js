@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 let typingStatus = {}; // تخزين مؤقت في الذاكرة
 
 export async function POST(req) {
+  const user = getAuthenticatedUser(req);
+  if (!user) return unauthorized();
   const { userId, isTyping, adminTyping } = await req.json();
   if (!userId) {
     return NextResponse.json({ error: "userId required" }, { status: 400 });
@@ -18,6 +21,8 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
+  const user = getAuthenticatedUser(req);
+  if (!user) return unauthorized();
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
   if (!userId) {
