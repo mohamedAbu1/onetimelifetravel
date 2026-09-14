@@ -5,10 +5,13 @@ import { FaArrowRight, FaCarSide, FaCheck, FaRoute, FaShieldAlt } from "react-ic
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation as useCommonTranslation } from "react-i18next";
+import { useState } from "react";
+import CarBookingModal from "./CarBookingModal";
 
 const benefits = ["Private door-to-door service", "Professional local drivers", "Comfort across Luxor & Aswan"];
 
 export default function CarBookingSection() {
+  const [bookingOpen, setBookingOpen] = useState(false);
   const { t } = useTranslation("home");
   const { user } = useAuth();
   const { t: tc } = useCommonTranslation("common");
@@ -27,7 +30,7 @@ export default function CarBookingSection() {
           <div className="mt-7 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             {benefits.map((benefit) => <div key={benefit} className="flex items-center gap-3 text-sm text-[var(--text)]"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--logo-border)]/50 text-[var(--logo-border)]"><FaCheck size={11} /></span>{benefit}</div>)}
           </div>
-          {user ? <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => window.dispatchEvent(new CustomEvent("openCarBookingChat"))} className="editorial-button dust-interactive mt-9 inline-flex w-fit items-center gap-3 bg-[var(--logo-border)] px-7 py-3.5 text-sm text-[#15120e]"><FaCarSide />{t("Book")}<FaArrowRight className="text-xs" /></motion.button> : <p className="mt-9 text-sm font-semibold italic text-[var(--sub-text)]">{tc("loginToBookCar")}</p>}
+          {user ? <motion.button type="button" whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setBookingOpen(true)} className="editorial-button dust-interactive mt-9 inline-flex w-fit items-center gap-3 bg-[var(--logo-border)] px-7 py-3.5 text-sm text-[#15120e]"><FaCarSide />{t("Book")}<FaArrowRight className="text-xs" /></motion.button> : <p className="mt-9 text-sm font-semibold italic text-[var(--sub-text)]">{tc("loginToBookCar")}</p>}
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.7 }} className="order-1 lg:order-2">
           <div className="car-transfer-card editorial-card relative h-full overflow-hidden rounded-[2rem] border p-2.5 sm:p-3">
@@ -41,6 +44,7 @@ export default function CarBookingSection() {
           </div>
         </motion.div>
       </div>
+      <CarBookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </section>
   );
 }

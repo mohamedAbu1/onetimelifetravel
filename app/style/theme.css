@@ -757,6 +757,23 @@ button, a, input, select, textarea { font: inherit; }
 .review-empty h3 { margin-top: 1rem; color: var(--heading); font-family: Cinzel, Georgia, serif; font-size: 1.5rem; }
 .review-empty p { margin-top: .6rem; color: var(--sub-text); line-height: 1.8; }
 .car-transfer-section { background: linear-gradient(135deg, color-mix(in srgb, var(--background) 92%, #0b2a31), var(--background)); }
+.chat-fab { isolation: isolate; background: linear-gradient(135deg, #d1b06a, #9f7840) !important; color: #15120e; font-weight: 900; }
+.chat-fab::before { position: absolute; inset: 3px; z-index: -1; border: 1px solid rgba(255,255,255,.35); border-radius: inherit; content: ""; pointer-events: none; }
+.chat-fab:hover { box-shadow: 0 18px 55px rgba(209,176,106,.3), 0 12px 35px rgba(0,0,0,.42); filter: brightness(1.06); }
+.chat-fab-ring { position: absolute; inset: -5px; z-index: -2; border: 1px solid rgba(209,176,106,.34); border-radius: inherit; animation: chat-fab-pulse 2.8s ease-out infinite; pointer-events: none; }
+.chat-fab-label { color: #17130e; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.chat-fab-badge { position: absolute; right: -.2rem; top: -.35rem; display: grid; min-width: 1.25rem; height: 1.25rem; place-items: center; border: 2px solid var(--background); border-radius: 999px; padding-inline: .25rem; color: white; background: #c94f4f; font-size: .58rem; font-weight: 900; line-height: 1; box-shadow: 0 5px 15px rgba(0,0,0,.35); }
+@keyframes chat-fab-pulse { 0%, 65%, 100% { opacity: .7; transform: scale(1); } 78% { opacity: 0; transform: scale(1.16); } }
+@media (max-width: 640px) { .chat-fab { width: 3.6rem; height: 3.6rem; padding: 0; } .chat-fab-label { display: none; } .chat-fab-badge { right: -.15rem; } }
+.car-booking-field { display: grid; gap: .45rem; color: #a9aaa1; font-size: .68rem; font-weight: 800; letter-spacing: .04em; }
+.car-booking-field > span { display: flex; align-items: center; gap: .45rem; }
+.car-booking-field > span svg { color: #d1b06a; }
+.car-booking-field input, .car-booking-field select { min-height: 3rem; width: 100%; border: 1px solid rgba(209,176,106,.25); border-radius: .8rem; padding: .7rem .8rem; background: rgba(255,255,255,.045); color: #f7f1e6; outline: 0; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+.car-booking-field input::placeholder { color: #716f67; }
+.car-booking-field select option { color: #f7f1e6; background: #101719; }
+.car-booking-field input:focus, .car-booking-field select:focus { border-color: #d1b06a; background: rgba(209,176,106,.08); box-shadow: 0 0 0 4px rgba(209,176,106,.1); }
+.car-booking-field input[type="date"], .car-booking-field input[type="time"] { color-scheme: dark; }
+.car-booking-modal { scrollbar-width: thin; scrollbar-color: rgba(209,176,106,.6) transparent; }
 .car-transfer-shell { border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); padding-block: clamp(2rem, 5vw, 4.5rem); }
 .car-transfer-copy { min-width: 0; }
 .car-transfer-copy > p:last-child { max-width: 34rem; }

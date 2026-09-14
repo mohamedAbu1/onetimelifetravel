@@ -29,7 +29,8 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     setMessageses,
   } = useChat();
     const { t } = useTranslation("home");
-    const { t: tc } = useTranslation("common");
+  const { t: tc } = useTranslation("common");
+  const unreadMessages = messages.filter((message) => message.sender_type === "admin" && message.status !== "seen").length;
 
   // ✅ جلب رسائل المستخدم
   useEffect(() => {
@@ -42,12 +43,12 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
   useEffect(() => {
     if (userData?.id && messages.length > 0) {
       messages.forEach((msg) => {
-        if (msg.sender_type === "admin" && msg.status === "sent") {
+        if (open && msg.sender_type === "admin" && msg.status === "sent") {
           markMessageSeen(msg.id);
         }
       });
     }
-  }, [userData, messages]);
+  }, [userData, messages, open]);
   // Send the onboarding message once per account, 20 seconds after login.
   useEffect(() => {
     const userId = userData?.id;
@@ -141,10 +142,13 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label={tc("openChat")}
-          className={`chat-fab fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-full border border-[#e0bf78]/70 shadow-[0_16px_45px_rgba(0,0,0,.4)] transition sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-6 ${theme.buttonPrimary}`}
+          aria-expanded={open}
+          className={`chat-fab fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-[60] flex min-h-14 min-w-14 items-center justify-center gap-3 rounded-full border border-[#e0bf78]/70 px-4 shadow-[0_16px_45px_rgba(0,0,0,.45)] transition sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:right-6 ${theme.buttonPrimary}`}
         >
           <span className="chat-fab-ring" />
           <FaComments size={22} color="#fff" />
+          <span className="chat-fab-label">{tc("chatWithUs", { defaultValue: "Chat with us" })}</span>
+          {unreadMessages > 0 && <span className="chat-fab-badge" aria-label={`${unreadMessages} unread messages`}>{unreadMessages > 9 ? "9+" : unreadMessages}</span>}
         </motion.button>
       )}
 
