@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import { useMessages } from "@/context/MessageContext";
@@ -15,6 +16,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
   const { messages, sendMessage, fetchMessages, markMessageSeen, setMessages } =
     useMessages();
   const [text, setText] = useState("");
+  const [mounted, setMounted] = useState(false);
   const { userData } = useAuth(); // ✅ بيانات من AuthContext
   const [adminTyping, setAdminTyping] = useState(false);
   const {
@@ -31,6 +33,8 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     const { t } = useTranslation("home");
   const { t: tc } = useTranslation("common");
   const unreadMessages = messages.filter((message) => message.sender_type === "admin" && message.status !== "seen").length;
+
+  useEffect(() => setMounted(true), []);
 
   // ✅ جلب رسائل المستخدم
   useEffect(() => {
@@ -133,7 +137,9 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     setMessages((prev) => [...prev.filter((message) => String(message.id) !== String(data.id)), data]);
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal((
     <>
       {!isAdmin && (
         <motion.button
@@ -226,5 +232,5 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
         )}
       </AnimatePresence>
     </>
-  );
+  ), document.body);
 }
