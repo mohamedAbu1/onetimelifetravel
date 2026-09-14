@@ -1,11 +1,12 @@
 // src/app/api/reviews/[id]/route.js
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 // ✅ GET: جلب تعليق واحد
 export async function GET(req, { params }) {
   try {
-    const reviewId = params.id;
+    const { id: reviewId } = await params;
     const db = await connectDB();
 
     const [rows] = await db.query("SELECT * FROM reviews WHERE id = ?", [reviewId]);
@@ -23,7 +24,9 @@ export async function GET(req, { params }) {
 // ✅ DELETE: حذف تعليق
 export async function DELETE(req, { params }) {
   try {
-    const reviewId = params.id;
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    const { id: reviewId } = await params;
     const db = await connectDB();
 
     // جلب التعليق للتأكد من وجوده
@@ -32,7 +35,7 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ ok: false, error: "Review not found" }, { status: 404 });
     }
 
-    // ⚠️ هنا تقدر تضيف تحقق من المستخدم الحالي (role أو id) لو عندك نظام Auth مبني على JWT/MySQL
+    if (rows[0].user_id !== user.id && !isAdmin(user)) return forbidden();
     await db.query("DELETE FROM reviews WHERE id = ?", [reviewId]);
 
     return NextResponse.json({ ok: true, message: "Review deleted successfully" }, { status: 200 });
@@ -44,7 +47,9 @@ export async function DELETE(req, { params }) {
 // ✅ PUT: تعديل تعليق
 export async function PUT(req, { params }) {
   try {
-    const reviewId = params.id;
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    const { id: reviewId } = await params;
     const body = await req.json();
     const { comment, rating } = body;
 
@@ -56,7 +61,7 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ ok: false, error: "Review not found" }, { status: 404 });
     }
 
-    // ⚠️ تحقق من صلاحيات المستخدم قبل التعديل (مثلاً لو عندك user_id من JWT)
+    if (rows[0].user_id !== user.id && !isAdmin(user)) return forbidden();
     await db.query("UPDATE reviews SET comment = ?, rating = ? WHERE id = ?", [
       comment,
       rating,

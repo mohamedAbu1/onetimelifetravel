@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 // ================== GET ==================
 export async function GET(req, context) {
@@ -105,6 +106,9 @@ export async function GET(req, context) {
 // ================== PUT ==================
 export async function PUT(req, context) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const { id } = await context.params;
     const body = await req.json();
     const db = await connectDB();
@@ -243,6 +247,9 @@ export async function PUT(req, context) {
 // ================== DELETE ==================
 export async function DELETE(req, context) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const { id } = await context.params;
     const db = await connectDB();
 

@@ -106,7 +106,7 @@ const OurSection = () => {
               >
                 <Image
                   src={imgSrc || "/fallback.jpg"}
-                  alt={`WasetTravel Slide ${index + 1}`}
+                  alt={`One Time Life Travel Slide ${index + 1}`}
                   fill
                   className="w-full h-full object-cover rounded-lg"
                   loading="lazy"
@@ -130,7 +130,7 @@ const OurSection = () => {
           </p>
 
           <h2 className="sc-title text-[18px] font-bold mb-4 leading-snug text-gradient" style={{ fontSize: "1.9rem", lineHeight: "1.2" }}>
-            {t("DiscoverWasetTravel")}
+            {t("DiscoverOneTimeLifeTravel")}
           </h2>
 
           <DividerWithIcon />
@@ -196,7 +196,7 @@ const OurSection = () => {
               >
                 <Image
                   src={imgSrc || "/fallback.jpg"}
-                  alt={`WasetTravel Slide ${index + 1}`}
+                  alt={`One Time Life Travel Slide ${index + 1}`}
                   fill
                   className="w-full h-full object-cover rounded-lg"
                   loading="lazy"

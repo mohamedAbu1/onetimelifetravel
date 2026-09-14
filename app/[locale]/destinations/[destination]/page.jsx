@@ -3,46 +3,43 @@ import Link from "next/link";
 import Header from "@/components/header/Header";
 import Footer from "@/components/Footer/Footer";
 import EgyptianBackground from "@/components/layout/EgyptianBackground";
+import en from "@/locales/en/translation.json";
+import es from "@/locales/es/translation.json";
+import fr from "@/locales/fr/translation.json";
+import de from "@/locales/de/translation.json";
+import it from "@/locales/it/translation.json";
+import zh from "@/locales/zh/translation.json";
 
-const destinations = {
-  luxor: {
-    name: "Luxor",
-    eyebrow: "The world's greatest open-air museum",
-    title: "Luxor tours shaped around ancient wonder",
-    description: "Explore Luxor temples, royal tombs and Nile-side stories with a private Egypt travel experience designed around your pace.",
-    image: "/Luxor/Dendera.webp",
-    highlights: ["Karnak and Luxor Temples", "Valley of the Kings", "Private Nile-side experiences"],
-  },
-  aswan: {
-    name: "Aswan",
-    eyebrow: "A slower, sunnier side of the Nile",
-    title: "Aswan tours for unhurried Nile days",
-    description: "Discover Nubian culture, island sunsets and the quiet beauty of southern Egypt with a curated Aswan itinerary.",
-    image: "/Aswan/chrysanthe-gomree-_nubht5aO2w-unsplash.webp",
-    highlights: ["Philae Temple and the islands", "Nubian village encounters", "Nile cruises from Aswan"],
-  },
+const localizedDestinations = { en: en.destinations, es: es.destinations, fr: fr.destinations, de: de.destinations, it: it.destinations, zh: zh.destinations };
+const localizedUi = { en: en.footer, es: es.footer, fr: fr.footer, de: de.footer, it: it.footer, zh: zh.footer };
+const destinationMedia = {
+  luxor: { image: "/Luxor/Dendera.webp" },
+  aswan: { image: "/Aswan/chrysanthe-gomree-_nubht5aO2w-unsplash.webp" },
 };
 
 export function generateStaticParams() {
-  return ["en", "de", "es", "fr", "it", "zh"].flatMap((locale) =>
-    Object.keys(destinations).map((destination) => ({ locale, destination }))
-  );
+  return ["en", "de", "es", "fr", "it", "zh"].flatMap((locale) => Object.keys(destinationMedia).map((destination) => ({ locale, destination })));
 }
 
 export async function generateMetadata({ params }) {
-  const destination = destinations[params.destination];
+  const { locale, destination: destinationKey } = await params;
+  const destination = localizedDestinations[locale]?.[destinationKey] || localizedDestinations.en[destinationKey];
   if (!destination) return { title: "Egypt Tours | One Time Life Travel" };
   return {
     title: `${destination.name} Tours in Egypt | One Time Life Travel`,
     description: destination.description,
-    keywords: `${destination.name} tours, ${destination.name} Egypt travel, Egypt tours, Nile cruise, private Egypt itinerary`,
-    alternates: { canonical: `https://onetimelifetravel.com/${params.locale}/destinations/${params.destination}` },
+    keywords: `${destination.name} tours, Egypt travel, Nile cruise, private Egypt itinerary`,
+    alternates: { canonical: `https://onetimelifetravel.com/${locale}/destinations/${destinationKey}` },
   };
 }
 
-export default function DestinationPage({ params }) {
-  const destination = destinations[params.destination];
-  if (!destination) return null;
+export default async function DestinationPage({ params }) {
+  const { locale: requestedLocale, destination: destinationKey } = await params;
+  const locale = localizedDestinations[requestedLocale] ? requestedLocale : "en";
+  const destination = localizedDestinations[locale]?.[destinationKey];
+  const ui = localizedUi[locale];
+  const media = destinationMedia[destinationKey];
+  if (!destination || !media) return null;
 
   return (
     <main className="site-page relative min-h-screen overflow-hidden pt-28">
@@ -54,13 +51,13 @@ export default function DestinationPage({ params }) {
           <h1 className="max-w-3xl font-[Cinzel] text-4xl font-semibold leading-[1.08] text-[var(--heading)] sm:text-6xl">{destination.title}</h1>
           <p className="mt-7 max-w-xl text-base leading-8 text-[var(--sub-text)]">{destination.description}</p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link href={`/${params.locale}/trips`} className="dust-interactive rounded-full bg-[var(--logo-border)] px-6 py-3 text-sm font-bold text-[#15120e] transition hover:-translate-y-0.5">Browse Egypt tours</Link>
-            <Link href={`/${params.locale}/contact`} className="dust-interactive rounded-full border border-[var(--logo-border)]/50 px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--logo-border)]/10">Plan with an expert</Link>
+            <Link href={`/${locale}/trips`} className="dust-interactive rounded-full bg-[var(--logo-border)] px-6 py-3 text-sm font-bold text-[#15120e] transition hover:-translate-y-0.5">{ui.browseTours}</Link>
+            <Link href={`/${locale}/contact`} className="dust-interactive rounded-full border border-[var(--logo-border)]/50 px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--logo-border)]/10">{ui.planExpert}</Link>
           </div>
         </div>
         <div className="relative overflow-hidden rounded-[2rem] border border-[var(--logo-border)]/40 bg-black/30 p-2 shadow-2xl">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[1.6rem] sm:aspect-[5/4]">
-            <Image src={destination.image} alt={`${destination.name} Egypt tours`} fill priority className="object-cover saturate-[0.85]" sizes="(max-width: 1024px) 100vw, 45vw" />
+            <Image src={media.image} alt={`${destination.name} Egypt tours`} fill priority className="object-cover saturate-[0.85]" sizes="(max-width: 1024px) 100vw, 45vw" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
             <span className="absolute bottom-6 left-6 font-[Cinzel] text-3xl text-[#f2d083]">{destination.name}</span>
           </div>
@@ -78,3 +75,6 @@ export default function DestinationPage({ params }) {
     </main>
   );
 }
+
+
+

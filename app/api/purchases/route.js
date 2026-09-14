@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db"; // ملف الاتصال بقاعدة البيانات MySQL
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const db = await connectDB();
 
     // 1️⃣ جلب الحجوزات

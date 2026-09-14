@@ -2,10 +2,14 @@ import { v4 as uuidv4 } from "uuid";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { getUserToken } from "@/lib/notifications"; // 🟢 الدالة اللي تجيب التوكن
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 // ✅ إضافة إشعار جديد + إرسال إشعار للموبايل
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const db = await connectDB();
     const body = await req.json();
 
@@ -17,7 +21,7 @@ export async function POST(req) {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 0)`,
       [
         id,
-        body.admin_id,
+        user.id,
         body.event_type,
         body.message,
         body.user_id,
@@ -54,8 +58,11 @@ export async function POST(req) {
 }
 
 // ✅ جلب الإشعارات
-export async function GET() {
+export async function GET(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const db = await connectDB();
     const [rows] = await db.execute(
       `SELECT id, admin_id, event_type, user_id, message, type, user_name, user_email, user_image, created_at, is_read, trip_id 

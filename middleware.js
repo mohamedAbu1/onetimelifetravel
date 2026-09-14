@@ -8,6 +8,8 @@ export function middleware(req) {
   // استثناء مسارات النظام والملفات الثابتة
   if (
     url.pathname.startsWith("/_next") ||
+    url.pathname === "/robots.txt" ||
+    url.pathname === "/sitemap.xml" ||
     url.pathname.startsWith("/favicon.ico") ||
     url.pathname.startsWith("/api") ||
     url.pathname.startsWith("/assets") ||
@@ -47,3 +49,4 @@ export function middleware(req) {
   // لو اللغة موجودة بالفعل → لا تعمل أي إعادة توجيه
   return NextResponse.next();
 }
+

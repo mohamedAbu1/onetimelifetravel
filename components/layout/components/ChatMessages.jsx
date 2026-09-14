@@ -1,148 +1,69 @@
-"use client"
-import { motion, AnimatePresence } from "framer-motion";
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { saveAs } from "file-saver";
-import { FaClock, FaDownload, FaExpand, FaComments } from "react-icons/fa";
-import { useEffect ,useRef} from "react";
+import { FaCheck, FaCheckDouble, FaComments, FaDownload, FaExpand } from "react-icons/fa";
+import { useEffect, useRef } from "react";
 
-export default function ChatMessages({ messages, adminTyping, themeName }) {
-    const messagesEndRef = useRef(null);
-   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+export default function ChatMessages({ messages, adminTyping }) {
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, adminTyping]);
+
   const handleDownload = async (url, id) => {
     const response = await fetch(url);
     const blob = await response.blob();
-
-    const img = new Image();
-    img.src = URL.createObjectURL(blob);
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob(
-        (newBlob) => {
-          saveAs(newBlob, `chat-image-${id}.jpg`);
-        },
-        "image/jpeg",
-        0.7
-      );
-    };
+    saveAs(blob, `chat-image-${id}.jpg`);
   };
 
   return (
-    <div className="flex-1 overflow-x-hidden p-4 overflow-y-auto space-y-4">
-      <AnimatePresence>
-        {messages.length > 0 ? (
-          messages.map((msg) => (
-            <motion.div
-              key={msg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={`flex items-start gap-3 max-w-[100%] ${
-                msg.sender_type === "user"
-                  ? "self-start"
-                  : "self-end flex-row-reverse"
-              }`}
-            >
-              <img
-               src={
-                  msg.sender_type === "admin" ?   themeName === "dark"
-                ? "/HomePageImage/Copilot_20260613_134423.webp"
-                : "/HomePageImage/Copilot_20260613_134550.webp" :
-                  msg.user_image}
-                alt={msg.user_name}
-                className={`w-12 h-12 rounded-full border ${
-                  msg.sender_type === "admin" ? "border-yellow-500" : "border-[#41707e]"
-                } object-cover`}
-              />
-              <div
-                className={`p-3 rounded-lg shadow-md max-w-[70%] flex flex-col ${
-                  msg.sender_type === "user"
-                    ? themeName === "dark"
-                      ? "bg-gray-700 text-white"
-                      : "bg-gray-200 text-black"
-                    : themeName === "dark"
-                    ? "bg-yellow-500 text-black"
-                    : "bg-[#41707e] text-white"
-                }`}
-              >
-                <p className="text-sm font-semibold mb-1 capitalize">
-                  {msg.sender_type === "admin" ? "👑 Basttet Travel 👑" : msg.user_name} 
-                </p>
-
-                {msg.content.startsWith("http") &&
-                msg.content.match(/\.(jpeg|jpg|gif|png|webp)$/) ? (
-                  <div className="relative group w-full max-w-xs">
-                    <img
-                      src={msg.content}
-                      alt="uploaded"
-                      className="w-full rounded-lg object-cover"
-                    />
-                    <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button
-                        onClick={() => handleDownload(msg.content, msg.id)}
-                        className={`flex items-center gap-2 px-3 py-1 text-xs font-medium rounded shadow ${
-                          themeName === "dark"
-                            ? "bg-gray-700 text-white hover:bg-gray-600"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                        } transition`}
-                      >
-                        <FaDownload className="text-sm" /> Download
-                      </button>
-                      <button
-                        onClick={() => window.open(msg.content, "_blank")}
-                        className={`flex items-center gap-2 px-3 py-1 text-xs font-medium rounded shadow ${
-                          themeName === "dark"
-                            ? "bg-gray-700 text-white hover:bg-gray-600"
-                            : "bg-green-500 text-white hover:bg-green-600"
-                        } transition`}
-                      >
-                        <FaExpand className="text-sm" /> View
-                      </button>
+    <div className="flex-1 space-y-4 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(194,168,120,.08),transparent_38%),#0d0d0d] px-4 py-5 sm:px-5">
+      <div className="mx-auto mb-5 max-w-[280px] text-center text-[11px] leading-5 text-[#8e8577]">
+        <span className="mx-auto mb-2 block h-8 w-px bg-[#c2a878]/40" />
+        Your private line to One Time Life Travel
+      </div>
+      <AnimatePresence initial={false}>
+        {messages.length ? messages.map((msg) => {
+          const isUser = msg.sender_type === "user";
+          const isImage = typeof msg.content === "string" && /\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i.test(msg.content);
+          return (
+            <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className={`flex items-end gap-2 ${isUser ? "justify-start" : "justify-end"}`}>
+              {isUser && <img src={msg.user_image || "/default-avatar.png"} alt="" className="h-8 w-8 shrink-0 rounded-xl border border-white/10 object-cover" />}
+              <div className={`max-w-[82%] ${isUser ? "items-start" : "items-end"}`}>
+                <div className={`mb-1 px-1 text-[10px] font-semibold uppercase tracking-[.12em] ${isUser ? "text-[#8e8577]" : "text-[#e0bf78]"}`}>
+                  {isUser ? msg.user_name || "You" : "One Time Life Travel"}
+                </div>
+                <div className={`rounded-2xl px-4 py-3 text-sm leading-6 shadow-lg ${isUser ? "rounded-bl-md border border-white/10 bg-[#1b1b1b] text-[#f7f1e6]" : "rounded-br-md bg-[#c2a878] text-[#15120e]"}`}>
+                  {isImage ? (
+                    <div className="group relative overflow-hidden rounded-xl">
+                      <img src={msg.content} alt="Uploaded attachment" className="max-h-56 w-full object-cover" />
+                      <div className="absolute inset-x-2 bottom-2 flex justify-center gap-2 opacity-0 transition group-hover:opacity-100">
+                        <button type="button" onClick={() => handleDownload(msg.content, msg.id)} className="rounded-lg bg-black/70 px-3 py-2 text-xs text-white"><FaDownload /></button>
+                        <button type="button" onClick={() => window.open(msg.content, "_blank", "noopener,noreferrer")} className="rounded-lg bg-black/70 px-3 py-2 text-xs text-white"><FaExpand /></button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <p>{msg.content}</p>
-                )}
-
-                <div className="flex items-center gap-1 mt-1 text-xs opacity-70">
-                  <FaClock className="text-xs" />
-                  <span className="italic">
-                    {msg.created_at
-                      ? formatDistanceToNow(new Date(msg.created_at), {
-                          addSuffix: true,
-                        })
-                      : ""}
-                  </span>
-                  {msg.status && (
-                    <span className="ml-2">
-                      {msg.status === "sent" ? "✅ Sent" : "👀 Seen"}
-                    </span>
-                  )}
+                  ) : <p className="whitespace-pre-wrap break-words">{msg.content}</p>}
+                </div>
+                <div className={`mt-1 flex items-center gap-1 px-1 text-[10px] text-[#8e8577] ${isUser ? "justify-start" : "justify-end"}`}>
+                  {msg.created_at && formatDistanceToNow(new Date(msg.created_at), { addSuffix: true })}
+                  {!isUser && (msg.status === "seen" ? <FaCheckDouble className="text-[#c2a878]" /> : <FaCheck />)}
                 </div>
               </div>
             </motion.div>
-          ))
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500 opacity-80">
-            <FaComments className="text-3xl mb-2 text-yellow-500" />
-            <p className="font-semibold">No messages yet</p>
-            <p className="text-sm">Start your conversation with us ✨🚘</p>
+          );
+        }) : (
+          <div className="flex h-full min-h-64 flex-col items-center justify-center text-center text-[#8e8577]">
+            <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl border border-[#c2a878]/25 bg-[#c2a878]/10 text-2xl text-[#e0bf78]"><FaComments /></span>
+            <p className="font-semibold text-[#f7f1e6]">Start your conversation</p>
+            <p className="mt-1 text-xs">Our travel team is ready to help.</p>
           </div>
         )}
       </AnimatePresence>
-
-      {adminTyping && (
-        <p className="text-xs italic opacity-70">Admin is typing...</p>
-      )}
+      {adminTyping && <div className="flex items-center gap-2 text-xs text-[#8e8577]"><span className="flex gap-1 rounded-full bg-white/5 px-3 py-2"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:120ms]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:240ms]" /></span>Travel team is typing</div>}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

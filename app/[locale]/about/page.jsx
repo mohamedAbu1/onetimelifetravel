@@ -21,7 +21,7 @@ export default function AboutPage() {
   const { user } = useAuth(); // ✅ جلب المستخدم الحالي
   return (
     <>
-      <main className="site-page relative w-full flex flex-col min-h-screen justify-center items-center">
+      <main className="site-page pharaonic-page relative w-full flex flex-col min-h-screen justify-center items-center">
         {" "}
         <Decor pos={"top"} />
         <Header />
@@ -43,3 +43,4 @@ export default function AboutPage() {
     </>
   );
 }
+

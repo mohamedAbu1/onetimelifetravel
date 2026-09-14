@@ -1,10 +1,17 @@
 "use server";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 export async function POST(req) {
   try {
-    const { userId, token } = await req.json();
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    const { token } = await req.json();
+    const userId = user.id;
+    if (!token || typeof token !== "string" || token.length > 500) {
+      return NextResponse.json({ success: false, error: "Invalid token" }, { status: 400 });
+    }
     const db = await connectDB();
 
     // 🟢 إدخال أو تحديث الـ token (UPSERT)

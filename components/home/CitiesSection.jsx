@@ -1,234 +1,82 @@
 "use client";
+
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useTheme } from "@/context/ThemeContext";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCitiesCategories } from "@/context/CitiesCategoriesContext";
-import DividerWithIcon from "../layout/DividerWithIcon";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
-import Decor from "../layout/Decor";
 
 const encodeData = (obj) => btoa(JSON.stringify(obj));
 
-function CityCard({ city, themeName, theme, language, t }) {
+function CityCard({ city, index, language, t }) {
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
-  const cityName =
-    city.name?.[language] || city.name?.["en"] || city.name || "";
-
-  const handleExplore = () => {
-    const queryObj = {
-      city: [cityName],
-      category: "all",
-      price: "All",
-      popular: false,
-    };
-    const encoded = encodeData(queryObj);
-    router.push(`/${locale}/trips?data=${encoded}`);
-  };
-
   const [currentImage, setCurrentImage] = useState(0);
+  const cityName = city.name?.[language] || city.name?.en || city.name || "";
+  const images = city.images?.filter(Boolean).slice(0, 2) || [];
+  const imageSources = images.length ? images : ["/fallback.jpg"];
 
   useEffect(() => {
+    if (imageSources.length < 2) return undefined;
     const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev === 0 ? 1 : 0));
-    }, 4000);
+      setCurrentImage((previous) => (previous + 1) % imageSources.length);
+    }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [imageSources.length]);
 
-  const images = city.images?.slice(0, 2) || ["/fallback.jpg", "/fallback.jpg"];
+  const handleExplore = () => {
+    const query = encodeData({ city: [cityName], category: "all", price: "All", popular: false });
+    router.push(`/${locale}/trips?data=${query}`);
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="min-w-[250px] p-4"
+    <motion.article
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.55, delay: Math.min(index * 0.06, 0.3) }}
+      className={`group relative overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[#151515] shadow-[0_18px_50px_rgba(0,0,0,.22)] ${index === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
     >
-      <div
-        className={`dust-interactive relative h-82 rounded-2xl overflow-hidden group cursor-pointer
-          ${theme.card} ${theme.border} ${theme.shadow}
-          transition-all duration-500 hover:scale-[1.05] hover:shadow-2xl hover:-rotate-1`}
-      >
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={currentImage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={images[currentImage]}
-              alt={cityName || "City image"}
-              fill
-              className="object-cover rounded-lg"
-            />
+      <div className={`relative min-h-[245px] ${index === 0 ? "md:min-h-[510px]" : ""}`}>
+        <AnimatePresence mode="wait">
+          <motion.div key={imageSources[currentImage]} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="absolute inset-0">
+            <Image src={imageSources[currentImage]} alt={cityName || "Egyptian destination"} fill sizes={index === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 100vw"} className="object-cover transition duration-700 group-hover:scale-105" />
           </motion.div>
         </AnimatePresence>
-
-        <div
-          className={`absolute inset-0 ${theme.overlay} flex flex-col items-center justify-end pb-6`}
-        >
-          <p
-            className={`trips-text text-lg font-bold mb-2 ${theme.title}`}
-            style={{
-              WebkitTextStroke:
-                themeName === "dark" ? "1px #C2A878" : "1px #ffffff",
-              textShadow:
-                themeName === "dark"
-                  ? "2px 2px 6px rgba(0,0,0,0.6)"
-                  : "2px 2px 6px rgba(255,255,255,0.3)",
-            }}
-          >
-            {cityName}
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleExplore}
-            className={`rounded-[9px] px-3 py-2 font-semibold tracking-wide cursor-pointer transition-all duration-300 shadow-lg ${theme.buttonPrimary}`}
-            style={{ border: `2px solid ${theme.logoBorder}` }}
-          >
-            {t("Explore")}
-          </motion.button>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-black/5" />
+        <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#d1b06a] backdrop-blur-md">0{index + 1} · Egypt</div>
+        <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">Explore destination</p>
+            <h3 className="font-[Cinzel] text-2xl font-semibold text-[#f4ead8] md:text-3xl">{cityName}</h3>
+          </div>
+          <button type="button" onClick={handleExplore} className="shrink-0 rounded-full border border-[#d1b06a]/70 bg-[#d1b06a] px-4 py-2 text-xs font-semibold text-[#16130f] transition hover:bg-[#ead39e] focus:outline-none focus:ring-2 focus:ring-[#d1b06a] focus:ring-offset-2 focus:ring-offset-black">{t("Explore")}</button>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
-const CitiesSection = () => {
-  const { theme, themeName } = useTheme();
+export default function CitiesSection() {
   const { t, i18n } = useTranslation("home");
   const { cities, loading } = useCitiesCategories();
-  const normalizedLang = i18n.language.split("-")[0];
-
-  // ✅ hooks لازم تكون فوق
-  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenSize({ width: window.innerWidth, height: window.innerHeight });
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const language = i18n.language.split("-")[0];
 
   if (loading) {
-    return (
-      <section className="site-section w-full px-6" aria-label="Loading destinations">
-        <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((item) => <div key={item} className="editorial-card h-80 animate-pulse rounded-2xl border bg-white/5" />)}
-        </div>
-      </section>
-    );
+    return <section className="site-section w-full px-6 py-20" aria-label="Loading destinations"><div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <div key={item} className="h-64 animate-pulse rounded-[1.75rem] bg-white/10" />)}</div></section>;
   }
-
-  if (!cities.length) {
-    return (
-      <section className="site-section flex min-h-[360px] w-full flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">Destinations</p>
-        <h2 className="mt-4 font-[Cinzel] text-3xl font-semibold text-[var(--heading)]">Luxor, Aswan and beyond</h2>
-        <p className="mt-4 max-w-lg leading-8 text-[var(--sub-text)]">Tell us where you want to go and our local experts will build the right Egyptian route around you.</p>
-      </section>
-    );
-  }
-
-  const looped = [...cities, ...cities];
-
-  // ✅ الرموز الفرعونية للديكور
-  const symbols = [
-    "𓂀",
-    "𓋹",
-    "𓆣",
-    "𓇼",
-    "𓇯",
-    "𓏏",
-    "𓎛",
-    "𓊽",
-    "𓃾",
-    "𓅓",
-    "𓈇",
-    "𓉐",
-    "𓊹",
-    "𓌙",
-    "𓍿",
-    "𓎟",
-  ];
 
   return (
-    <section
-      className="site-section flex w-full min-h-[560px] relative bg-cover bg-center flex-col items-center justify-center overflow-hidden px-4 py-16"
-    >
-      {/* خلفية الرموز */}
-      <div className="absolute inset-0 pointer-events-none">
-        {symbols.map((sym, i) => (
-          <motion.span
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 0.15, y: 0 }}
-            transition={{ duration: 1.2, delay: i * 0.1 }}
-            className="absolute text-6xl"
-            style={{
-              top: `${8 + ((i * 23) % 86)}%`,
-              left: `${4 + ((i * 31) % 92)}%`,
-              transform: `rotate(${(i * 29) % 360}deg)`,
-              color: theme.icon,
-            }}
-          >
-            {sym}
-          </motion.span>
-        ))}
-      </div>
-      <Decor pos={"top"} />
-
-      <div className="max-w-2xl mx-auto mb-16 w-full relative z-10 pt-12">
-        <h2
-          className="sc-title-first text-5xl font-extrabold tracking-wide drop-shadow-md text-center text-gradient2"
-          style={{ textAlign: "center" }}
-        >
-          <span className="inline-block transform text-gradient2 scale-x-[-1] mr-4">𓅓</span>
-          {t("ExploreCities")}
-          <span className="inline-block text-gradient2 ml-4">𓅓</span>
-        </h2>
-         <p className="sc-p-first mt-4 capitalize text-lg opacity-80 text-center text-gradient">
-          Cities where we operate professionally
-        
-        </p>
-        <DividerWithIcon />
-      </div>
-
-      {/* ✅ Marquee Animation */}
-      <div className="relative overflow-hidden w-full max-w-7xl mx-auto h-[410px] z-10">
-        <motion.div
-          className="flex h-full"
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{
-            duration: 20,
-            ease: "linear",
-            repeat: Infinity,
-          }}
-        >
-          {looped.map((city, i) => (
-            <CityCard
-              key={i}
-              city={city}
-              t={t}
-              themeName={themeName}
-              theme={theme}
-              language={normalizedLang}
-            />
-          ))}
-        </motion.div>
+    <section id="destinations" className="site-section w-full overflow-hidden bg-[#0d0d0d] px-5 py-20 text-[#f4ead8] md:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <div><p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d1b06a]">One Time Life Travel · Destinations</p><h2 className="max-w-2xl font-[Cinzel] text-3xl font-semibold leading-tight text-[#f4ead8] md:text-5xl">{t("ExploreCities")}</h2></div>
+          <p className="max-w-md text-sm leading-7 text-[#b8b0a2] md:text-right">Discover the places, stories, and quiet details that make every Egyptian journey memorable.</p>
+        </div>
+        {cities.length ? <div className="grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-4">{cities.map((city, index) => <CityCard key={city.id || city.name?.en || index} city={city} index={index} language={language} t={t} />)}</div> : <div className="rounded-[1.75rem] border border-[var(--border)] bg-white/[0.03] px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[#f4ead8]">Luxor, Aswan and beyond</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[#b8b0a2]">Our local experts are preparing the next destinations for you.</p></div>}
       </div>
     </section>
   );
-};
-
-export default CitiesSection;
+}

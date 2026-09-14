@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
     const db = await connectDB();
-    const { tripId, userId } = await req.json();
+    const { tripId } = await req.json();
+    const userId = user.id;
 
     // ✅ تحديث حالة الحجز إلى Cancelled
     const [result] = await db.query(

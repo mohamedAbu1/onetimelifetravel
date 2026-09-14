@@ -1,248 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { useTheme } from "@/context/ThemeContext";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-const CalendarBooking = ({
-  tripId,
-  prise,
-  setCheckInPrice,
-  checkInPrice,
-  checkIn,
-  setCheckIn,
-  checkOut,
-  setCheckOut,
-}) => {
-  const { theme } = useTheme();
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const year = new Date().getFullYear();
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const daysInMonth = new Date(year, currentMonth + 1, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
+export default function CalendarBooking({ tripId, prise, setCheckInPrice, checkInPrice, checkIn, setCheckIn, checkOut, setCheckOut }) {
+  const today = useMemo(() => startOfDay(new Date()), []);
+  const [visibleMonth, setVisibleMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const monthKey = `${visibleMonth.getFullYear()}-${String(visibleMonth.getMonth() + 1).padStart(2, "0")}`;
+  const daysInMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
+  const firstDay = (new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1).getDay() + 6) % 7;
   const [prices, setPrices] = useState([]);
 
-  const [guests, setGuests] = useState(0); // ✅ عدد الأشخاص
-
-  // توليد أسعار جديدة
-  // توليد أسعار جديدة مرتبطة بسعر الفرد ±6 دولار
-  const generatePrices = () => {
-    return Array.from({ length: daysInMonth }, () => {
-      const variation = Math.round((Math.random() - 0.5) * 6);
-      return prise + variation;
-    });
-  };
-
   useEffect(() => {
-    const savedData = localStorage.getItem(`calendarPrices_${tripId}`);
-    const savedTime = localStorage.getItem(`calendarPricesTime_${tripId}`);
+    const storageKey = `calendarPrices_${tripId}_${monthKey}`;
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      if (Array.isArray(saved) && saved.length === daysInMonth) { setPrices(saved); return; }
+    } catch { /* regenerate invalid cached data */ }
+    const base = Number(prise) || 0;
+    const generated = Array.from({ length: daysInMonth }, (_, index) => base + ((index * 7 + visibleMonth.getMonth()) % 7) - 3);
+    setPrices(generated);
+    localStorage.setItem(storageKey, JSON.stringify(generated));
+  }, [daysInMonth, monthKey, prise, tripId, visibleMonth]);
 
-    if (savedData && savedTime) {
-      const lastUpdate = new Date(savedTime);
-      const now = new Date();
-      const diffHours = (now - lastUpdate) / (1000 * 60 * 60);
-
-      if (diffHours < 24) {
-        setPrices(JSON.parse(savedData));
-        return;
-      }
-    }
-
-    const newPrices = generatePrices();
-    setPrices(newPrices);
-    localStorage.setItem(`calendarPrices_${tripId}`, JSON.stringify(newPrices));
-    localStorage.setItem(
-      `calendarPricesTime_${tripId}`,
-      new Date().toISOString(),
-    );
-  }, [currentMonth, prise, tripId]);
-  const handleDateClick = (day, price) => {
-    const selectedDate = new Date(year, currentMonth, day);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) return;
-
-    const selected = `${day} ${months[currentMonth]} ${year}`;
-
-    if (checkIn === selected) {
-      setCheckIn(null);
-      setCheckInPrice(null);
-      return;
-    }
-    if (checkOut === selected) {
-      setCheckOut(null);
-      return;
-    }
-
-    if (!checkIn || (checkIn && checkOut)) {
-      setCheckIn(selected);
-      setCheckInPrice(price);
-      setCheckOut(null);
-    } else if (!checkOut) {
-      const checkInDate = new Date(checkIn);
-      if (selectedDate > checkInDate) {
-        setCheckOut(selected);
-      }
-    }
+  const dateKey = (day) => `${visibleMonth.getFullYear()}-${String(visibleMonth.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  const selectedDate = (day) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), day);
+  const selectDate = (day) => {
+    const date = selectedDate(day);
+    if (date < today) return;
+    const value = dateKey(day);
+    if (!checkIn || checkOut) { setCheckIn(value); setCheckOut(null); setCheckInPrice(prices[day - 1] || Number(prise) || 0); return; }
+    if (value === checkIn) { setCheckIn(null); setCheckInPrice(null); return; }
+    if (date > new Date(checkIn)) setCheckOut(value);
   };
+  const canGoPrevious = visibleMonth.getFullYear() > today.getFullYear() || visibleMonth.getMonth() > today.getMonth();
+  const changeMonth = (amount) => setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1));
+  const isBetween = (value) => checkIn && checkOut && new Date(value) > new Date(checkIn) && new Date(value) < new Date(checkOut);
 
-  const prevMonth = () =>
-    setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
-  const nextMonth = () =>
-    setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1));
+  return <div className="rounded-[1.35rem] border border-white/10 bg-black/20 p-4">
+    <div className="mb-5 flex items-center justify-between"><button type="button" aria-label="Previous month" disabled={!canGoPrevious} onClick={() => changeMonth(-1)} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-[#d1b06a] transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"><FaChevronLeft /></button><div className="text-center"><p className="text-[10px] uppercase tracking-[0.24em] text-[#9d9384]">Choose your dates</p><h3 className="mt-1 font-[Cinzel] text-lg text-[#f4ead8]">{monthNames[visibleMonth.getMonth()]} {visibleMonth.getFullYear()}</h3></div><button type="button" aria-label="Next month" onClick={() => changeMonth(1)} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-[#d1b06a] transition hover:bg-white/10"><FaChevronRight /></button></div>
+    <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wider text-[#8f8678]">{weekdays.map((day) => <span key={day}>{day}</span>)}</div>
+    <div className="grid grid-cols-7 gap-1.5">{Array.from({ length: firstDay }).map((_, index) => <span key={`empty-${index}`} />)}{Array.from({ length: daysInMonth }, (_, index) => { const day = index + 1; const value = dateKey(day); const past = selectedDate(day) < today; const start = value === checkIn; const end = value === checkOut; return <div key={value} className="min-w-0 text-center"><button type="button" disabled={past} onClick={() => selectDate(day)} className={`flex aspect-square w-full items-center justify-center rounded-lg text-xs transition ${past ? "cursor-not-allowed text-[#514b43]" : start || end ? "bg-[#d1b06a] font-bold text-[#15120e]" : isBetween(value) ? "bg-[#d1b06a]/25 text-[#ead39e]" : "text-[#c8beaf] hover:bg-white/10"}`}>{day}</button>{!past && <span className="mt-1 block truncate text-[9px] text-[#8f8678]">{prices[index] ? `$${Math.round(prices[index])}` : ""}</span>}</div>; })}</div>
+    <div className="mt-5 grid gap-2 sm:grid-cols-2"><DateBox icon={<FaCalendarAlt />} label="Check-in" value={checkIn} /><DateBox icon={<FaCalendarAlt />} label="Check-out" value={checkOut} /></div>
+    {checkIn && checkOut && <p className="mt-4 rounded-lg bg-[#d1b06a]/10 px-3 py-2 text-center text-xs text-[#d9c28d]">Your dates are selected. Continue below to complete the booking.</p>}
+    {(checkIn || checkOut) && <button type="button" onClick={() => { setCheckIn(null); setCheckInPrice(null); setCheckOut(null); }} className="mt-4 w-full rounded-full border border-white/15 py-2 text-xs text-[#aaa092] transition hover:border-[#d1b06a] hover:text-[#ead39e]">Clear selected dates</button>}
+  </div>;
+}
 
-  return (
-    <div
-      className={`${theme.card} max-w-2xl mx-auto p-6 shadow-lg font-sans mb-3`}
-    >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <button
-          type="button"
-          aria-label="Previous month"
-          className={`${theme.buttonSecondary} p-2 rounded-full`}
-          onClick={prevMonth}
-        >
-          <FaChevronLeft className={`${theme.icon} w-5 h-5`} aria-hidden="true" />
-        </button>
-        <h2 className={`${theme.title} text-lg`}>
-          {months[currentMonth]} {year}
-        </h2>
-        <button
-          type="button"
-          aria-label="Next month"
-          className={`${theme.buttonSecondary} p-2 rounded-full`}
-          onClick={nextMonth}
-        >
-          <FaChevronRight className={`${theme.icon} w-5 h-5`} aria-hidden="true" />
-        </button>
-      </div>
-
-      {/* Days of Week */}
-      <div className="grid grid-cols-7 text-center flex-wrap gap-1 text-sm mb-2">
-        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-          <div key={day} className={`${theme.subText} `}>
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Days Grid */}
-      <div className="grid grid-cols-7 gap-2 text-center">
-        {days.map((day, index) => {
-          const selectedDate = new Date(year, currentMonth, day);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          const isPast = selectedDate < today;
-
-          const selected = `${day} ${months[currentMonth]} ${year}`;
-          const isCheckIn = checkIn === selected;
-          const isCheckOut = checkOut === selected;
-          const price = prices[index];
-
-          let isBetween = false;
-          if (checkIn && checkOut) {
-            const checkInDate = new Date(checkIn);
-            const checkOutDate = new Date(checkOut);
-            isBetween =
-              selectedDate > checkInDate && selectedDate < checkOutDate;
-          }
-
-          let isInvalid = false;
-          if (checkIn && !checkOut && selectedDate <= new Date(checkIn)) {
-            isInvalid = true;
-          }
-
-          return (
-            <div key={day} className="flex flex-col items-center">
-              <motion.button
-                onClick={() =>
-                  !isPast && !isInvalid && handleDateClick(day, price)
-                }
-                disabled={isPast || isInvalid}
-                whileHover={{ scale: isPast || isInvalid ? 1 : 1.1 }}
-                whileTap={{ scale: isPast || isInvalid ? 1 : 0.9 }}
-                className={`w-10 h-10 rounded-lg transition ${
-                  isPast || isInvalid
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed border border-dashed border-gray-400"
-                    : isCheckIn
-                      ? "bg-blue-500 text-white shadow-md"
-                      : isCheckOut
-                        ? "bg-green-500 text-white shadow-md"
-                        : isBetween
-                          ? "bg-blue-100 text-blue-700 border border-blue-300"
-                          : theme.background
-                }`}
-              >
-                {day}
-              </motion.button>
-              {!checkIn && !isPast && !isInvalid && (
-                <p className={`${theme.subText} text-xs mt-1`}>${price}</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Selected Info */}
-      <div className="mt-6 grid grid-cols-2 gap-6 text-center">
-        <div className={`${theme.card} p-4`}>
-          <h3 className={`${theme.heading} text-sm uppercase tracking-wide`}>
-            Check-in
-          </h3>
-          <p className={`${theme.title} mt-2 text-lg`}>
-            {checkIn ? checkIn : "Not Selected"}
-          </p>
-          {checkInPrice && (
-            <p className={`${theme.subText} mt-1 text-sm`}>
-              Price: ${checkInPrice}
-            </p>
-          )}
-        </div>
-        <div className={`${theme.card} p-4`}>
-          <h3 className={`${theme.heading} text-sm uppercase tracking-wide`}>
-            Check-out
-          </h3>
-          <p className={`${theme.title} mt-2 text-lg`}>
-            {checkOut ? checkOut : "Not Selected"}
-          </p>
-        </div>
-      </div>
-
-      {/* Reset Button */}
-      {(checkIn || checkOut) && (
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={() => {
-              setCheckIn(null);
-              setCheckInPrice(null);
-              setCheckOut(null);
-            }}
-            className={`${theme.buttonSecondary} px-4 py-2`}
-          >
-            Clear All
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default CalendarBooking;
+function DateBox({ icon, label, value }) { return <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3"><p className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] text-[#d1b06a]">{icon}{label}</p><p className="mt-2 text-sm text-[#f4ead8]">{value || "Select a date"}</p></div>; }
+function startOfDay(date) { const copy = new Date(date); copy.setHours(0, 0, 0, 0); return copy; }

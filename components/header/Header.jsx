@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { FaSignOutAlt, FaUserPlus } from "react-icons/fa";
 import { useData } from "@/context/DataContext";
 import MobileHeaderAuth from "./components/MobileHeaderAuth";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 
 export default function Header() {
   const { theme, themeName } = useTheme();
@@ -20,17 +21,20 @@ export default function Header() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed left-0 top-0 z-50 w-full bg-transparent px-3 pt-3 transition-all duration-500"
+      className="fixed left-0 top-0 z-50 w-full bg-transparent px-2 pt-2 transition-all duration-500 sm:px-3 sm:pt-3"
       style={{
         borderTopRadius: "0px",
       }}
     >
-      <div className={`header-journal container mx-auto flex h-[70px] max-w-7xl items-center justify-between gap-4 rounded-2xl border px-4 shadow-lg transition-colors duration-500 sm:px-7 lg:h-[76px] lg:px-8 ${theme.border}`}>
+      <div className={`header-journal container mx-auto flex h-[64px] min-w-0 max-w-7xl items-center justify-between gap-2 rounded-2xl border px-3 shadow-lg transition-colors duration-500 sm:h-[70px] sm:gap-4 sm:px-7 lg:h-[76px] lg:px-8 ${theme.border}`}>
         {/* شعار الموقع */}
         <Logo />
 
         {/* روابط التنقل */}
         <NavBar />
+
+        {/* مبدّل اللغة ويمين الهيدر */}
+        <LanguageSwitcher />
 
         {/* يمين الهيدر (تبديل الثيم + المستخدم) */}
         <RightBar />
@@ -71,3 +75,5 @@ export default function Header() {
     </motion.header>
   );
 }
+
+

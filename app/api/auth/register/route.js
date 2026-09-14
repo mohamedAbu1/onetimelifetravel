@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { setAuthCookies } from "@/lib/auth";
 
 // ✅ روابط الصور المخزنة على هوستنجر (iamges)
 const maleAvatars = [
@@ -48,13 +49,19 @@ export async function POST(request) {
     console.log("🔵 [API REGISTER] الاتصال بقاعدة البيانات ناجح");
 
     const body = await request.json();
-    console.log("🔵 [API REGISTER] البيانات المستلمة:", body);
+    console.log("🔵 [API REGISTER] استلام بيانات التسجيل");
 
-    const { name, email, password, gender } = body;
+    const name = String(body?.name || "").trim();
+    const email = String(body?.email || "").trim().toLowerCase();
+    const password = String(body?.password || "");
+    const { gender } = body;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 8) {
+      return NextResponse.json({ error: "Invalid registration data" }, { status: 400 });
+    }
 
     // ✅ تحقق من البريد إذا كان موجود مسبقًا
     const [existing] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-    console.log("🔵 [API REGISTER] نتيجة البحث عن البريد:", existing);
+    console.log("🔵 [API REGISTER] تم فحص البريد");
 
     if (existing.length > 0) {
       console.warn("⚠️ [API REGISTER] البريد مستخدم بالفعل");
@@ -79,17 +86,20 @@ export async function POST(request) {
     // ✅ جلب بيانات المستخدم الجديد
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
     const newUser = rows[0];
-    console.log("🔵 [API REGISTER] المستخدم الجديد:", newUser);
+    console.log("🔵 [API REGISTER] تم إنشاء المستخدم:", newUser.id);
 
     // ✅ إنشاء JWT token
     const accessToken = jwt.sign(
       { id: newUser.id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "15m" }
     );
+    const refreshToken = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
     console.log("🔵 [API REGISTER] التوكين تم إنشاؤه");
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         user: {
           id: newUser.id,
@@ -100,10 +110,10 @@ export async function POST(request) {
           role: newUser.role,
           status: newUser.status,
         },
-        accessToken,
       },
       { status: 201 }
     );
+    return setAuthCookies(response, accessToken, refreshToken);
   } catch (e) {
     console.error("❌ [API REGISTER] خطأ داخلي:", e);
     return NextResponse.json({ error: "خطأ داخلي" }, { status: 500 });

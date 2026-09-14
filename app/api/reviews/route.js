@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid"; 
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 // ✅ جلب التعليقات
 export async function GET(req) {
@@ -30,12 +31,20 @@ export async function GET(req) {
 // ✅ إضافة تعليق جديد
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
     console.log("📩 Request received at /api/reviews");
 
     const body = await req.json();
     console.log("📌 Parsed body:", body);
 
-    const { trip_id, user_id, rating, comment, name, avatar_url, time } = body;
+    const { trip_id, rating, comment, time } = body;
+    const user_id = user.id;
+    const name = user.name;
+    const avatar_url = user.avatar_url;
+    if (!trip_id || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || !String(comment || "").trim()) {
+      return NextResponse.json({ success: false, error: "Invalid review data" }, { status: 400 });
+    }
     console.log("✅ Extracted values:", {
       trip_id,
       user_id,

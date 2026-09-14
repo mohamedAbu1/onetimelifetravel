@@ -25,14 +25,13 @@ const Footer = () => {
 
   const internalLinks = [
     ["Home", `/${locale}`],
-    ["Egypt Tours", `/${locale}/trips`],
-    ["Luxor Tours", `/${locale}/destinations/luxor`],
-    ["Aswan Tours", `/${locale}/destinations/aswan`],
-    ["About Us", `/${locale}/about`],
+    ["Tours", `/${locale}/trips`],
+    ["LuxorTours", `/${locale}/destinations/luxor`],
+    ["AswanTours", `/${locale}/destinations/aswan`],
+    ["AboutUs", `/${locale}/about`],
     ["Contact", `/${locale}/contact`],
-    ["Privacy Policy", `/${locale}/privacyPolicy`],
+    ["privacyPolicy", `/${locale}/privacyPolicy`],
   ];
-
   const socialLinks = [
     [FaFacebookF, "https://www.facebook.com/profile.php?id=61591222981163", "Facebook"],
     [FaInstagram, "https://www.instagram.com/ismailharoun225/", "Instagram"],
@@ -51,21 +50,21 @@ const Footer = () => {
       <div className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.25fr_0.8fr_0.8fr]">
         <motion.div variants={fadeUp}>
           <div className="inline-flex rounded-2xl border border-[var(--logo-border)]/35 bg-black/10 px-6 py-4 backdrop-blur-sm"><Logo compact /></div>
-          <h2 className="mt-7 max-w-md font-[Cinzel] text-2xl font-semibold leading-tight text-[var(--text)]">Egypt tours shaped around your story.</h2>
+          <h2 className="mt-7 max-w-md font-[Cinzel] text-2xl font-semibold leading-tight text-[var(--text)]">{t("heroTitle")}</h2>
           <p className="mt-4 max-w-lg text-sm leading-7 text-[var(--sub-text)]">{t("p")}</p>
-          <p className="mt-5 flex items-center gap-2 text-sm text-[var(--sub-text)]"><MdLocationOn className="text-xl text-[var(--logo-border)]" /> Luxor, Aswan & destinations across Egypt</p>
+          <p className="mt-5 flex items-center gap-2 text-sm text-[var(--sub-text)]"><MdLocationOn className="text-xl text-[var(--logo-border)]" /> {t("location")}</p>
         </motion.div>
 
         <motion.nav variants={fadeUp} aria-label="Footer navigation">
-          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[var(--logo-border)]">Explore</h3>
+          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[var(--logo-border)]">{t("explore")}</h3>
           <div className="flex flex-col gap-3 text-sm text-[var(--sub-text)]">
-            {internalLinks.map(([label, href]) => <Link key={href} href={href} className="transition hover:text-[var(--logo-border)]">{label}</Link>)}
+            {internalLinks.map(([label, href]) => <Link key={href} href={href} className="transition hover:text-[var(--logo-border)]">{t(label)}</Link>)}
           </div>
         </motion.nav>
 
         <motion.div variants={fadeUp}>
-          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[var(--logo-border)]">Plan your journey</h3>
-          <p className="text-sm leading-7 text-[var(--sub-text)]">Discover curated Luxor tours, Aswan tours, Nile cruises and private Egypt travel experiences.</p>
+          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[var(--logo-border)]">{t("planJourney")}</h3>
+          <p className="text-sm leading-7 text-[var(--sub-text)]">{t("journeyDescription")}</p>
           <div className="mt-5 flex flex-wrap gap-3">
             {socialLinks.map(([Icon, href, label]) => <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} whileHover={{ scale: 1.08 }} className="dust-interactive rounded-full border border-[var(--logo-border)]/30 bg-black/10 p-3 text-[var(--logo-border)] transition hover:bg-[var(--logo-border)]/15"><Icon size={17} /></motion.a>)}
           </div>
@@ -82,3 +81,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

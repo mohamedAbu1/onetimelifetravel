@@ -1,88 +1,23 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "react-i18next";
-import DividerWithIcon from "../layout/DividerWithIcon";
-import Decor from "../layout/Decor";
 
 export default function AboutHero() {
-  const { themeName } = useTheme();
   const { t } = useTranslation("about");
-
+  const image = "/HomePageImage/ancient-egyptian-winged-goddess-isis-statue-white-background.webp";
   return (
-    <section className="site-section relative z-10 w-full px-6 pt-16 lg:px-10">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-[0.8fr_1fr_0.8fr] lg:gap-12">
-        {/* الصورة الأولى */}
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="editorial-card relative h-80 w-full overflow-hidden lg:h-[560px]"
-        >
-          <Image
-            src={
-              themeName === "dark"
-                ? "/HomePageImage/ancient-egyptian-winged-goddess-isis-statue-white-background.webp"
-                : "/HomePageImage/golden-pharaoh-statue-ancient-egypt.webp"
-            }
-            alt="WasetTravel Luxury Experience"
-            width={800}
-            height={800}
-            className="object-cover scale-x-[-1]"
-          />
+    <section className="pharaonic-hero w-full">
+      <Image src={image} alt="Egyptian heritage" fill priority className="object-cover -z-20 opacity-55" />
+      <div className="pharaonic-hero-content relative">
+        <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }} className="max-w-3xl">
+          <p className="pharaonic-kicker mb-5">{t("AboutOneTimeLifeTravel")}</p>
+          <div className="pharaonic-rule mb-6 max-w-md"><span>𓋹</span></div>
+          <h1>{t("h1")}</h1>
+          <p className="mt-7 text-lg leading-8">{t("p")}</p>
         </motion.div>
-
-        {/* النصوص */}
-        <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-5"
-        >
-          <p
-            className={`about-p uppercase tracking-widest text-sm text-gradient `}
-          >
-            {t("AboutWasetTravel")}
-          </p>
-
-          <DividerWithIcon />
-
-          <h1
-            className={`about-title text-4xl lg:text-5xl font-extrabold leading-tight text-gradient`}
-          >
-            {t("h1")}
-          </h1>
-
-          <DividerWithIcon />
-
-          <p className={`about-p text-gradient`}>{t("p")}</p>
-        </motion.div>
-
-        {/* الصورة الثانية */}
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="editorial-card relative h-80 w-full overflow-hidden lg:h-[560px]"
-        >
-          <Image
-            src={
-              themeName === "dark"
-                ? "/HomePageImage/ancient-egyptian-winged-goddess-isis-statue-white-background.webp"
-                : "/HomePageImage/golden-pharaoh-statue-ancient-egypt.webp"
-            }
-            alt="WasetTravel Luxury Experience"
-            width={800}
-            height={800}
-            className="object-cover"
-          />
-        </motion.div>
-        <Decor pos={"bottom"} />
       </div>
+      <div className="absolute bottom-8 right-8 hidden text-6xl text-[#d6b76c]/60 md:block">𓂀</div>
     </section>
   );
 }

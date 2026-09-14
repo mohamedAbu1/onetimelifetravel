@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { forbidden, getAuthenticatedUser, unauthorized, isAdmin } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -14,8 +15,11 @@ export async function GET() {
 
 export async function PUT(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const { id, rate } = await req.json();
-    if (!id) {
+    if (!id || !Number.isFinite(Number(rate)) || Number(rate) <= 0) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 

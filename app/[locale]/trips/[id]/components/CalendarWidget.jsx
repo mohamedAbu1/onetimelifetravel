@@ -1,119 +1,28 @@
-// BookingCalendar.jsx
-import { useTheme } from "@/context/ThemeContext";
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import CalendarBooking from "./components/CalendarBooking";
 import BookingSummaryCard from "./components/BookingSummaryCard";
-import { useChat } from "@/context/ChatContext";
 
-const BookingCalendar = ({ trip,id }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const prise = trip.solo_price;
-  const { theme } = useTheme();
-  const {
-    participants,
-    setParticipants,
-    childrenCount,
-    setChildrenCount,
-    checkInPrice,
-    setCheckInPrice,
-    checkIn,
-    setCheckIn,
-    checkOut,
-    setCheckOut,
-  } = useChat();
+export default function CalendarWidget({ trip, id }) {
+  const [participants, setParticipants] = useState(0);
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [checkInPrice, setCheckInPrice] = useState(null);
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+  const hasGuests = participants + childrenCount > 0;
 
-  const handleDateClick = (day) => {
-    setSelectedDate(day);
-  };
-
-  return (
-    <div className={`${theme.card} w-full lg:w-1/2 h-fit p-6 shadow-lg font-sans`}>
-      {/* Participants Section */}
-      <h2 className={`${theme.title} mb-4`}>Participants</h2>
-
-      <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 justify-between mb-6">
-        {/* Adults */}
-        <div className="flex items-center space-x-1">
-          <div>
-            <p className={theme.heading}>Adult</p>
-            <p className={theme.subText}>Age 6 - 100</p>
-          </div>
-          <div className="flex items-center ml-3 lg:ml-0 space-x-2">
-            <button
-              onClick={() => setParticipants(Math.max(0, participants - 1))}
-              className={`${theme.buttonSecondary}`}
-              disabled={participants === 0}
-            >
-              -
-            </button>
-            <span className={theme.text}>{participants}</span>
-            <button
-              onClick={() => setParticipants(participants + 1)}
-              className={`${theme.buttonPrimary}`}
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        {/* Children */}
-        <div className="flex items-center space-x-1">
-          <div>
-            <p className={theme.heading}>Child</p>
-            <p className={theme.subText}>Age 6 - 12</p>
-          </div>
-          <div className="flex items-center ml-5 lg:ml-0 space-x-2">
-            <button
-              onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}
-              className={`${theme.buttonSecondary}`}
-              disabled={childrenCount === 0}
-            >
-              -
-            </button>
-            <span className={theme.text}>{childrenCount}</span>
-            <button
-              onClick={() => setChildrenCount(childrenCount + 1)}
-              className={`${theme.buttonPrimary}`}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Calendar Section OR Message */}
-      {participants + childrenCount === 0 ? (
-        <div className="text-center py-10">
-          <p className={`${theme.heading} text-lg`}>
-            Please add participants to view available dates
-          </p>
-          <p className={theme.subText}>
-            Select the number of adults or children to continue booking.
-          </p>
-        </div>
-      ) : (
-        <CalendarBooking
-          prise={prise}
-          checkInPrice={checkInPrice}
-          setCheckInPrice={setCheckInPrice}
-          setCheckOut={setCheckOut}
-          checkOut={checkOut}
-          checkIn={checkIn}
-          setCheckIn={setCheckIn}
-          tripId={id}
-        />
-      )}
-
-      <BookingSummaryCard
-        checkInPrice={checkInPrice}
-        participants={participants}
-        childrenCount={childrenCount}
-        checkOut={checkOut}
-        checkIn={checkIn}
-        tripId={id}
-      />
+  return <section className="w-full rounded-[1.35rem] border border-[#d1b06a]/45 bg-[#151515] p-5 text-[#f4ead8] shadow-[0_18px_50px_rgba(0,0,0,.3)]">
+    <div className="mb-5"><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">Plan your dates</p><h2 className="mt-2 font-[Cinzel] text-2xl font-semibold">Reserve your journey</h2><p className="mt-2 text-xs leading-5 text-[#a79d8d]">Choose your group size first, then select an available check-in and check-out date.</p></div>
+    <div className="grid gap-3 sm:grid-cols-2">
+      <GuestCounter label="Adults" hint="Age 6+" value={participants} onDecrease={() => setParticipants(Math.max(0, participants - 1))} onIncrease={() => setParticipants(participants + 1)} />
+      <GuestCounter label="Children" hint="Under 12" value={childrenCount} onDecrease={() => setChildrenCount(Math.max(0, childrenCount - 1))} onIncrease={() => setChildrenCount(childrenCount + 1)} />
     </div>
-  );
-};
+    {!hasGuests ? <div className="my-5 rounded-xl border border-dashed border-white/15 px-4 py-8 text-center"><p className="text-sm text-[#ead39e]">Add guests to view booking dates</p><p className="mt-2 text-xs text-[#918879]">Your calendar will appear here once you choose at least one guest.</p></div> : <div className="mt-5"><CalendarBooking prise={trip.solo_price} checkInPrice={checkInPrice} setCheckInPrice={setCheckInPrice} setCheckOut={setCheckOut} checkOut={checkOut} checkIn={checkIn} setCheckIn={setCheckIn} tripId={id} /></div>}
+    <div className="mt-4"><BookingSummaryCard tourName={trip.title?.en || "Egyptian journey"} checkInPrice={checkInPrice} participants={participants} childrenCount={childrenCount} checkOut={checkOut} checkIn={checkIn} tripId={id} /></div>
+  </section>;
+}
 
-export default BookingCalendar;
+function GuestCounter({ label, hint, value, onDecrease, onIncrease }) {
+  return <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3"><div><p className="text-sm font-semibold text-[#f4ead8]">{label}</p><p className="mt-1 text-[10px] uppercase tracking-wider text-[#918879]">{hint}</p></div><div className="flex items-center gap-2"><button type="button" onClick={onDecrease} disabled={!value} className="grid h-8 w-8 place-items-center rounded-full border border-white/15 text-[#d1b06a] transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30">−</button><span className="w-5 text-center text-sm text-[#f4ead8]">{value}</span><button type="button" onClick={onIncrease} className="grid h-8 w-8 place-items-center rounded-full bg-[#d1b06a] text-lg text-[#15120e] transition hover:bg-[#ead39e]">+</button></div></div>;
+}

@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
 
   return (
     <main
-      className={`site-page min-h-screen ${theme.background} transition-colors duration-500 font-sans`}
+      className={`site-page pharaonic-page min-h-screen ${theme.background} transition-colors duration-500 font-sans`}
     >
       <EgyptianBackground />
      <div className="absolute inset-0 flex flex-wrap justify-center items-center opacity-10 pointer-events-none">
@@ -60,3 +60,4 @@ export default function PrivacyPolicyPage() {
     </main>
   );
 }
+

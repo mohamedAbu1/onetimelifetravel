@@ -79,7 +79,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <main className="site-page relative flex flex-col min-h-screen justify-center items-center pt-24">
+      <main className="site-page pharaonic-page relative flex flex-col min-h-screen justify-center items-center pt-24">
         <Header />
         {/* خلفية الرموز الفرعونية */}
         <div className="absolute inset-0 pointer-events-none">
@@ -101,15 +101,15 @@ export default function ContactPage() {
         </div>
 
         {/* المحتوى */}
-        <section className="relative z-10 pt-20 px-6 mt-6">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <section className="pharaonic-section relative z-10 w-full">
+          <div className="contact-grid grid grid-cols-1 lg:grid-cols-[.85fr_1.15fr] gap-8 items-start">
             {/* معلومات التواصل */}
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className={`card-theme relative rounded-2xl p-8 shadow-xl ${
+              className={`pharaonic-card contact-panel relative ${
                 themeName === "dark" ? "card-dark" : "card-light"
               }`}
             >
@@ -159,7 +159,7 @@ export default function ContactPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className={`card-theme rounded-2xl p-8 shadow-xl space-y-6 ${
+              className={`pharaonic-card contact-panel space-y-6 ${
                 themeName === "dark" ? "card-dark" : "card-light"
               }`}
             >
@@ -276,7 +276,7 @@ export default function ContactPage() {
               </div>
 
               {/* زر الإرسال */}
-              <button type="submit" className="btn-gradient w-full p-3 border-r-2 border-b-2 rounded-lg text-white cursor-pointer font-bold text-lg transition-transform transform hover:scale-105">
+              <button type="submit" className="btn-gradient w-full p-3 rounded-full text-white cursor-pointer font-bold text-lg transition-transform transform hover:scale-105">
                 {t("btn")}
               </button>
             </motion.form>
@@ -290,3 +290,4 @@ export default function ContactPage() {
     </>
   );
 }
+

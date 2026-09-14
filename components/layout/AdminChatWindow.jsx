@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import AdminChatMessages from "./components/AdminChatMessages";
 import AdminChatInput from "./components/AdminChatInput";
-import EgyptianBackground from "./EgyptianBackground";
 import { useMessages } from "@/context/MessageContext";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaUserCircle } from "react-icons/fa";
 import { useChat } from "@/context/ChatContext";
 
 export default function AdminChatWindow({ user, admin, messages, onClose }) {
@@ -86,31 +85,28 @@ export default function AdminChatWindow({ user, admin, messages, onClose }) {
     <AnimatePresence>
       {user && (
         <motion.div
-          className={`fixed bottom-20 right-6 w-110 h-125 rounded-xl shadow-xl flex flex-col z-50 ${theme.card} ${theme.text}`}
+          className="fixed bottom-4 right-4 z-50 flex h-[min(700px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-[450px] flex-col overflow-hidden rounded-[1.5rem] border border-[#c2a878]/30 bg-[#0d0d0d]/95 text-[#f7f1e6] shadow-[0_24px_90px_rgba(0,0,0,.6)] backdrop-blur-2xl sm:bottom-6 sm:right-6"
         >
-          <EgyptianBackground />
-
-          <div className="flex items-center justify-between p-3 border-b-#d4af37 border-b-2">
+          <div className="flex items-center justify-between border-b border-white/10 bg-[#17130e]/95 px-5 py-4">
             <div className="flex items-center gap-2">
               <img
                 src={user.image || "/default-avatar.png"}
                 alt={user.name}
-                width={40}
-                height={40}
-                style={{ borderRadius: "50%", border: "2px solid #d4af37" }}
+                className="h-11 w-11 rounded-2xl border border-[#c2a878]/50 object-cover"
               />
-              <span className="font-bold capitalize">{user.name}</span>
+              <span><strong className="block font-[Cinzel] text-sm capitalize">{user.name || "Traveler"}</strong><span className="mt-1 flex items-center gap-1 text-[11px] text-[#8e8577]"><FaUserCircle className="text-[#c2a878]" /> Customer conversation</span></span>
             </div>
             <button
               onClick={onClose}
-              className="text-red-500 hover:text-red-600 transition-colors duration-300 cursor-pointer"
+              aria-label="Close chat"
+              className="rounded-full p-2 text-[#8e8577] transition hover:bg-white/10 hover:text-white"
             >
               <motion.div
                 whileHover={{ rotate: 90, scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <FaTimes size={22} />
+                <FaTimes size={18} />
               </motion.div>
             </button>
           </div>

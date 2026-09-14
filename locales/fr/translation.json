@@ -5,7 +5,9 @@
     "about": "À propos",
     "contact": "Contact",
     "admin": "Admin",
-    "privacyPolicy": "Politique de confidentialité"
+    "privacyPolicy": "Politique de confidentialité",
+    "Logout": "Déconnexion",
+    "SignUp": "S’inscrire"
   },
   "home": {
     "FullName": "Nom complet",
@@ -41,7 +43,7 @@
     "ExploreCities": "Explorer les villes",
     "Explore": "Explorer",
     "AboutUs": "À propos de nous",
-    "DiscoverWasetTravel": "Découvrez  One Time Life Travel",
+    "DiscoverOneTimeLifeTravel": "Découvrez One Time Life Travel",
     "At": "Chez",
     "AtP": ", nous créons des voyages inoubliables à travers l'Égypte...",
     "professionalguides": "guides professionnels",
@@ -73,7 +75,7 @@
     "SignUp": "S'inscrire",
     "Send": "Envoyer",
     "Support": "Support",
-      "welcomeMessage": "👋 Bonjour et bienvenue ! L'équipe de  One Time Life Travel est ravie de vous aider à planifier votre prochain voyage inoubliable. Comment pouvons-nous vous aider aujourd'hui ?",
+    "welcomeMessage": "👋 Bonjour et bienvenue ! L'équipe de  One Time Life Travel est ravie de vous aider à planifier votre prochain voyage inoubliable. Comment pouvons-nous vous aider aujourd'hui ?",
     "trips": {
       "nileCruise": "Croisière sur le Nil Louxor-Assouan",
       "luxuryCruise": "Croisière de luxe sur le Nil",
@@ -81,7 +83,9 @@
       "cairoTour": "Excursion d'une journée au Caire",
       "gizaTrip": "Excursion d'une journée aux pyramides de Gizeh",
       "alexandriaTour": "Excursion d'une journée à Alexandrie"
-    }
+    },
+    "seoIntro": "Excursions à Louxor et Assouan, croisières sur le Nil et voyages privés en Égypte",
+    "LoginBookCar": "Veuillez vous connecter et réserver votre voiture maintenant ✨"
   },
   "trips": {
     "Searchtrips": "Rechercher des voyages...",
@@ -101,7 +105,7 @@
     "BuyTrip": "Acheter le voyage"
   },
   "about": {
-    "AboutWasetTravel": "À propos de  One Time Life Travel",
+    "AboutOneTimeLifeTravel": "À propos de One Time Life Travel",
     "h1": "Voyages de luxe façonnés par l’héritage et le cœur",
     "p": "Nous créons des expériences immersives à travers l’Égypte — de l’élégance intemporelle du Nil à la beauté silencieuse du désert blanc. Chaque détail reflète confort, culture et soin.",
     "p2": "Élevez votre voyage en Égypte grâce à des expériences organisées, confortables et riches culturellement.",
@@ -144,11 +148,20 @@
     "Tours": "Excursions",
     "Contact": "Contact",
     "privacyPolicy": "Politique de confidentialité",
-    "Footer": "© 2026  One Time Life Travel. Tous droits réservés. Propriétaire: Ismail Haroun — Téléphone: +20 1100507802"
+    "Footer": "© 2026  One Time Life Travel. Tous droits réservés. Propriétaire: Ismail Haroun — Téléphone: +20 1100507802",
+    "LuxorTours": "Circuits à Louxor",
+    "AswanTours": "Circuits à Assouan",
+    "heroTitle": "Des voyages en Égypte pensés autour de votre histoire.",
+    "location": "Louxor, Assouan et destinations à travers l’Égypte",
+    "explore": "Explorer",
+    "planJourney": "Planifiez votre voyage",
+    "journeyDescription": "Découvrez des circuits à Louxor et Assouan, des croisières sur le Nil et des expériences privées en Égypte.",
+    "browseTours": "Découvrir les circuits en Égypte",
+    "planExpert": "Planifier avec un expert"
   },
   "tripsId": {
     "submitReview": "Soumettre l'avis",
-    "Average": "Moyenne"
+    "average": "Moyenne"
   },
   "privacyPolicy": {
     "title": "Politique de confidentialité",
@@ -180,16 +193,15 @@
     "ownerLabel": "Propriétaire:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Téléphone:",
     "phone": "+20 1100507802"
   },
   "cancellationPolicy": {
     "title": "Politique de paiement et d'annulation",
     "effectiveDate": "Date d'entrée en vigueur: 1 juillet 2026",
-
     "cancellationPolicy": "Politique d'annulation",
-    "cancellationText": "Les demandes d'annulation doivent être envoyées par écrit par e-mail pour fournir à BasttetTravel une confirmation officielle.",
+    "cancellationText": "Les demandes d'annulation doivent être envoyées par écrit par e-mail pour fournir à One Time Life Travel une confirmation officielle.",
     "cancellationRules": [
       "150 – 120 jours avant: 25% facturé",
       "120 – 90 jours avant: 50% facturé",
@@ -198,24 +210,19 @@
       "Non-présentation: montant total facturé"
     ],
     "note": "Remarque: Pour toute annulation, des frais de transaction bancaire de 6% seront facturés sur le dépôt payé.",
-
     "refunds": "Remboursements",
     "refundsText": "Les remboursements seront traités en utilisant le même mode de paiement dans les 14 jours ouvrables. Aucun remboursement pour les non-présentations.",
-
     "accommodation": "Hébergement",
     "accommodationText": "Les prix sont basés sur une occupation double. Chambres simples disponibles avec supplément. Les hôtels peuvent être remplacés par une qualité similaire.",
-
     "responsibility": "Responsabilité",
-    "responsibilityText": "BasttetTravel agit uniquement en tant qu'agent. Nous n'assumons aucune responsabilité pour les blessures, maladies, dommages, pertes, accidents, retards ou irrégularités causés par:",
+    "responsibilityText": "One Time Life Travel agit uniquement en tant qu'agent. Nous n'assumons aucune responsabilité pour les blessures, maladies, dommages, pertes, accidents, retards ou irrégularités causés par:",
     "responsibilityList": [
       "Conditions météorologiques, force majeure",
       "Guerres, émeutes, vols, quarantaines",
       "Retards ou annulations par hôtels, transporteurs, restaurants"
     ],
-
     "specialRequests": "Demandes spéciales",
     "specialRequestsText": "Les demandes doivent être faites lors de la réservation. Nous essayons de les satisfaire mais ne pouvons pas garantir leur réalisation. Les réservations ne peuvent pas être conditionnelles aux demandes.",
-
     "childrenPolicy": "Politique enfants",
     "packages": "Forfaits, Croisières sur le Nil, Hôtels",
     "packagesList": [
@@ -230,22 +237,43 @@
       "Moins de 12 ans: 50% facturé",
       "12+ ans: Tarif complet"
     ],
-
     "tipping": "Pourboires",
     "tippingText": "Le pourboire est une coutume pour exprimer sa satisfaction. Entièrement à votre discrétion.",
-
     "complaints": "Plaintes et résolution des litiges",
-    "complaintsText": "Informez immédiatement BasttetTravel en cas de problème. Si non résolu, contactez l'Association des agents de voyage égyptiens ou le Ministère du Tourisme.",
-
+    "complaintsText": "Informez immédiatement One Time Life Travel en cas de problème. Si non résolu, contactez l'Association des agents de voyage égyptiens ou le Ministère du Tourisme.",
     "acceptance": "Acceptation de l'accord",
     "acceptanceText": "Le paiement du dépôt ou du solde final indique l'acceptation de toutes les conditions générales.",
-
     "contact": "Informations de contact",
     "ownerLabel": "Propriétaire:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Téléphone:",
     "phone": "+20 1100507802"
+  },
+  "destinations": {
+    "luxor": {
+      "name": "Louxor",
+      "eyebrow": "Le plus grand musée à ciel ouvert du monde",
+      "title": "Des circuits à Louxor au cœur des merveilles anciennes",
+      "description": "Explorez les temples de Louxor, les tombeaux royaux et les récits du Nil lors d’une expérience privée en Égypte adaptée à votre rythme.",
+      "highlights": [
+        "Temples de Karnak et de Louxor",
+        "Vallée des Rois",
+        "Expériences privées au bord du Nil"
+      ]
+    },
+    "aswan": {
+      "name": "Assouan",
+      "eyebrow": "Le visage plus doux et ensoleillé du Nil",
+      "title": "Des circuits à Assouan pour savourer le Nil sans hâte",
+      "description": "Découvrez la culture nubienne, les couchers de soleil sur les îles et la beauté paisible du sud de l’Égypte.",
+      "highlights": [
+        "Temple de Philae et les îles",
+        "Rencontres dans les villages nubiens",
+        "Croisières sur le Nil depuis Assouan"
+      ]
+    }
   }
 }
+

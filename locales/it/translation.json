@@ -5,7 +5,9 @@
     "about": "Chi siamo",
     "contact": "Contatto",
     "admin": "Admin",
-    "privacyPolicy": "Informativa sulla privacy"
+    "privacyPolicy": "Informativa sulla privacy",
+    "Logout": "Esci",
+    "SignUp": "Registrati"
   },
   "home": {
     "FullName": "Nome completo",
@@ -41,7 +43,7 @@
     "ExploreCities": "Esplora città",
     "Explore": "Esplora",
     "AboutUs": "Chi siamo",
-    "DiscoverWasetTravel": "Scopri  One Time Life Travel",
+    "DiscoverOneTimeLifeTravel": "Scopri One Time Life Travel",
     "At": "Da",
     "AtP": ", creiamo viaggi indimenticabili in tutto l'Egitto. Dalle crociere di lusso sul Nilo alle avventure nel deserto, la nostra missione è unire comfort, tradizione ed eleganza.",
     "professionalguides": "guide professionali",
@@ -74,7 +76,7 @@
     "SignUp": "Iscriviti",
     "Send": "Invia",
     "Support": "Supporto",
-      "welcomeMessage": "👋 Ciao e benvenuto! Il team di  One Time Life Travel è entusiasta di aiutarti a pianificare il tuo prossimo viaggio indimenticabile. Come possiamo assisterti oggi?",
+    "welcomeMessage": "👋 Ciao e benvenuto! Il team di  One Time Life Travel è entusiasta di aiutarti a pianificare il tuo prossimo viaggio indimenticabile. Come possiamo assisterti oggi?",
     "trips": {
       "nileCruise": "Crociera sul Nilo Luxor-Aswan",
       "luxuryCruise": "Crociera di lusso sul Nilo",
@@ -82,7 +84,8 @@
       "cairoTour": "Tour di un giorno al Cairo",
       "gizaTrip": "Gita di un giorno alle Piramidi di Giza",
       "alexandriaTour": "Tour di un giorno ad Alessandria"
-    }
+    },
+    "seoIntro": "Tour di Luxor e Assuan, crociere sul Nilo e viaggi privati in Egitto"
   },
   "trips": {
     "Searchtrips": "Cerca viaggi...",
@@ -102,7 +105,7 @@
     "BuyTrip": "Acquista viaggio"
   },
   "about": {
-    "AboutWasetTravel": "Informazioni su  One Time Life Travel",
+    "AboutOneTimeLifeTravel": "Informazioni su One Time Life Travel",
     "h1": "Viaggi di lusso creati con cuore e tradizione",
     "p": "Progettiamo esperienze immersive in tutto l’Egitto — dall’eleganza senza tempo del Nilo al silenzioso splendore del Deserto Bianco. Ogni dettaglio riflette comfort, cultura e cura.",
     "p2": "Eleviamo il viaggio in Egitto attraverso esperienze curate, confortevoli e ricche di cultura.",
@@ -145,11 +148,20 @@
     "Tours": "Tour",
     "Contact": "Contatto",
     "privacyPolicy": "Informativa sulla privacy",
-    "Footer": "© 2026  One Time Life Travel. Tutti i diritti riservati. Proprietario: Ismail Haroun — Telefono: +20 1100507802"
+    "Footer": "© 2026  One Time Life Travel. Tutti i diritti riservati. Proprietario: Ismail Haroun — Telefono: +20 1100507802",
+    "LuxorTours": "Tour di Luxor",
+    "AswanTours": "Tour di Assuan",
+    "heroTitle": "Viaggi in Egitto costruiti intorno alla tua storia.",
+    "location": "Luxor, Assuan e destinazioni in tutto l’Egitto",
+    "explore": "Esplora",
+    "planJourney": "Pianifica il viaggio",
+    "journeyDescription": "Scopri tour selezionati di Luxor e Assuan, crociere sul Nilo ed esperienze private in Egitto.",
+    "browseTours": "Scopri i tour in Egitto",
+    "planExpert": "Pianifica con un esperto"
   },
   "tripsId": {
     "submitReview": "Invia recensione",
-    "Average": "Media"
+    "average": "Media"
   },
   "privacyPolicy": {
     "title": "Informativa sulla privacy",
@@ -181,16 +193,15 @@
     "ownerLabel": "Proprietario:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Telefono:",
     "phone": "+20 1100507802"
   },
   "cancellationPolicy": {
     "title": "Politica di pagamento e cancellazione",
     "effectiveDate": "Data di entrata in vigore: 1 luglio 2026",
-
     "cancellationPolicy": "Politica di cancellazione",
-    "cancellationText": "Le richieste di cancellazione devono essere inviate per iscritto via e-mail per fornire a BasttetTravel una conferma ufficiale.",
+    "cancellationText": "Le richieste di cancellazione devono essere inviate per iscritto via e-mail per fornire a One Time Life Travel una conferma ufficiale.",
     "cancellationRules": [
       "150 – 120 giorni prima: 25% addebitato",
       "120 – 90 giorni prima: 50% addebitato",
@@ -199,24 +210,19 @@
       "No Show: importo totale addebitato"
     ],
     "note": "Nota: Per qualsiasi cancellazione verrà addebitata una commissione bancaria del 6% sull'acconto versato.",
-
     "refunds": "Rimborsi",
     "refundsText": "I rimborsi saranno elaborati utilizzando lo stesso metodo di pagamento entro 14 giorni lavorativi. Nessun rimborso per i no-show.",
-
     "accommodation": "Alloggio",
     "accommodationText": "I prezzi si basano su una condivisione doppia. Camere singole disponibili con supplemento. Gli hotel possono essere sostituiti con qualità simile.",
-
     "responsibility": "Responsabilità",
-    "responsibilityText": "BasttetTravel agisce solo come agente. Non ci assumiamo alcuna responsabilità per lesioni, malattie, danni, perdite, incidenti, ritardi o irregolarità causati da:",
+    "responsibilityText": "One Time Life Travel agisce solo come agente. Non ci assumiamo alcuna responsabilità per lesioni, malattie, danni, perdite, incidenti, ritardi o irregolarità causati da:",
     "responsibilityList": [
       "Condizioni meteorologiche, forza maggiore",
       "Guerre, rivolte, furti, quarantene",
       "Ritardi o cancellazioni da parte di hotel, vettori, ristoranti"
     ],
-
     "specialRequests": "Richieste speciali",
     "specialRequestsText": "Le richieste devono essere fatte al momento della prenotazione. Cerchiamo di soddisfarle ma non possiamo garantirne l'adempimento. Le prenotazioni non possono essere condizionate alle richieste.",
-
     "childrenPolicy": "Politica bambini",
     "packages": "Pacchetti, Crociere sul Nilo, Hotel",
     "packagesList": [
@@ -231,22 +237,43 @@
       "Sotto i 12 anni: 50% addebitato",
       "12+ anni: Tariffa completa"
     ],
-
     "tipping": "Mance",
     "tippingText": "La mancia è consuetudine per esprimere soddisfazione. Interamente a tua discrezione.",
-
     "complaints": "Reclami e risoluzione delle controversie",
-    "complaintsText": "Notifica immediatamente BasttetTravel in caso di problemi. Se non risolto, contatta l'Associazione degli agenti di viaggio egiziani o il Ministero del Turismo.",
-
+    "complaintsText": "Notifica immediatamente One Time Life Travel in caso di problemi. Se non risolto, contatta l'Associazione degli agenti di viaggio egiziani o il Ministero del Turismo.",
     "acceptance": "Accettazione dell'accordo",
     "acceptanceText": "Il pagamento dell'acconto o del saldo finale indica l'accettazione di tutti i termini e condizioni.",
-
     "contact": "Informazioni di contatto",
     "ownerLabel": "Proprietario:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Telefono:",
     "phone": "+20 1100507802"
+  },
+  "destinations": {
+    "luxor": {
+      "name": "Luxor",
+      "eyebrow": "Il più grande museo a cielo aperto del mondo",
+      "title": "Tour di Luxor tra meraviglie antiche",
+      "description": "Esplora templi, tombe reali e storie del Nilo con un’esperienza privata in Egitto costruita secondo i tuoi ritmi.",
+      "highlights": [
+        "Templi di Karnak e Luxor",
+        "Valle dei Re",
+        "Esperienze private sul Nilo"
+      ]
+    },
+    "aswan": {
+      "name": "Assuan",
+      "eyebrow": "Il lato più lento e soleggiato del Nilo",
+      "title": "Tour di Assuan per vivere il Nilo senza fretta",
+      "description": "Scopri la cultura nubiana, i tramonti sulle isole e la bellezza del sud dell’Egitto con un itinerario curato.",
+      "highlights": [
+        "Tempio di Philae e le isole",
+        "Incontri nei villaggi nubiani",
+        "Crociere sul Nilo da Assuan"
+      ]
+    }
   }
 }
+

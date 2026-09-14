@@ -43,7 +43,7 @@
     "ExploreCities": "探索城市",
     "Explore": "探索",
     "AboutUs": "关于我们",
-    "DiscoverWasetTravel": "发现  One Time Life Travel",
+    "DiscoverOneTimeLifeTravel": "发现 One Time Life Travel",
     "At": "在",
     "AtP": "，我们在埃及打造难忘的旅程。从豪华尼罗河游轮到沙漠探险，我们的使命是结合舒适、遗产与优雅。",
     "professionalguides": "专业导游",
@@ -76,7 +76,7 @@
     "LoginBookCar": "请登录并立即预订您的汽车 ✨",
     "Send": "发送",
     "Support": "支持",
-      "welcomeMessage": "👋 您好，欢迎光临！ One Time Life Travel 团队很高兴帮助您规划下一次难忘的旅程。今天我们能为您做些什么？",
+    "welcomeMessage": "👋 您好，欢迎光临！ One Time Life Travel 团队很高兴帮助您规划下一次难忘的旅程。今天我们能为您做些什么？",
     "trips": {
       "nileCruise": "卢克索-阿斯旺尼罗河游轮",
       "luxuryCruise": "豪华尼罗河游轮",
@@ -84,7 +84,8 @@
       "cairoTour": "开罗一日游",
       "gizaTrip": "吉萨金字塔一日游",
       "alexandriaTour": "亚历山大一日游"
-    }
+    },
+    "seoIntro": "卢克索和阿斯旺之旅、尼罗河游轮以及埃及私人旅行"
   },
   "trips": {
     "Searchtrips": "搜索旅行...",
@@ -103,9 +104,8 @@
     "CancelBooking": "❌ 取消预订",
     "BuyTrip": "购买行程"
   },
-
   "about": {
-    "AboutWasetTravel": "关于  One Time Life Travel",
+    "AboutOneTimeLifeTravel": "关于 One Time Life Travel",
     "h1": "以传承与真心打造的奢华旅程",
     "p": "我们在埃及设计沉浸式体验——从尼罗河的永恒优雅到白色沙漠的静谧奇观。每一个细节都体现舒适、文化与关怀。",
     "p2": "通过精心策划、舒适且富有文化的体验提升在埃及的旅行。",
@@ -148,7 +148,16 @@
     "Tours": "旅游",
     "Contact": "联系我们",
     "privacyPolicy": "隐私政策",
-    "Footer": "© 2026  One Time Life Travel. 版权所有。所有权人: Ismail Haroun — 电话: +20 1100507802"
+    "Footer": "© 2026  One Time Life Travel. 版权所有。所有权人: Ismail Haroun — 电话: +20 1100507802",
+    "LuxorTours": "卢克索之旅",
+    "AswanTours": "阿斯旺之旅",
+    "heroTitle": "围绕你的故事打造埃及之旅。",
+    "location": "卢克索、阿斯旺及埃及各地目的地",
+    "explore": "探索",
+    "planJourney": "规划你的旅程",
+    "journeyDescription": "探索精选的卢克索和阿斯旺之旅、尼罗河游轮以及埃及私人旅行体验。",
+    "browseTours": "探索埃及之旅",
+    "planExpert": "与专家规划旅程"
   },
   "tripsId": {
     "submitReview": "提交评价",
@@ -184,7 +193,7 @@
     "ownerLabel": "所有者:",
     "owner": "Ismail Haroun",
     "emailLabel": "电子邮件:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "电话:",
     "phone": "+20 1100507802"
   },
@@ -192,7 +201,7 @@
     "title": "付款和取消政策",
     "effectiveDate": "生效日期: 2026年7月1日",
     "cancellationPolicy": "取消政策",
-    "cancellationText": "取消请求必须通过电子邮件书面发送，以向 BasttetTravel 提供正式确认。",
+    "cancellationText": "取消请求必须通过电子邮件书面发送，以向 One Time Life Travel 提供正式确认。",
     "cancellationRules": [
       "150 – 120 天前: 收取 25%",
       "120 – 90 天前: 收取 50%",
@@ -206,7 +215,7 @@
     "accommodation": "住宿",
     "accommodationText": "价格基于双人共享。单人房需支付附加费。酒店可能会替换为同等质量。",
     "responsibility": "责任与义务",
-    "responsibilityText": "BasttetTravel 仅作为代理。我们不承担因以下原因造成的任何责任:",
+    "responsibilityText": "One Time Life Travel 仅作为代理。我们不承担因以下原因造成的任何责任:",
     "responsibilityList": [
       "天气、不可抗力",
       "战争、骚乱、盗窃、隔离",
@@ -223,19 +232,48 @@
       "12 岁以上: 全额"
     ],
     "tours": "观光旅游与短途旅行",
-    "toursList": ["6 岁以下: 免费", "12 岁以下: 收取 50%", "12 岁以上: 全额"],
+    "toursList": [
+      "6 岁以下: 免费",
+      "12 岁以下: 收取 50%",
+      "12 岁以上: 全额"
+    ],
     "tipping": "小费",
     "tippingText": "小费是表达满意的习惯。完全由您自行决定。",
     "complaints": "投诉与争议解决",
-    "complaintsText": "如有问题请立即通知 BasttetTravel。如未解决，请联系埃及旅行社协会或旅游部。",
+    "complaintsText": "如有问题请立即通知 One Time Life Travel。如未解决，请联系埃及旅行社协会或旅游部。",
     "acceptance": "协议接受",
     "acceptanceText": "支付定金/尾款表示接受所有条款和条件。",
     "contact": "联系信息",
     "ownerLabel": "所有者:",
     "owner": "Ismail Haroun",
     "emailLabel": "电子邮件:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "电话:",
     "phone": "+20 1100507802"
+  },
+  "destinations": {
+    "luxor": {
+      "name": "卢克索",
+      "eyebrow": "世界上最伟大的露天博物馆",
+      "title": "在古老奇迹中探索卢克索",
+      "description": "按照你的节奏探索卢克索神庙、皇家陵墓以及尼罗河畔的故事，享受专属埃及旅行体验。",
+      "highlights": [
+        "卡纳克神庙与卢克索神庙",
+        "帝王谷",
+        "尼罗河畔私人体验"
+      ]
+    },
+    "aswan": {
+      "name": "阿斯旺",
+      "eyebrow": "尼罗河更宁静、更阳光的一面",
+      "title": "悠闲享受尼罗河时光的阿斯旺之旅",
+      "description": "探索努比亚文化、岛屿日落以及埃及南部宁静的美景，体验精心安排的阿斯旺行程。",
+      "highlights": [
+        "菲莱神庙与岛屿",
+        "努比亚村落体验",
+        "从阿斯旺出发的尼罗河游轮"
+      ]
+    }
   }
 }
+

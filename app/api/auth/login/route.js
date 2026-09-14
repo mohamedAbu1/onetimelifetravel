@@ -3,11 +3,17 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { setAuthCookies } from "@/lib/auth";
 
 export async function POST(request) {
   try {
     const db = await connectDB();
-    const { email, password } = await request.json();
+    const body = await request.json();
+    const email = String(body?.email || "").trim().toLowerCase();
+    const password = String(body?.password || "");
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+    }
 
     console.log("📩 Step 1: Received login request", { email });
 
@@ -18,7 +24,7 @@ export async function POST(request) {
     }
 
     const user = rows[0];
-    console.log("👤 Step 2: User retrieved", { user });
+    console.log("👤 Step 2: User retrieved", { id: user.id });
 
     // ✅ التحقق من كلمة المرور
     const isValid = await bcrypt.compare(password, user.password);
@@ -37,7 +43,7 @@ export async function POST(request) {
     };
 
     const accessToken = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-      expiresIn: "30d",
+      expiresIn: "15m",
     });
 
     const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -45,7 +51,7 @@ export async function POST(request) {
     });
 
     // ✅ تجهيز الرد بصيغة JSON واضحة للتطبيق
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         message: "تم تسجيل الدخول بنجاح",
         user: {
@@ -56,11 +62,10 @@ export async function POST(request) {
           gender: user.gender,
           avatar_url: user.avatar_url,
         },
-        accessToken,
-        refreshToken,
       },
       { status: 200 }
     );
+    return setAuthCookies(response, accessToken, refreshToken);
   } catch (e) {
     console.error("💥 Internal error", e);
     return NextResponse.json({ error: "خطأ داخلي" }, { status: 500 });

@@ -3,9 +3,12 @@ import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import path from "path";
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
     const contentType = req.headers.get("content-type") || "";
 
     // 📌 لو الرسالة صورة
@@ -13,20 +16,23 @@ export async function POST(req) {
       const formData = await req.formData();
       const file = formData.get("file");
       if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      if (!file.type?.startsWith("image/") || file.size > 10 * 1024 * 1024) {
+        return NextResponse.json({ error: "Only images up to 10MB are allowed" }, { status: 400 });
+      }
 
-      // اسم فريد للصورة
-      const fileName = `${Date.now()}-${file.name}`;
-      const baseUrl = `https://basttettravel.com/iamges/${fileName}`; // صححت iamges → iamges
+      const extension = path.extname(file.name || "").toLowerCase();
+      const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+      if (!allowedExtensions.includes(extension)) {
+        return NextResponse.json({ error: "Unsupported image type" }, { status: 400 });
+      }
+      const fileName = `${uuidv4()}${extension}`;
+      const baseUrl = `/iamges/${fileName}`;
 
       // مسار المشروع المحلي
       const projectPath = path.join(process.cwd(), "public/iamges", fileName);
 
-      // مسار الاستضافة
-      const hostingPath = `/home/u984684626/public_html/iamges/${fileName}`;
-
-      // تجهيز المجلدات
+      // تجهيز المجلد المحلي
       await fs.promises.mkdir(path.dirname(projectPath), { recursive: true });
-      await fs.promises.mkdir(path.dirname(hostingPath), { recursive: true });
 
       // تحويل الملف إلى buffer
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -34,18 +40,16 @@ export async function POST(req) {
       // حفظ نسخة في المشروع
       await fs.promises.writeFile(projectPath, buffer);
 
-      // حفظ نسخة في الاستضافة
-      await fs.promises.writeFile(hostingPath, buffer);
-
       // باقي البيانات
       const user_id = formData.get("user_id");
       if (!user_id) return NextResponse.json({ error: "user_id is required" }, { status: 400 });
 
-      const sender_type = formData.get("sender_type") || "admin";
-      const user_name = formData.get("user_name") || "Admin";
-      const user_image = formData.get("user_image") || "/default-avatar.png";
+      const sender_type = formData.get("sender_type") || "user";
+      if (sender_type === "admin" && !isAdmin(user)) return forbidden();
+      const user_name = user.name || formData.get("user_name") || "User";
+      const user_image = user.avatar_url || formData.get("user_image") || "/default-avatar.png";
       const reply_to = formData.get("reply_to");
-      const admin_id = formData.get("admin_id") || null;
+      const admin_id = isAdmin(user) ? user.id : null;
 
       const db = await connectDB();
       const messagesId = uuidv4();
@@ -75,7 +79,11 @@ export async function POST(req) {
 
     // 📌 لو الرسالة نصية
     const body = await req.json();
-    const { user_id, content, sender_type = "user", user_name = "Unknown User", user_image = "/default-avatar.png", reply_to = null, admin_id = null } = body;
+    const { content, sender_type = "user", reply_to = null } = body;
+    const user_id = user.id;
+    const user_name = user.name || "Unknown User";
+    const user_image = user.avatar_url || "/default-avatar.png";
+    const admin_id = isAdmin(user) ? user.id : null;
 
     if (!user_id) return NextResponse.json({ error: "user_id is required" }, { status: 400 });
     if (!content) return NextResponse.json({ error: "Content cannot be null" }, { status: 400 });
@@ -112,6 +120,8 @@ export async function POST(req) {
 
 export async function GET(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
     const messageId = searchParams.get("messageId");
@@ -122,11 +132,16 @@ export async function GET(req) {
     let params = [];
 
     if (messageId) {
-      query += ` WHERE id = ?`;
+      query += isAdmin(user) ? ` WHERE id = ?` : ` WHERE id = ? AND user_id = ?`;
       params.push(messageId);
+      if (!isAdmin(user)) params.push(user.id);
     } else if (userId) {
+      if (!isAdmin(user) && userId !== user.id) return forbidden();
       query += ` WHERE user_id = ?`;
       params.push(userId);
+    } else if (!isAdmin(user)) {
+      query += ` WHERE user_id = ?`;
+      params.push(user.id);
     }
 
     query += ` ORDER BY created_at ASC`;
@@ -143,6 +158,9 @@ export async function GET(req) {
 // ✅ تحديث حالة الرسالة
 export async function PUT(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     let body = {};
     try {
       body = await req.json();
@@ -178,6 +196,9 @@ export async function PUT(req) {
 // ✅ حذف رسالة
 export async function DELETE(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     let body = {};
     try {
       body = await req.json();

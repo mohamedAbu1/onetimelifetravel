@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/static-components */
 "use client";
-import ThemeToggle from "@/components/ThemeToggle";
 import React from "react";
 import Link from "next/link";
 import {
@@ -57,7 +56,7 @@ export default function Sidebar({ activeSection, setActiveSection }) {
       <EgyptianBackground />
 
       <h2 className="text-2xl font-bold mb-6 flex flex-row items-center justify-between">
-        <span>WasetTravel</span> <ThemeToggle />
+        <span>One Time Life Travel</span>
       </h2>
 
       <nav className="flex flex-col gap-3">

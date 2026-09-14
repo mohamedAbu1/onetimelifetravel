@@ -43,7 +43,7 @@
     "ExploreCities": "Explore Cities",
     "Explore": "Explore",
     "AboutUs": "About Us",
-    "DiscoverWasetTravel": "Discover  One Time Life Travel",
+    "DiscoverOneTimeLifeTravel": "Discover One Time Life Travel",
     "At": "At",
     "AtP": ", we craft unforgettable journeys across Egypt. From luxury Nile cruises to desert adventures, our mission is to combine comfort, heritage, and elegance. With",
     "professionalguides": "professional guides",
@@ -76,7 +76,8 @@
     "SignUp": "Sign Up",
     "LoginBookCar": "Please log in and book your car now ✨",
     "Send": "Send",
-    "Support": "Support",  "welcomeMessage": "👋 Hello and welcome! The  One Time Life Travel team is excited to help you plan your next unforgettable journey. How can we assist you today?",
+    "Support": "Support",
+    "welcomeMessage": "👋 Hello and welcome! The  One Time Life Travel team is excited to help you plan your next unforgettable journey. How can we assist you today?",
     "trips": {
       "nileCruise": "Nile Cruise Luxor-Aswan",
       "luxuryCruise": "Luxury Nile Cruise",
@@ -110,10 +111,19 @@
     "Tours": "Tours",
     "Contact": "Contact",
     "privacyPolicy": "Privacy Policy",
-    "Footer": "© 2026  One Time Life Travel. All rights reserved. Owner: Ismail Haroun — Phone: +20 1100507802"
+    "Footer": "© 2026  One Time Life Travel. All rights reserved. Owner: Ismail Haroun — Phone: +20 1100507802",
+    "LuxorTours": "Luxor Tours",
+    "AswanTours": "Aswan Tours",
+    "heroTitle": "Egypt tours shaped around your story.",
+    "location": "Luxor, Aswan & destinations across Egypt",
+    "explore": "Explore",
+    "planJourney": "Plan your journey",
+    "journeyDescription": "Discover curated Luxor tours, Aswan tours, Nile cruises and private Egypt travel experiences.",
+    "browseTours": "Browse Egypt tours",
+    "planExpert": "Plan with an expert"
   },
   "about": {
-    "AboutWasetTravel": "About  One Time Life Travel",
+    "AboutOneTimeLifeTravel": "About One Time Life Travel",
     "h1": "Luxury journeys crafted with heritage and heart",
     "p": "We design immersive experiences across Egypt—from the Nile’s timeless elegance to the White Desert’s quiet wonder. Every detail reflects comfort, culture, and care.",
     "p2": "Elevate travel in Egypt through curated, comfortable, and culturally rich experiences.",
@@ -153,7 +163,6 @@
     "submitReview": "Submit Review",
     "average": "Average"
   },
-
   "privacyPolicy": {
     "title": "Privacy Policy",
     "effectiveDate": "Effective date: July 1, 2026",
@@ -184,16 +193,15 @@
     "ownerLabel": "Owner:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Phone:",
     "phone": "+20 1100507802"
   },
-
   "cancellationPolicy": {
     "title": "Payment and Cancellation Policy",
     "effectiveDate": "Effective date: July 1, 2026",
     "cancellationPolicy": "Cancellation Policy",
-    "cancellationText": "Cancellation requests must be sent in writing via email to provide BasttetTravel with official confirmation.",
+    "cancellationText": "Cancellation requests must be sent in writing via email to provide One Time Life Travel with official confirmation.",
     "cancellationRules": [
       "150 – 120 days prior: 25% charged",
       "120 – 90 days prior: 50% charged",
@@ -207,7 +215,7 @@
     "accommodation": "Accommodation",
     "accommodationText": "Prices are based on twin sharing. Single rooms available with supplementary rate. Hotels may be substituted with similar quality.",
     "responsibility": "Responsibility & Liability",
-    "responsibilityText": "BasttetTravel acts only as an agent. We assume no liability for injury, illness, damage, loss, accident, delay, or irregularity caused by:",
+    "responsibilityText": "One Time Life Travel acts only as an agent. We assume no liability for injury, illness, damage, loss, accident, delay, or irregularity caused by:",
     "responsibilityList": [
       "Weather, acts of God, force majeure",
       "Wars, riots, theft, breakdowns, quarantines",
@@ -232,15 +240,40 @@
     "tipping": "Tipping",
     "tippingText": "Tipping is customary to express satisfaction. Entirely at your discretion.",
     "complaints": "Complaints & Dispute Resolution",
-    "complaintsText": "Notify BasttetTravel immediately for issues. If unresolved, contact Egyptian Travel Agent Association or Ministry of Tourism.",
+    "complaintsText": "Notify One Time Life Travel immediately for issues. If unresolved, contact Egyptian Travel Agent Association or Ministry of Tourism.",
     "acceptance": "Acceptance of Agreement",
     "acceptanceText": "Payment of deposit/final payment indicates acceptance of all terms and conditions.",
     "contact": "Contact Information",
     "ownerLabel": "Owner:",
     "owner": "Ismail Haroun",
     "emailLabel": "Email:",
-    "email": "BasttetTravel@outlook.com",
+    "email": "OneTimeLifeTravel@outlook.com",
     "phoneLabel": "Phone:",
     "phone": "+20 1100507802"
+  },
+  "destinations": {
+    "luxor": {
+      "name": "Luxor",
+      "eyebrow": "The world's greatest open-air museum",
+      "title": "Luxor tours shaped around ancient wonder",
+      "description": "Explore Luxor temples, royal tombs and Nile-side stories with a private Egypt travel experience designed around your pace.",
+      "highlights": [
+        "Karnak and Luxor Temples",
+        "Valley of the Kings",
+        "Private Nile-side experiences"
+      ]
+    },
+    "aswan": {
+      "name": "Aswan",
+      "eyebrow": "A slower, sunnier side of the Nile",
+      "title": "Aswan tours for unhurried Nile days",
+      "description": "Discover Nubian culture, island sunsets and the quiet beauty of southern Egypt with a curated Aswan itinerary.",
+      "highlights": [
+        "Philae Temple and the islands",
+        "Nubian village encounters",
+        "Nile cruises from Aswan"
+      ]
+    }
   }
 }
+

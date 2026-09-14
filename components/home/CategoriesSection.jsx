@@ -1,244 +1,98 @@
 "use client";
+
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@/context/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/context/ThemeContext";
 import { useCitiesCategories } from "@/context/CitiesCategoriesContext";
-import DividerWithIcon from "../layout/DividerWithIcon";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import EgyptianBackground from "../layout/EgyptianBackground";
 
-const encodeData = (obj) => btoa(JSON.stringify(obj));
+const encodeData = (value) => btoa(JSON.stringify(value));
 
-function CategoryCard({ cat, theme, language }) {
-  const [imgIndex, setImgIndex] = useState(0);
+function getDisplayName(category, language) {
+  if (typeof category?.name === "object") {
+    return category.name?.[language] || category.name?.en || "Travel experience";
+  }
+  return category?.name || "Travel experience";
+}
+
+function CategoryCard({ category, language, theme }) {
+  const [imageIndex, setImageIndex] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
+  const name = getDisplayName(category, language);
+  const images = Array.isArray(category?.images) ? category.images.filter(Boolean) : [];
+  const image = images[imageIndex] || images[0] || "/fallback.jpg";
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setImgIndex((prev) => (prev + 1) % (cat.images?.length || 1));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [cat.images]);
+    if (images.length < 2) return undefined;
+    const timer = setInterval(() => setImageIndex((current) => (current + 1) % images.length), 5000);
+    return () => clearInterval(timer);
+  }, [images.length]);
 
-  const displayName =
-    typeof cat.name === "object"
-      ? cat.name?.[language] || cat.name?.en || cat.name
-      : cat.name;
-
-  const luxuryNames = [
-    "Luxusreisen",
-    "Luxury Tours",
-    "Tours de lujo",
-    "Voyages de luxe",
-    "Tour di lusso",
-    "豪华旅游",
-  ];
-
-  const handleClick = () => {
-    const queryObj = {
-      city: "all",
-      category: [displayName],
-      group_price: luxuryNames.includes(displayName) ? "Luxury" : "All",
-      popular: false,
-    };
-    const encoded = encodeData(queryObj);
-    router.push(`/${locale}/trips?data=${encoded}`);
+  const openCategory = () => {
+    const query = encodeData({ city: "all", category: [name], group_price: "All", popular: false });
+    router.push(`/${locale}/trips?data=${query}`);
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className={`editorial-card dust-interactive group relative h-[320px] cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${theme.card}`}
-      style={{ border: `1px solid ${theme.logoBorder}` }}
+    <motion.button
+      type="button"
+      onClick={openCategory}
+      whileHover={{ y: -6 }}
+      whileTap={{ scale: 0.985 }}
+      className="category-card group relative isolate flex min-h-[280px] w-full overflow-hidden rounded-[1.35rem] border text-left shadow-[0_18px_50px_rgba(0,0,0,.22)] transition-shadow duration-300 hover:shadow-[0_24px_70px_rgba(0,0,0,.34)] sm:min-h-[320px]"
+      style={{ borderColor: "rgba(194,168,120,.5)", background: theme.card }}
+      aria-label={`Explore ${name}`}
     >
-      <AnimatePresence mode="sync">
-        <motion.div
-          key={imgIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={
-              cat.images?.[imgIndex]?.startsWith("/")
-                ? cat.images[imgIndex]
-                : cat.images?.[imgIndex]?.startsWith("http")
-                ? cat.images[imgIndex]
-                : "/fallback.jpg"
-            }
-            alt={displayName}
-            fill
-            className="object-cover opacity-85 transition duration-700 group-hover:scale-105"
-          />
-        </motion.div>
-      </AnimatePresence>
-
-      <div
-          className={`absolute inset-0 ${theme.overlay} flex items-end justify-start p-6`}
-      >
-        <p
-          className="trips-text text-lg font-semibold tracking-wide drop-shadow-lg"
-        >
-          {displayName}
-        </p>
+      <Image src={image} alt={name} fill sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 23vw" className="object-cover transition duration-700 group-hover:scale-110" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
+      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+        <span className="mb-3 inline-flex rounded-full border border-[var(--logo-border)]/45 bg-black/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-[var(--logo-border)] backdrop-blur-sm">One Time Life</span>
+        <h3 className="font-[Cinzel] text-xl font-semibold leading-tight text-[#f7f1e6] sm:text-2xl">{name}</h3>
+        <span className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-[#e0bf78]">Explore journeys <span aria-hidden="true">→</span></span>
       </div>
-    </div>
+    </motion.button>
   );
 }
 
-const CategoriesSection = () => {
+export default function CategoriesSection() {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation("home");
   const { categories, loading } = useCitiesCategories();
-  const [index, setIndex] = useState(0);
-  const normalizedLang = i18n.language.split("-")[0];
-
-  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenSize({ width: window.innerWidth, height: window.innerHeight });
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (!categories.length) return undefined;
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % categories.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [categories.length]);
-
-  if (loading) {
-    return (
-      <section className="site-section w-full px-6" aria-label="Loading travel styles">
-        <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((item) => <div key={item} className="editorial-card h-72 animate-pulse rounded-2xl border bg-white/5" />)}
-        </div>
-      </section>
-    );
-  }
-
-  if (!categories.length) {
-    return (
-      <section className="site-section flex min-h-[320px] w-full flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">Travel styles</p>
-        <h2 className="mt-4 font-[Cinzel] text-3xl font-semibold text-[var(--heading)]">A journey made for you</h2>
-        <p className="mt-4 max-w-lg leading-8 text-[var(--sub-text)]">Choose a private tour, Nile cruise, cultural escape, or desert adventure and we will take care of the details.</p>
-      </section>
-    );
-  }
-
-  // الرموز الفرعونية للديكور
-  const symbols = [
-    "𓂀","𓋹","𓆣","𓇼","𓇯","𓏏","𓎛","𓊽",
-    "𓃾","𓅓","𓈇","𓉐","𓊹","𓌙","𓍿","𓎟",
-  ];
-
-  // ضبط عرض الكارد حسب الشاشة
-  const cardWidth = screenSize.width < 640 ? screenSize.width : 220;
+  const language = i18n.language.split("-")[0];
 
   return (
-    <section
-      className={`site-section flex flex-col py-24 px-6 w-full mx-auto relative transition-colors duration-500 ${theme.background}`}
-    >
-      {/* خلفية الرموز */}
-      <div className="absolute inset-0 flex flex-wrap justify-center items-center opacity-10 pointer-events-none">
-        {symbols.map((sym, i) => (
-          <motion.span
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 0.3, y: 0 }}
-            transition={{ duration: 1, delay: i * 0.1 }}
-            className="text-6xl m-6"
-            style={{ color: theme.icon }}
-          >
-            {sym}
-          </motion.span>
-        ))}
-      </div>
+    <section id="categories" className="site-section relative w-full overflow-hidden px-4 py-20 sm:px-6 lg:px-10 lg:py-28">
       <EgyptianBackground />
-
-      {/* العنوان */}
-      <div className="max-w-7xl mx-auto items-center mb-10 text-center relative z-10">
-        <h2 className="sc-title-first text-2xl lg:text-5xl font-extrabold tracking-wide drop-shadow-md text-gradient">
-          <span className="inline-block transform scale-x-[-1] text-gradient mr-4">
-            𓅓
-          </span>
-          {t("ExploreCategories")}
-          <span className="inline-block ml-4 text-gradient">𓅓</span>
-        </h2>
-        <p className="sc-p-first mt-4 capitalize text-lg opacity-80 text-start text-gradient">
-          {t("Discover")}
-        </p>
-        <DividerWithIcon />
-      </div>
-
-      {/* نسخة الموبايل */}
-      <div className="lg:hidden flex flex-col items-center gap-6 w-full">
-        <motion.div
-          className="w-[90%] max-w-sm"
-          drag="x"
-          dragConstraints={{ left: -screenSize.width / 3, right: screenSize.width / 3 }}
-          animate={{ x: -index * cardWidth + (screenSize.width - cardWidth) / 2 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          <CategoryCard
-            cat={categories[index]}
-            theme={theme}
-            language={normalizedLang}
-          />
-        </motion.div>
-
-        {/* مؤشرات أسفل الكارد */}
-        <div className="flex gap-2 mt-4">
-          {categories.map((_, i) => (
-            <span
-              key={i}
-              className={`h-2 w-2 rounded-full ${
-                i === index ? "bg-[var(--logo-border)]" : "bg-white/30"
-              }`}
-            ></span>
-          ))}
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-10 flex flex-col gap-5 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[.3em] text-[var(--logo-border)]">One Time Life Travel</p>
+            <h2 className="mt-3 font-[Cinzel] text-3xl font-semibold leading-tight text-[var(--heading)] sm:text-4xl lg:text-5xl">{t("ExploreCategories")}</h2>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--sub-text)] sm:text-base">{t("Discover")}</p>
+          </div>
+          <a href="#featured-trips" className="self-start rounded-full border border-[var(--logo-border)]/60 px-5 py-3 text-xs font-bold uppercase tracking-[.16em] text-[var(--logo-border)] transition hover:bg-[var(--logo-border)] hover:text-[#15120e] sm:self-auto">View featured trips</a>
         </div>
-      </div>
 
-      {/* نسخة الديسكتوب */}
-      <div className="hidden lg:block relative overflow-hidden w-full max-w-7xl mx-auto z-10">
-        <motion.div
-          className="flex h-full"
-          drag="x"
-          dragConstraints={{ left: -categories.length * cardWidth, right: 0 }}
-          whileTap={{ cursor: "grabbing" }}
-          animate={{ x: -index * cardWidth }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          {categories.map((cat, i) => (
-            <div
-              key={i}
-              className="min-w-[100%] sm:min-w-[50%] md:min-w-[33.33%] lg:min-w-[20%] p-3 flex justify-center"
-            >
-              <CategoryCard
-                cat={cat}
-                theme={theme}
-                language={normalizedLang}
-              />
-            </div>
-          ))}
-        </motion.div>
+        {loading ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[1, 2, 3, 4].map((item) => <div key={item} className="h-[280px] animate-pulse rounded-[1.35rem] border border-[var(--logo-border)]/20 bg-white/5 sm:h-[320px]" />)}
+          </div>
+        ) : categories.length ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {categories.map((category, index) => <CategoryCard key={category.id || index} category={category} language={language} theme={theme} />)}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-[var(--logo-border)]/25 bg-black/10 p-10 text-center backdrop-blur-sm">
+            <h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">Your journey starts here</h3>
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">Explore private tours, Nile cruises, cultural escapes, and desert adventures with One Time Life Travel.</p>
+          </div>
+        )}
       </div>
     </section>
   );
-};
-
-export default CategoriesSection;
+}

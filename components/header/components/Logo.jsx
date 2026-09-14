@@ -1,12 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import { useTheme } from "@/context/ThemeContext";
 import Link from "next/link";
 
-export default function BasttetTravelLogo({ compact = false, className = "" }) {
-  const { themeName } = useTheme();
-  const gold = themeName === "dark" ? "#e0bf78" : "#b1843a";
-  const ink = themeName === "dark" ? "#f7f1e6" : "#17343d";
+export default function OneTimeLifeTravelLogo({ compact = false, className = "" }) {
+  const gold = "#e0bf78";
+  const ink = "#f7f1e6";
 
   return (
     <motion.div

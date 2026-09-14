@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { forbidden, getAuthenticatedUser, unauthorized, isAdmin } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const { userId, newRole } = await req.json();
+    if (!userId || !["USER", "ADMIN"].includes(newRole)) {
+      return Response.json({ error: "Invalid role data" }, { status: 400 });
+    }
     const db = await connectDB();
 
     // ✅ تحديث الدور في قاعدة البيانات

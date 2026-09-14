@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
     const {
       tripId,
       user_name,
@@ -17,12 +20,12 @@ export async function POST(req) {
       hasGuide,
       selectedLanguages,
       arrivalDate,
-      userId,
       status,
       departureDate,
       platform,
     } = await req.json();
 
+    const userId = user.id;
     const db = await connectDB();
 
     // ✅ Check if there is an existing purchase

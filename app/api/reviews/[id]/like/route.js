@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 // ✅ جلب اللايكات
-export async function GET(req, context) {
+export async function GET(req, { params }) {
   try {
-        const reviewId = params.id;
+    const { id: reviewId } = await params;
 
     const db = await connectDB();
     const [rows] = await db.query(
@@ -23,20 +24,17 @@ export async function GET(req, context) {
 }
 
 // ✅ إضافة لايك
-export async function POST(req, context) {
+export async function POST(req, { params }) {
   try {
-    const reviewId = params.id;
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    const { id: reviewId } = await params;
 
-    const body = await req.json();
-    const { user_id } = body;
-
-    if (!user_id) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-    }
+    const user_id = user.id;
 
     const db = await connectDB();
     await db.query(
-      "INSERT INTO review_likes (review_id, user_id, created_at) VALUES (?, ?, NOW())",
+      "INSERT IGNORE INTO review_likes (review_id, user_id, created_at) VALUES (?, ?, NOW())",
       [reviewId, user_id]
     );
 
@@ -47,17 +45,13 @@ export async function POST(req, context) {
 }
 
 // ✅ إزالة لايك
-export async function DELETE(req, context) {
+export async function DELETE(req, { params }) {
   try {
-    const { params } = await context; // ✅ لازم await
-    const reviewId = params.id;
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    const { id: reviewId } = await params;
 
-    const body = await req.json();
-    const { user_id } = body;
-
-    if (!user_id) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-    }
+    const user_id = user.id;
 
     const db = await connectDB();
     await db.query(

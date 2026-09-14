@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import { useMessages } from "@/context/MessageContext";
 import { FaComments } from "react-icons/fa";
-import EgyptianBackground from "@/components/layout/EgyptianBackground";
 import { useAuth } from "@/context/AuthContext";
 import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
@@ -120,7 +119,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     });
 
     const data = await res.json();
-    if (!data.url) return;
+    if (!data.content) return;
 
     // ✅ الرسالة الجديدة تدخل في الـ context
     await sendMessage({
@@ -128,7 +127,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
       user_name: userData?.name,
       user_image:
         userData?.avatar_url || userData?.image || "/default-avatar.png",
-      content: data.url, // الرابط النهائي للصورة
+      content: data.content, // الرابط النهائي للصورة
       sender_type: "user",
       status: "sent",
     });
@@ -154,9 +153,8 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className={`fixed overflow-x-hidden bottom-20 right-6 w-110 h-125 rounded-xl shadow-xl flex flex-col z-50 ${theme.card} ${theme.text}`}
+            className="fixed bottom-4 right-4 z-50 flex h-[min(680px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-[430px] flex-col overflow-hidden rounded-[1.5rem] border border-[#c2a878]/30 bg-[#0d0d0d]/95 text-[#f7f1e6] shadow-[0_24px_90px_rgba(0,0,0,.55)] backdrop-blur-2xl sm:bottom-6 sm:right-6"
           >
-            <EgyptianBackground />
             <ChatHeader onClose={() => setOpen(false)} theme={theme} />
             <ChatMessages
               messages={messages}
@@ -165,8 +163,8 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
             />
 
             {bookingMode ? (
-              <div className="p-6 rounded-xl shadow-lg bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900">
-                <p className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <div className="m-4 rounded-2xl border border-[#c2a878]/20 bg-[#17130e] p-5 shadow-inner">
+                <p className="mb-4 text-base font-semibold text-[#f7f1e6]">
                   🚗 Where would you like to book the car from and to?
                 </p>
 
@@ -175,8 +173,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
                   placeholder="From"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 w-full mb-3 
-               focus:outline-none focus:ring-2 focus:ring-[#C2A878] dark:bg-gray-700 dark:text-white"
+                  className="mb-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#8e8577] focus:border-[#c2a878] focus:ring-2 focus:ring-[#c2a878]/20"
                 />
 
                 <input
@@ -184,8 +181,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
                   placeholder="To"
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 w-full mb-3 
-               focus:outline-none focus:ring-2 focus:ring-[#C2A878] dark:bg-gray-700 dark:text-white"
+                  className="mb-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#8e8577] focus:border-[#c2a878] focus:ring-2 focus:ring-[#c2a878]/20"
                 />
 
                 <button
@@ -203,9 +199,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
                     ]);
                     setBookingMode(false);
                   }}
-                  className="mt-4 w-full px-6 py-3 rounded-lg font-bold text-white 
-               bg-gradient-to-r from-[#C2A878] to-[#eab308] 
-               shadow-md hover:scale-105 transition-transform duration-300"
+                  className="mt-4 w-full rounded-xl bg-[#c2a878] px-6 py-3 text-sm font-bold text-[#15120e] shadow-lg shadow-[#c2a878]/10 transition hover:bg-[#e0bf78]"
                 >
                   Confirm Booking
                 </button>

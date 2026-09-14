@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
 
 export async function POST(request) {
   try {
+    const user = getAuthenticatedUser(request);
+    if (!user) return unauthorized();
     const { amount, userDetails } = await request.json();
+    const numericAmount = Number(amount);
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0 || numericAmount > 10_000_000) {
+      return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+    }
 
     if (!process.env.PAYMOB_API_KEY || !process.env.PAYMOB_INTEGRATION_ID) {
       console.error("❌ Missing Paymob Environment Variables");
@@ -13,63 +20,52 @@ export async function POST(request) {
     }
 
     // 1. Auth Request
-    console.log("🚀 Starting Auth Request with API_KEY:", process.env.PAYMOB_API_KEY);
     const authResponse = await fetch("https://accept.paymob.com/api/auth/tokens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ api_key: process.env.PAYMOB_API_KEY }),
     });
-
-    console.log("📡 Auth Response Status:", authResponse.status);
     const authData = await authResponse.json();
-    console.log("📦 Auth Response Data:", authData);
 
     if (!authResponse.ok || !authData.token) {
       return NextResponse.json(
-        { error: "Authentication failed", details: authData },
+        { error: "Authentication failed" },
         { status: 401 },
       );
     }
 
     const authToken = authData.token;
-    console.log("✅ Auth Token:", authToken);
 
     // 2. Order Registration
-    console.log("🚀 Starting Order Registration with amount:", amount * 100);
     const orderResponse = await fetch("https://accept.paymob.com/api/ecommerce/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         auth_token: authToken,
         delivery_needed: "false",
-        amount_cents: amount * 100,
+        amount_cents: Math.round(numericAmount * 100),
         currency: "EGP",
         items: [],
       }),
     });
-
-    console.log("📡 Order Response Status:", orderResponse.status);
     const orderData = await orderResponse.json();
-    console.log("📦 Order Response Data:", orderData);
 
     if (!orderResponse.ok || !orderData.id) {
       return NextResponse.json(
-        { error: "Order registration failed", details: orderData },
+        { error: "Order registration failed" },
         { status: 400 },
       );
     }
 
     const orderId = orderData.id;
-    console.log("✅ Order ID:", orderId);
 
     // 3. Payment Key Request
-    console.log("🚀 Starting Payment Key Request with Integration ID:", process.env.PAYMOB_INTEGRATION_ID);
     const paymentKeyResponse = await fetch("https://accept.paymob.com/api/acceptance/payment_keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         auth_token: authToken,
-        amount_cents: amount * 100,
+        amount_cents: Math.round(numericAmount * 100),
         expiration: 3600,
         order_id: orderId,
         billing_data: {
@@ -92,25 +88,21 @@ export async function POST(request) {
         lock_order_when_paid: "true",
       }),
     });
-
-    console.log("📡 Payment Key Response Status:", paymentKeyResponse.status);
     const paymentKeyData = await paymentKeyResponse.json();
-    console.log("📦 Payment Key Response Data:", paymentKeyData);
 
     if (!paymentKeyResponse.ok || !paymentKeyData.token) {
       return NextResponse.json(
-        { error: "Payment key generation failed", details: paymentKeyData },
+        { error: "Payment key generation failed" },
         { status: 400 },
       );
     }
-
-    console.log("✅ Payment Token:", paymentKeyData.token);
     return NextResponse.json({ token: paymentKeyData.token });
   } catch (error) {
     console.error("💥 Paymob Server Error:", error);
     return NextResponse.json(
-      { error: "Internal server error", message: error.message },
+      { error: "Internal server error" },
       { status: 500 },
     );
   }
 }
+

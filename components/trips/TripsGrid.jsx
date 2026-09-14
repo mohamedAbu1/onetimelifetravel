@@ -1,198 +1,50 @@
 "use client";
-import { FaStar, FaDollarSign, FaEuroSign, FaPoundSign } from "react-icons/fa";
+
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { FaStar } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { usePurchase } from "@/context/PurchaseContext";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/context/LanguageContext";
-import { useTheme } from "@/context/ThemeContext";
-import { useCurrency } from "@/context/CurrencyContext"; // ✅ استدعاء الكونتكست
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-export default function TripsGrid({ trips, cardStyle = "vertical" }) {
+import { useCurrency } from "@/context/CurrencyContext";
+
+export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split("/").filter(Boolean)[0] || "en";
   const { userData } = useAuth();
-  const { currency, purchases } = usePurchase();
+  const { currency, purchases = [] } = usePurchase();
+  const { rates } = useCurrency();
   const { t } = useTranslation("trips");
   const { lang } = useLanguage();
-  const { theme } = useTheme();
 
-  const getRandomStars = () => Math.floor(Math.random() * 3) + 3;
-  const convertPrice = (group_price, tripCurrency) => {
-    let converted = group_price;
-    if (currency === "EUR" && tripCurrency === "USD") {
-      converted = (group_price * 0.85).toFixed(2);
-    } else if (currency === "USD" && tripCurrency === "EUR") {
-      converted = (group_price * 1.18).toFixed(2);
-    } else if (currency === "EGP" && tripCurrency === "USD") {
-      converted = (group_price * 49.1).toFixed(2);
-    } else if (currency === "USD" && tripCurrency === "EGP") {
-      converted = (group_price / 49.1).toFixed(2);
-    }
-    return converted;
+  const convertPrice = (price, tripCurrency) => {
+    const amount = Number(price) || 0;
+    if (currency === tripCurrency) return amount.toFixed(2);
+    if (currency === "EUR" && tripCurrency === "USD") return (amount * (rates?.EUR || 0.85)).toFixed(2);
+    if (currency === "USD" && tripCurrency === "EUR") return (amount / (rates?.EUR || 1.18)).toFixed(2);
+    if (currency === "EGP" && tripCurrency === "USD") return (amount * (rates?.USD || 49.1)).toFixed(2);
+    if (currency === "USD" && tripCurrency === "EGP") return (amount / (rates?.USD || 49.1)).toFixed(2);
+    return amount.toFixed(2);
   };
-  return (
-    <div
-      className={`flex-1 z-[0] ${
-        cardStyle === "vertical"
-          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-          : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"
-      } `}
-    >
-     {trips.map((trip, i) => {
-        const avgStars = getRandomStars();
-        const displayedPrice = convertPrice(trip.group_price, trip.currency);
 
-        const hasPurchased =
-          userData &&
-          purchases.some(
-            (p) =>
-              p.user_id?.toString() === userData.id?.toString() &&
-              p.trip_id?.toString() === trip.id?.toString() &&
-              p.status !== "Cancelled",
-          );
+  return <div className={`grid flex-1 gap-5 ${cardStyle === "vertical" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
+    {trips.map((trip, index) => {
+      const title = trip.title?.[lang] || trip.title?.en || "Untitled trip";
+      const cities = getLocalizedNames(trip.cities, lang);
+      const categories = getLocalizedNames(trip.categories, lang);
+      const purchased = purchases.some((purchase) => purchase.user_id?.toString() === userData?.id?.toString() && purchase.trip_id?.toString() === trip.id?.toString() && purchase.status !== "Cancelled");
+      const images = (trip.images?.filter(Boolean).length ? trip.images : [trip.cover_image || "/default.jpg"]);
+      return <motion.article key={trip.id || index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: Math.min(index * 0.05, 0.25) }} className={`group overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[#151515] shadow-[0_18px_50px_rgba(0,0,0,.16)] ${cardStyle === "horizontal" ? "md:flex" : ""}`}>
+        <div className={`relative overflow-hidden ${cardStyle === "horizontal" ? "h-64 md:h-auto md:w-2/5" : "h-60"}`}><Image src={images[0]} alt={title} fill sizes={cardStyle === "horizontal" ? "(min-width: 768px) 40vw, 100vw" : "(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw"} className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" /><div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#ead39e] backdrop-blur-md">{trip.duration || "Egypt journey"}</div></div>
+        <div className="flex flex-1 flex-col justify-between p-5"><div><div className="mb-3 flex items-center justify-between gap-2"><span className="text-xs text-[#d1b06a]">{cities || "Egypt"}</span><span className="flex items-center gap-1 text-xs text-[#e5c878]"><FaStar /> {trip.rating || "4.5"}</span></div><h2 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h2><p className="mt-3 line-clamp-1 text-xs text-[#93897a]">{categories || t("NoCategory")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(trip.group_price, trip.currency)} {currency}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className="rounded-full bg-[#d1b06a] px-4 py-2.5 text-xs font-semibold text-[#15120e] transition hover:-translate-y-0.5 hover:bg-[#ead39e]">{purchased ? t("Tripdetails") : t("btn")}</button></div></div>
+      </motion.article>;
+    })}
+  </div>;
+}
 
-        const hasActivePurchase = purchases.some(
-          (p) =>
-            p.trip_id === trip.id &&
-            p.user_id === userData?.id &&
-            p.status !== "Cancelled",
-        );
-
-        // 🟢 اختيار الأيقونة حسب العملة
-        let CurrencyIcon;
-        let currencyColor;
-        if (currency === "USD") {
-          CurrencyIcon = FaDollarSign;
-          currencyColor = theme.usdColor || "#2ecc71";
-        } else if (currency === "EUR") {
-          CurrencyIcon = FaEuroSign;
-          currencyColor = theme.eurColor || "#3498db";
-        } else if (currency === "EGP") {
-          CurrencyIcon = FaPoundSign;
-          currencyColor = theme.egpColor || "#b8860b";
-        }
-
-        return (
-          <motion.div
-            key={trip.id || i}
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: theme.shadow,
-            }}
-            className={`trip-card dust-interactive flex ${cardStyle === "vertical" ? "w-full flex-col" : "flex-row"} overflow-hidden transition-transform duration-300`}
-          >
-           
-
-          
-             {/* قسم الصور بسليدر */}
-            <div className={` ${cardStyle === "vertical" ? "w-full" : "lg:w-1/2"} w-full`}>
-              <Swiper
-                spaceBetween={10}
-                slidesPerView={1}
-                loop
-                autoplay={{ delay: 3000 }}
-                pagination={{ clickable: true }}
-                navigation
-                modules={[Autoplay, Pagination, Navigation]}
-                className="h-[300px] lg:h-[400px]"
-              >
-                {(trip.images || [trip.cover_image]).map((img, idx) => (
-                  <SwiperSlide key={idx}>
-                    <Image
-                      src={img || "/default.jpg"}
-                      alt={trip.title?.[lang] || trip.title?.en || "Trip image"}
-                      width={1900}
-                      height={400}
-                      className="object-cover w-full h-full"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-              {/* قسم المعلومات */}
-            <div className={`${cardStyle === "vertical" ? "w-full" : "lg:w-1/2"} w-full p-6 flex flex-col gap-4`}>
-              <h3 className="text-xl font-semibold leading-snug">
-                {trip.title?.[lang] || trip.title?.en || "Untitled"}
-              </h3>
-
-              <p className="text-sm">
-                {Array.isArray(trip.cities) && trip.cities.length > 0
-                  ? trip.cities
-                      .filter(Boolean)
-                      .map((c) => {
-                        try {
-                          const parsed = JSON.parse(c.name);
-                          return (
-                            parsed?.[lang] ||
-                            parsed?.["en"] ||
-                            Object.values(parsed)[0] ||
-                            "Unknown City"
-                          );
-                        } catch {
-                          return c.name || "Unknown City";
-                        }
-                      })
-                      .join(", ")
-                  : "Unknown City"}
-              </p>
-
-              <p className="text-sm">
-                {Array.isArray(trip.categories) && trip.categories.length > 0
-                  ? trip.categories
-                      .filter(Boolean)
-                      .map((cat) => {
-                        try {
-                          const parsed = JSON.parse(cat.name);
-                          return (
-                            parsed?.[lang] ||
-                            parsed?.["en"] ||
-                            Object.values(parsed)[0] ||
-                            "Unknown Category"
-                          );
-                        } catch {
-                          return cat.name || "Unknown Category";
-                        }
-                      })
-                      .join(", ")
-                  : t("NoCategory")}
-              </p>
-
-              <p className="text-lg font-semibold flex items-center gap-2">
-                <CurrencyIcon style={{ color: currencyColor }} />
-                {displayedPrice} {currency}
-              </p>
-
-              <div className="flex items-center gap-2">
-                {[...Array(5)].map((_, idx) => (
-                  <FaStar
-                    key={idx}
-                    className={
-                      idx < avgStars ? "text-yellow-400" : "text-gray-300"
-                    }
-                  />
-                ))}
-                <span className="text-sm opacity-70">({t("reviews")})</span>
-              </div>
-
-              <button
-                onClick={() => router.push(`/trips/${trip.id}`)}
-                className="editorial-button dust-interactive mt-3 cursor-pointer px-5 py-2 text-[#15120e] shadow-md"
-              >
-                {hasPurchased ? t("Tripdetails") : t("btn")}
-              </button>
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
+function getLocalizedNames(items = [], language) {
+  return items.filter(Boolean).map((item) => { let name = item.name; try { if (typeof name === "string" && name.startsWith("{")) name = JSON.parse(name); } catch { return item.name || ""; } return typeof name === "object" ? name?.[language] || name?.en || Object.values(name)[0] : name; }).filter(Boolean).join(", ");
 }

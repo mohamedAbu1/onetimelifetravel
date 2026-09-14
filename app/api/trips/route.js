@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 // دالة آمنة لتحويل أي قيمة إلى JSON نصي
 const safeStringify = (value) => {
@@ -12,6 +13,9 @@ const safeStringify = (value) => {
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const body = await req.json();
     const tripId = uuidv4();
 
@@ -226,4 +230,3 @@ export async function GET() {
     );
   }
 }
-

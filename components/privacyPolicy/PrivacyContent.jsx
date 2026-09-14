@@ -1,88 +1,32 @@
 "use client";
+
 import { motion } from "framer-motion";
-import DividerWithIcon from "../layout/DividerWithIcon";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-export default function PrivacyContent({ theme }) {
+export default function PrivacyContent() {
   const { t } = useTranslation("privacyPolicy");
+  const pathname = usePathname();
+  const locale = pathname.split("/").filter(Boolean)[0] || "en";
+  const sections = [
+    { title: t("informationCollection"), body: t("informationCollectionText") },
+    { title: t("useOfData"), items: ["provideService", "notifyChanges", "interactiveFeatures", "customerCare", "monitorUsage", "preventIssues"] },
+  ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5 }}
-      className={`${theme.card} shadow-lg p-10 mt-[-4rem] relative z-10 max-w-5xl mx-auto`}
-    >
-      <article
-        className={`prose max-w-none prose-lg leading-relaxed ${theme.text} flex flex-col gap-3`}
-      >
-        <h1 className={`${theme.title} text-3xl pt-5`}>
-          {t("title")}
-        </h1>
-        <DividerWithIcon />
-
-        <p>
-          <strong className="capitalize">{t("effectiveDate", { defaultValue: "Effective date:" })}</strong> {t("effectiveDate")}
-        </p>
-        <p>{t("intro")}</p>
-        <>
-          {t("dataUsage")}{" "}
-          {t("consent")}{" "}
-          <Link href="/cancellationPolicy" className="text-blue-500 underline">
-            Cancellation Policy
-          </Link>
-        </>
-        <DividerWithIcon />
-        <DividerWithIcon />
-
-        <h2 className={theme.heading}>
-          <strong className="capitalize">{t("informationCollection")}</strong>
-        </h2>
-        <p>{t("informationCollectionText")}</p>
-        <DividerWithIcon />
-
-        <h3 className={theme.heading}>
-          <strong className="capitalize">{t("typesOfData")}</strong>
-        </h3>
-        <h4 className={theme.subText}>{t("personalData")}</h4>
-        <ul>
-          <li>{t("emailAddress")}</li>
-          <li>{t("fullName")}</li>
-          <li>{t("phoneNumber")}</li>
-          <li>{t("address")}</li>
-          <li>{t("cookiesUsage")}</li>
-        </ul>
-
-        <h4 className={theme.subText}>{t("usageData")}</h4>
-        <p>{t("usageDataText")}</p>
-
-        <h4 className={theme.subText}>{t("cookiesData")}</h4>
-        <p>{t("cookiesDataText")}</p>
-        <DividerWithIcon />
-
-        <h2 className={theme.heading}>
-          <strong className="capitalize">{t("useOfData")}</strong>
-        </h2>
-        <ul>
-          <li>{t("provideService")}</li>
-          <li>{t("notifyChanges")}</li>
-          <li>{t("interactiveFeatures")}</li>
-          <li>{t("customerCare")}</li>
-          <li>{t("monitorUsage")}</li>
-          <li>{t("preventIssues")}</li>
-        </ul>
-        <DividerWithIcon />
-
-        <h2 className={theme.heading}>
-          <strong className="capitalize">{t("contactUs")}</strong>
-        </h2>
-        <ul>
-          <li><strong>{t("ownerLabel")}</strong> {t("owner")}</li>
-          <li><strong>{t("emailLabel")}</strong> {t("email")}</li>
-          <li><strong>{t("phoneLabel")}</strong> {t("phone")}</li>
-        </ul>
-      </article>
+    <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="policy-content-modern">
+      <div className="policy-document-head"><div><p className="policy-kicker">OneTimeLifeTravel · Privacy</p><h2>{t("title")}</h2></div><span className="policy-status">Updated</span></div>
+      <p className="policy-effective"><strong>{t("effectiveDate", { defaultValue: "Effective date:" })}</strong> {t("effectiveDate")}</p>
+      <p className="policy-lead">{t("intro")}</p>
+      <div className="policy-callout">{t("dataUsage")} {t("consent")} <Link href={`/${locale}/cancellationPolicy`}>Cancellation Policy</Link></div>
+      <div className="policy-grid">
+        {sections.map((section) => (
+          <section key={section.title} className="policy-section-card"><h3>{section.title}</h3>{section.body && <p>{section.body}</p>}{section.items && <ul>{section.items.map((item) => <li key={item}>{t(item)}</li>)}</ul>}</section>
+        ))}
+      </div>
+      <section className="policy-section-card"><h3>{t("typesOfData")}</h3><h4>{t("personalData")}</h4><ul><li>{t("emailAddress")}</li><li>{t("fullName")}</li><li>{t("phoneNumber")}</li><li>{t("address")}</li><li>{t("cookiesUsage")}</li></ul><h4>{t("usageData")}</h4><p>{t("usageDataText")}</p><h4>{t("cookiesData")}</h4><p>{t("cookiesDataText")}</p></section>
+      <section className="policy-contact-card"><p className="policy-kicker">Need clarification?</p><h3>{t("contactUs")}</h3><ul><li><strong>{t("ownerLabel")}</strong> {t("owner")}</li><li><strong>{t("emailLabel")}</strong> {t("email")}</li><li><strong>{t("phoneLabel")}</strong> {t("phone")}</li></ul></section>
     </motion.div>
   );
 }

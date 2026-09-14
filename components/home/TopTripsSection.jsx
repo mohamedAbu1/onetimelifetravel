@@ -1,204 +1,65 @@
 "use client";
+
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@/context/ThemeContext";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import DividerWithIcon from "../layout/DividerWithIcon";
+import { useTheme } from "@/context/ThemeContext";
 import { useTrip } from "@/context/TripContext";
 import { usePurchase } from "@/context/PurchaseContext";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCurrency } from "@/context/CurrencyContext";
-import { usePathname } from "next/navigation";
 
-const TopTripsSection = () => {
+export default function TopTripsSection() {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation("home");
+  const { trips, fetchTrips, loadingTrips } = useTrip();
+  const { currency, purchases = [] } = usePurchase();
+  const { rates } = useCurrency();
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
-  const { user } = useAuth();
-  const normalizedLang = i18n.language.split("-")[0];
+  const language = i18n.language.split("-")[0];
 
-  const { trips, fetchTrips, loadingTrips } = useTrip();
-  const { currency, purchases } = usePurchase();
-  const { rates } = useCurrency();
-
-  useEffect(() => {
-    fetchTrips();
-  }, []);
+  useEffect(() => { fetchTrips(); }, [fetchTrips]);
 
   if (loadingTrips) {
-    return (
-      <section className="site-section w-full px-6" aria-label="Loading featured trips">
-        <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
-          {[1, 2, 3].map((item) => <div key={item} className="editorial-card h-80 animate-pulse rounded-2xl border bg-white/5" />)}
-        </div>
-      </section>
-    );
+    return <section className="site-section w-full px-6 py-20" aria-label="Loading featured trips"><div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[430px] animate-pulse rounded-[1.75rem] bg-white/10" />)}</div></section>;
   }
 
-  const topTrips = [...trips]
-    .sort(
-      (a, b) =>
-        (Array.isArray(b.reviews) ? b.reviews.length : 0) -
-        (Array.isArray(a.reviews) ? a.reviews.length : 0),
-    )
-    .slice(0, 7);
+  const topTrips = [...(trips || [])].sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0)).slice(0, 6);
+  const convertPrice = (price, tripCurrency) => {
+    const amount = Number(price) || 0;
+    if (currency === tripCurrency) return amount.toFixed(2);
+    if (currency === "EUR" && tripCurrency === "USD") return (amount * (rates.EUR || 0.85)).toFixed(2);
+    if (currency === "USD" && tripCurrency === "EUR") return (amount / (rates.EUR || 1.18)).toFixed(2);
+    if (currency === "EGP" && tripCurrency === "USD") return (amount * (rates.USD || 49.1)).toFixed(2);
+    if (currency === "USD" && tripCurrency === "EGP") return (amount / (rates.USD || 49.1)).toFixed(2);
+    return amount.toFixed(2);
+  };
 
   if (!topTrips.length) {
-    return (
-      <section id="featured-trips" className="site-section flex w-full flex-col items-center px-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">Curated Egypt travel</p>
-        <h2 className="mt-4 font-[Cinzel] text-3xl font-semibold text-[var(--heading)]">Your next story starts here</h2>
-        <p className="mt-4 max-w-lg leading-8 text-[var(--sub-text)]">Our featured journeys are being prepared. Contact our team and we will shape a private Luxor, Aswan, or Nile itinerary for you.</p>
-      </section>
-    );
+    return <section id="featured-trips" className="site-section w-full px-6 py-20 text-center"><p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d1b06a]">Featured journeys</p><h2 className="mt-4 font-[Cinzel] text-3xl text-[#f4ead8]">Your next story starts here</h2><p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#b8b0a2]">Our featured journeys are being prepared by our local team.</p></section>;
   }
 
-  const convertPrice = (group_price, tripCurrency) => {
-    let converted = group_price;
-    if (currency === "EUR" && tripCurrency === "USD") {
-      converted = (group_price * (rates.EUR || 0.85)).toFixed(2);
-    } else if (currency === "USD" && tripCurrency === "EUR") {
-      converted = (group_price * (1 / (rates.EUR || 1.18))).toFixed(2);
-    } else if (currency === "EGP" && tripCurrency === "USD") {
-      converted = (group_price * (rates.USD || 49.1)).toFixed(2);
-    } else if (currency === "USD" && tripCurrency === "EGP") {
-      converted = (group_price / (rates.USD || 49.1)).toFixed(2);
-    }
-    return converted;
-  };
-
-  // نسخة الموبايل بدون أي أنيميشن
-  const MobileSlider = () => {
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setIndex((prev) => (prev + 1) % topTrips.length);
-      }, 12000);
-      return () => clearInterval(interval);
-    }, []);
-
-    return (
-      <div className="flex flex-col items-center gap-6 w-full">
-        <div key={index} className="w-[90%] max-w-sm">
-          <TripCard trip={topTrips[index]} disableAnimation />
+  return (
+    <section id="featured-trips" className={`site-section w-full overflow-hidden px-5 py-20 md:px-8 lg:px-12 ${theme.background}`}>
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d1b06a]">One Time Life Travel · Curated journeys</p><h2 className="font-[Cinzel] text-3xl font-semibold text-[#f4ead8] md:text-5xl">{t("TopTrips")}</h2></div><p className="max-w-md text-sm leading-7 text-[#b8b0a2] md:text-right">Handpicked experiences designed around the places and moments you will remember longest.</p></div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {topTrips.map((trip, index) => {
+            const title = trip.title?.[language] || trip.title?.en || "Untitled trip";
+            const reviewCount = Array.isArray(trip.reviews) ? trip.reviews.length : 0;
+            const hasPurchased = purchases.some((purchase) => purchase.trip_id === trip.id && purchase.user_id === user?.id && purchase.status !== "Cancelled");
+            return <motion.article key={trip.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.55, delay: Math.min(index * 0.07, 0.3) }} className="group overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[#151515] shadow-[0_18px_50px_rgba(0,0,0,.2)]">
+              <div className="relative h-64 overflow-hidden"><Image src={trip.cover_image || "/default.jpg"} alt={title} fill sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" /><div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#ead39e] backdrop-blur-md">Featured</div><div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-xs text-[#f4ead8]"><span>{trip.duration || "Flexible itinerary"}</span><span className="rounded-full bg-black/45 px-3 py-1 backdrop-blur-md">★ {trip.rating || "4.5"}</span></div></div>
+              <div className="flex min-h-[205px] flex-col justify-between p-5"><div><h3 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h3><p className="mt-3 text-xs text-[#aaa092]">{reviewCount} {t("reviews")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(trip.group_price, trip.currency)} {currency}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className={`rounded-full px-4 py-2.5 text-xs font-semibold transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}>{hasPurchased ? t("Tripdetails") : t("BookNow")}</button></div></div>
+            </motion.article>;
+          })}
         </div>
       </div>
-    );
-  };
-
-  // كارت الرحلة
-  const TripCard = ({ trip, disableAnimation = false }) => {
-    const hasPurchased = purchases.some(
-      (p) =>
-        p.trip_id === trip.id &&
-        p.user_id === user?.id &&
-        p.status !== "Cancelled",
-    );
-
-    const CardWrapper = disableAnimation ? "div" : motion.div;
-
-    return (
-      <CardWrapper
-        key={trip?.id}
-        {...(!disableAnimation && {
-          initial: { opacity: 0, y: 50, scale: 0.95 },
-          whileInView: { opacity: 1, y: 0, scale: 1 },
-          transition: { duration: 0.8 },
-          viewport: { once: true },
-        })}
-        className={`trip-card dust-interactive relative h-[500px] w-full max-w-sm overflow-hidden group transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl`}
-        style={{ border: `2px solid ${theme.logoBorder}` }}
-      >
-        {/* صورة الرحلة */}
-        <div className="relative w-full h-3/5">
-          <Image
-            src={trip?.cover_image || "/default.jpg"}
-            alt={trip?.title?.[normalizedLang] || "Trip image"}
-            fill
-            className="object-cover group-hover:scale-110 transition duration-700 rounded-lg"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-        </div>
-
-        {/* النصوص تحت الصورة بدل absolute */}
-        <div className="flex flex-col justify-between p-6">
-          <h3
-            className="trips-text mb-1 line-clamp-2 text-xl font-semibold"
-          >
-            {trip?.title?.[normalizedLang] || "Untitled Trip"}
-          </h3>
-
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-yellow-400 text-lg font-semibold">
-              ⭐ {trip?.rating || "4.5"}
-            </span>
-            <span className={`text-sm opacity-80 ${theme.subText}`}>
-              ({Array.isArray(trip?.reviews) ? trip.reviews.length : 0}{" "}
-              {t("reviews")})
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <p className={`text-lg font-semibold ${theme.text}`}>
-              {convertPrice(trip?.group_price, trip?.currency)} {currency}
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => router.push(`/${locale}/trips/${trip?.id}`)}
-              className={`rounded-[9px] px-3 py-2 font-semibold tracking-wide cursor-pointer transition-all duration-300 shadow-lg ${theme.buttonPrimary}`}
-              style={{ border: `2px solid ${theme.logoBorder}` }}
-            >
-              {hasPurchased ? t("Tripdetails") : t("BookNow")}
-            </motion.button>
-          </div>
-        </div>
-      </CardWrapper>
-    );
-  };
-
-  return (
-    <>
-      {/* نسخة الموبايل */}
-      <section
-        id="featured-trips"
-        className={`site-section flex flex-col lg:hidden py-12 px-4 w-full mx-auto ${theme.background}`}
-      >
-        <div className="relative flex items-center justify-center w-full mb-12">
-          <h2 className="sc-title-first text-2xl font-extrabold tracking-wide drop-shadow-md text-gradient text-center">
-            <span className="inline-block transform scale-x-[-1] mr-4">𓅓</span>
-            {t("TopTrips")}
-            <span className="inline-block ml-4">𓅓</span>
-            <DividerWithIcon />
-          </h2>
-        </div>
-        <MobileSlider />
-      </section>
-
-      {/* نسخة الديسكتوب */}
-      <section
-        className={`site-section hidden lg:flex w-full flex-col relative py-24 px-6 transition-colors duration-500 ${theme.background}`}
-      >
-        <div className="relative flex items-center justify-center w-full mb-12">
-          <h2 className="sc-title-first text-5xl font-extrabold tracking-wide drop-shadow-md text-gradient text-center">
-            <span className="inline-block transform scale-x-[-1] mr-4">𓅓</span>
-            {t("TopTrips")}
-            <span className="inline-block ml-4">𓅓</span>
-            <DividerWithIcon />
-          </h2>
-        </div>
-        <div className="flex flex-wrap justify-center gap-8 max-w-7xl w-full mx-auto relative z-10">
-          {topTrips.map((trip) => (
-            <TripCard key={trip.id} trip={trip} />
-          ))}
-        </div>
-      </section>
-    </>
+    </section>
   );
-};
-
-export default TopTripsSection;
+}

@@ -1,92 +1,31 @@
 "use client";
-import React, { useEffect,useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaClock, FaDownload, FaExpand, FaComments } from "react-icons/fa";
 
-export default function AdminChatMessages({ messages, themeName }) {
-    const messagesEndRef = useRef(null);
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+import { motion } from "framer-motion";
+import { FaCheck, FaCheckDouble } from "react-icons/fa";
+import { useEffect, useRef } from "react";
+
+export default function AdminChatMessages({ messages, adminTyping }) {
+  const endRef = useRef(null);
+  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, adminTyping]);
+
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-3">
-      {messages.map((msg) => (
-        <motion.div
-          key={msg.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className={`flex items-start gap-3 max-w-[100%] ${
-            msg.sender_type === "user"
-              ? "self-start"
-              : "self-end flex-row-reverse"
-          }`}
-        >
-          <img
-            src={
-              msg.sender_type === "admin"
-                ? themeName === "dark"
-                  ? "/HomePageImage/Copilot_20260613_134423.webp"
-                  : "/HomePageImage/Copilot_20260613_134550.webp"
-                : msg.user_image
-            }
-            alt={msg.user_name}
-            className={`w-12 h-12 rounded-full border ${
-              msg.sender_type === "admin"
-                ? themeName === "dark"
-                  ? "border-yellow-500"
-                  : "#41707e"
-                : ""
-            } object-cover`}
-          />
-          <div
-            className={`p-3 rounded-lg shadow-md max-w-[70%] flex flex-col ${
-              msg.sender_type === "user"
-                ? themeName === "dark"
-                  ? "bg-gray-700 text-white"
-                  : "bg-gray-200 text-black"
-                : themeName === "dark"
-                  ? "bg-yellow-500 text-black"
-                  : "bg-[#41707e] text-white"
-            }`}
-          >
-            <p className="text-sm font-semibold mb-1 capitalize">
-              {msg.sender_type === "admin"
-                ? "👑  One Time Life Travel 👑"
-                : msg.user_name || " One Time Life Travel"}
-            </p>
-
-            {msg.content.startsWith("https") ? (
-              <img
-                src={msg.content}
-                alt="uploaded"
-                className="w-full rounded-lg object-cover"
-              />
-            ) : (
-              <p>{msg.content}</p>
-            )}
-
-            <div className="flex items-center gap-1 mt-1 text-xs opacity-70">
-              <FaClock className="text-xs" />
-              {/* <span className="italic">
-                    {msg.created_at
-                      ? formatDistanceToNow(new Date(msg.created_at), {
-                          addSuffix: true,
-                        })
-                      : ""}
-                  </span> */}
-              {msg.status && (
-                <span className="ml-2">
-                  {msg.status === "sent" ? "✅ Sent" : "👀 Seen"}
-                </span>
-              )}
+    <div className="flex-1 space-y-4 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(194,168,120,.08),transparent_38%),#0d0d0d] px-4 py-5">
+      {messages.length ? messages.map((msg) => {
+        const isAdmin = msg.sender_type === "admin";
+        const isImage = typeof msg.content === "string" && /\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i.test(msg.content);
+        return <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className={`flex items-end gap-2 ${isAdmin ? "justify-end" : "justify-start"}`}>
+          {!isAdmin && <img src={msg.user_image || "/default-avatar.png"} alt="" className="h-8 w-8 rounded-xl border border-white/10 object-cover" />}
+          <div className={`max-w-[82%] ${isAdmin ? "items-end" : "items-start"}`}>
+            <div className={`mb-1 px-1 text-[10px] font-semibold uppercase tracking-[.12em] ${isAdmin ? "text-[#e0bf78]" : "text-[#8e8577]"}`}>{isAdmin ? "One Time Life Travel" : msg.user_name || "Traveler"}</div>
+            <div className={`rounded-2xl px-4 py-3 text-sm leading-6 shadow-lg ${isAdmin ? "rounded-br-md bg-[#c2a878] text-[#15120e]" : "rounded-bl-md border border-white/10 bg-[#1b1b1b] text-[#f7f1e6]"}`}>
+              {isImage ? <img src={msg.content} alt="Uploaded attachment" className="max-h-56 rounded-xl object-cover" /> : <p className="whitespace-pre-wrap break-words">{msg.content}</p>}
             </div>
+            <div className={`mt-1 flex items-center gap-1 px-1 text-[10px] text-[#8e8577] ${isAdmin ? "justify-end" : "justify-start"}`}>{msg.created_at ? new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}{isAdmin && (msg.status === "seen" ? <FaCheckDouble className="text-[#c2a878]" /> : <FaCheck />)}</div>
           </div>
-        </motion.div>
-      ))}
+        </motion.div>;
+      }) : <div className="flex h-full min-h-64 items-center justify-center text-sm text-[#8e8577]">No messages yet.</div>}
+      {adminTyping && <div className="text-xs text-[#8e8577]">Traveler is typing…</div>}
+      <div ref={endRef} />
     </div>
   );
 }
