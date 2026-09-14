@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
+import { normalizeGallery, normalizeImageUrl } from "@/lib/imageUrl";
 
 // دالة آمنة لتحويل أي قيمة إلى JSON نصي
 const safeStringify = (value) => {
@@ -202,19 +203,19 @@ export async function GET() {
       ...trip,
       title: trip.title ? JSON.parse(trip.title) : {},
       description: trip.description ? JSON.parse(trip.description) : {},
-      cover_image: trip.cover_image,
+      cover_image: normalizeImageUrl(trip.cover_image),
       solo_price: Number(trip.solo_price),
       group_price: Number(trip.group_price),
       currency: trip.currency,
       duration: Number(trip.duration),
       priceLevel: trip.priceLevel,
       duration_unit: trip.duration_unit || "",
-      gallery_images: safeParse(trip.gallery_images),
+      gallery_images: normalizeGallery(safeParse(trip.gallery_images)),
       cities: safeParse(trip.cities),
       categories: safeParse(trip.categories),
       includes: safeParse(trip.includes),
       itinerary: safeParse(trip.days),
-      reviews: safeParse(trip.reviews), // ✅ التعليقات الآن موجودة
+      reviews: safeParse(trip.reviews).map((review) => ({ ...review, avatar_url: normalizeImageUrl(review.avatar_url, "/default-avatar.png") })), // ✅ التعليقات الآن موجودة
       discountPercent: safeParse(trip.discount_percent)
     }));
 

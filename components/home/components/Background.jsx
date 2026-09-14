@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
+import { getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 export default function Background() {
   const { themeName } = useTheme();
   const [index, setIndex] = useState(0);
+  const seasonalEvent = getSeasonalEventForDisplay();
 
   const darkImages = [
     "/HomePageImage/banner.62f1bfcb.jpg",
@@ -23,7 +25,7 @@ export default function Background() {
     "/Nile_Cruise/nacho-diaz-latorre-W4Oc4NIL5_U-unsplash.webp",
   ];
 
-  const images = themeName === "dark" ? darkImages : lightImages;
+  const images = seasonalEvent?.heroImage ? [seasonalEvent.heroImage] : (themeName === "dark" ? darkImages : lightImages);
 
   useEffect(() => {
     const interval = setInterval(() => {

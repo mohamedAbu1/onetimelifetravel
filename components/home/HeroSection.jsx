@@ -6,6 +6,7 @@ import { useState } from "react";
 import DownloadAppSection from "./components/DownloadAppSection";
 import LeftSocialIcons from "./components/LeftSocialIcons";
 import { useTranslation } from "react-i18next";
+import SeasonalCampaignCard from "@/components/layout/SeasonalCampaignCard";
 
 export default function HeroSection() {
   const [showTrips, setShowTrips] = useState(false);
@@ -31,6 +32,7 @@ export default function HeroSection() {
 
         <div className="flex w-full flex-col items-center justify-center gap-4 lg:items-end">
           <p className="w-full max-w-[560px] text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">{t("designStory")}</p>
+          <SeasonalCampaignCard />
           <BookingForm setShowTrips={setShowTrips} />
         </div>
       </div>

@@ -24,6 +24,7 @@ export default function TripReviews({ trip, lang }) {
   } = useReviews();
   const { userData } = useAuth();
   const { t } = useTranslation("tripsId");
+  const { t: tc } = useTranslation("common");
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -91,10 +92,11 @@ export default function TripReviews({ trip, lang }) {
   };
 
   return (
-    <section className={`p-6 rounded-xl transition ${theme.card} ${theme.shadow} ${theme.text}`}>
+    <section className={`trip-reviews-shell relative overflow-hidden ${theme.text}`}>
       <EgyptianBackground />
 
       {/* العنوان + المتوسط */}
+      <div className="trip-reviews-inner relative z-10">
       <ReviewsHeader
         title={tr.title}
         average={tr.average}
@@ -103,7 +105,7 @@ export default function TripReviews({ trip, lang }) {
         theme={theme}
       />
 
-      {userData && userData?.role !== "ADMIN" && (
+      {userData && userData?.role?.toLowerCase() !== "admin" && (
         <>
           {/* تقييم النجوم */}
           <StarRating
@@ -130,8 +132,7 @@ export default function TripReviews({ trip, lang }) {
       )}
 
       {/* عرض التعليقات */}
-      <div className="flex flex-row flex-wrap mt-6 gap-6 space-y-4">
-        <EgyptianBackground />
+      <div className="trip-reviews-list relative z-10">
         {currentComments.map((rev, idx) => (
           <ReviewCard
             key={rev.id || idx}
@@ -148,9 +149,7 @@ export default function TripReviews({ trip, lang }) {
         ))}
         {tripReviews.length === 0 && (
           <p className={`text-center w-full opacity-70 ${theme.subText}`}>
-            {!userData
-              ? "Please log in to write your review"
-              : "Be the first to review this trip ✨"}
+            {!userData ? tc("loginToReview") : tc("firstReview")}
           </p>
         )}
       </div>
@@ -166,7 +165,7 @@ export default function TripReviews({ trip, lang }) {
               currentPage === 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : theme.buttonSecondary
             }`}
           >
-            Prev
+            {tc("previous")}
           </button>
 
           {[...Array(totalPages)].map((_, i) => (
@@ -190,10 +189,11 @@ export default function TripReviews({ trip, lang }) {
               currentPage === totalPages ? "bg-gray-300 text-gray-500 cursor-not-allowed" : theme.buttonSecondary
             }`}
           >
-            Next
+            {tc("next")}
           </button>
         </div>
       )}
+      </div>
     </section>
   );
 }

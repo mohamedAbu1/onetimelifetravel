@@ -16,7 +16,7 @@ export default function NavBar() {
   const pathname = usePathname();
   const { t } = useTranslation("header");
 
-  const navItems = ["home", "trips", "about", "contact", "privacyPolicy"];
+  const navItems = ["home", "trips", "about", "contact"];
 
   const segments = pathname.split("/").filter(Boolean);
   const langPrefix = segments[0];
@@ -50,12 +50,7 @@ export default function NavBar() {
 
         const isActive =
           (item === "home" && normalizedPath === "/") ||
-          (item === "privacyPolicy" &&
-            (normalizedPath.startsWith("/privacyPolicy") ||
-              normalizedPath.startsWith("/cancellationPolicy"))) ||
-          (item !== "home" &&
-            item !== "privacyPolicy" &&
-            normalizedPath.startsWith(`/${item}`));
+          normalizedPath.startsWith(`/${item}`);
 
         return (
           <motion.div

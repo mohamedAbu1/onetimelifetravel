@@ -18,13 +18,18 @@ export default function CalendarBooking({ tripId, prise, setCheckInPrice, checkI
   const [prices, setPrices] = useState([]);
 
   useEffect(() => {
-    const storageKey = `calendarPrices_${tripId}_${monthKey}`;
+    const storageKey = `calendarPrices_v2_${tripId}_${monthKey}`;
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
       if (Array.isArray(saved) && saved.length === daysInMonth) { setPrices(saved); return; }
     } catch { /* regenerate invalid cached data */ }
     const base = Number(prise) || 0;
-    const generated = Array.from({ length: daysInMonth }, (_, index) => base + ((index * 7 + visibleMonth.getMonth()) % 7) - 3);
+    // Smooth deterministic variation: every day stays within ±$3 of the base price.
+    // The sine curve avoids abrupt jumps while keeping dates visibly different.
+    const generated = Array.from({ length: daysInMonth }, (_, index) => {
+      const offset = Math.round(Math.sin((index + visibleMonth.getMonth() * 2) * 0.85) * 3);
+      return Math.max(0, Number((base + offset).toFixed(2)));
+    });
     setPrices(generated);
     localStorage.setItem(storageKey, JSON.stringify(generated));
   }, [daysInMonth, monthKey, prise, tripId, visibleMonth]);

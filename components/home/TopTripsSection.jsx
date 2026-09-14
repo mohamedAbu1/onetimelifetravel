@@ -10,6 +10,7 @@ import { useTrip } from "@/context/TripContext";
 import { usePurchase } from "@/context/PurchaseContext";
 import { useAuth } from "@/context/AuthContext";
 import { useCurrency } from "@/context/CurrencyContext";
+import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 export default function TopTripsSection() {
   const { theme } = useTheme();
@@ -18,6 +19,7 @@ export default function TopTripsSection() {
   const { trips, fetchTrips, loadingTrips } = useTrip();
   const { currency, purchases = [] } = usePurchase();
   const { rates } = useCurrency();
+  const seasonalEvent = getSeasonalEventForDisplay();
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -56,7 +58,7 @@ export default function TopTripsSection() {
             const hasPurchased = purchases.some((purchase) => purchase.trip_id === trip.id && purchase.user_id === user?.id && purchase.status !== "Cancelled");
             return <motion.article key={trip.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.55, delay: Math.min(index * 0.07, 0.3) }} className="group overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[#151515] shadow-[0_18px_50px_rgba(0,0,0,.2)]">
               <div className="relative h-64 overflow-hidden"><Image src={trip.cover_image || "/default.jpg"} alt={title} fill sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" /><div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#ead39e] backdrop-blur-md">{tc("featured")}</div><div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-xs text-[#f4ead8]"><span>{trip.duration || tc("curated")}</span><span className="rounded-full bg-black/45 px-3 py-1 backdrop-blur-md">★ {trip.rating || "4.5"}</span></div></div>
-              <div className="flex min-h-[205px] flex-col justify-between p-5"><div><h3 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h3><p className="mt-3 text-xs text-[#aaa092]">{reviewCount} {t("reviews")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(trip.group_price, trip.currency)} {currency}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className={`rounded-full px-4 py-2.5 text-xs font-semibold transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}>{hasPurchased ? t("Tripdetails") : t("BookNow")}</button></div></div>
+              <div className="flex min-h-[205px] flex-col justify-between p-5"><div><h3 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h3><p className="mt-3 text-xs text-[#aaa092]">{reviewCount} {t("reviews")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(applySeasonalDiscount(trip.group_price, seasonalEvent), trip.currency)} {currency}{seasonalEvent && <small className="ml-2 text-[9px] text-[#ead39e]">-{seasonalEvent.discount}%</small>}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className={`rounded-full px-4 py-2.5 text-xs font-semibold transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}>{hasPurchased ? t("Tripdetails") : t("BookNow")}</button></div></div>
             </motion.article>;
           })}
         </div>

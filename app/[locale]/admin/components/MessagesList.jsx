@@ -7,6 +7,8 @@ import UsersSidebar from "./components/UsersSidebar";
 import ChatSection from "./components/ChatSection";
 import { useMessages } from "@/context/MessageContext";
 import axios from "axios";
+import AdminModuleHeader from "./AdminModuleHeader";
+import { FaInbox } from "react-icons/fa";
 
 export default function MessagesPage() {
   const { theme, themeName } = useTheme();
@@ -38,7 +40,9 @@ export default function MessagesPage() {
   }, [activeUser, setMessages]);
 
   return (
-    <main className={`flex h-[99%] ${theme.background} ${theme.text}`}>
+    <main className={`admin-module admin-module-messages flex h-[99%] flex-col gap-4 ${theme.background} ${theme.text}`}>
+      <AdminModuleHeader icon={FaInbox} eyebrow="Support / inbox" title="Messages" description="Respond to travellers and keep every conversation in context." />
+      <div className="admin-messages-workspace flex min-h-0 flex-1">
       <UsersSidebar
         users={users}
         userData={userData}
@@ -55,6 +59,7 @@ export default function MessagesPage() {
         theme={theme}
         themeName={themeName}
       />
+      </div>
     </main>
   );
 }

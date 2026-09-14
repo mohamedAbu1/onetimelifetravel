@@ -22,12 +22,14 @@ import { CitiesCategoriesProvider } from "@/context/CitiesCategoriesContext";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 import { SessionProvider } from "next-auth/react"; // ✅ إضافة SessionProvider
+import SeasonalTheme from "@/components/layout/SeasonalTheme";
 
 export default function Providers({ children }) {
   return (
     <SessionProvider>
       <I18nextProvider i18n={i18n}>
         <ThemeProvider>
+          <SeasonalTheme />
           <Suspense fallback={<div>Loading…</div>}>
             <NotificationsProvider>
               <CurrencyProvider>

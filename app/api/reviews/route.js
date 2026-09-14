@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid"; 
 import { getAuthenticatedUser, unauthorized } from "@/lib/auth";
+import { normalizeImageUrl } from "@/lib/imageUrl";
 
 // ✅ جلب التعليقات
 export async function GET(req) {
@@ -22,7 +23,7 @@ export async function GET(req) {
 
     const [rows] = await db.query(query, params);
 
-    return NextResponse.json({ success: true, reviews: rows }, { status: 200 });
+    return NextResponse.json({ success: true, reviews: rows.map((review) => ({ ...review, avatar_url: normalizeImageUrl(review.avatar_url, "/default-avatar.png") })) }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
@@ -41,7 +42,7 @@ export async function POST(req) {
     const { trip_id, rating, comment, time } = body;
     const user_id = user.id;
     const name = user.name;
-    const avatar_url = user.avatar_url;
+    const avatar_url = normalizeImageUrl(user.avatar_url, "/default-avatar.png");
     if (!trip_id || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || !String(comment || "").trim()) {
       return NextResponse.json({ success: false, error: "Invalid review data" }, { status: 400 });
     }

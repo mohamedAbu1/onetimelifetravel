@@ -2,14 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      "onetimelifetravel.com",
-    ],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "onetimelifetravel.com",
-        pathname: "/images/**",
+        pathname: "/iamges/**",
+      },
+      {
+        protocol: "https",
+        hostname: "basttettravel.com",
+        pathname: "/iamges/**",
       },
     ],
   },

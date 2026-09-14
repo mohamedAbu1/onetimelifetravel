@@ -13,13 +13,13 @@ export default function ReviewForm({
   theme,
 }) {
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div className="w-[100%] flex items-center gap-2">
+    <form onSubmit={onSubmit} className="trip-review-form space-y-4">
+      <div className="flex items-start gap-3">
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder={placeholder}
-          className={`w-[70%] p-3 rounded-lg focus:outline-none ${theme.border} ${theme.text}`}
+          className={`w-full p-4 rounded-2xl focus:outline-none ${theme.border} ${theme.text}`}
           rows={3}
         />
 
@@ -27,7 +27,8 @@ export default function ReviewForm({
           type="button"
           style={{ cursor: "pointer" }}
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className={`px-3 py-2 rounded-lg transition ${theme.buttonSecondary}`}
+          aria-label="Add emoji"
+          className={`mt-1 px-3 py-3 rounded-xl transition ${theme.buttonSecondary}`}
         >
           😀
         </button>
@@ -42,7 +43,7 @@ export default function ReviewForm({
       <button
         type="submit"
         style={{ cursor: "pointer" }}
-        className={`px-6 py-2 rounded-lg font-semibold transition ${theme.buttonPrimary}`}
+        className={`px-6 py-3 rounded-full font-semibold transition ${theme.buttonPrimary}`}
       >
         {submitLabel}
       </button>

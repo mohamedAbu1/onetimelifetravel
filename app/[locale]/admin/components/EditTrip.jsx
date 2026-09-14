@@ -8,15 +8,17 @@ import EditTripIncludes from "./components/EditTripIncludes";
 import EditTripDailyItinerary from "./components/EditTripDailyItinerary";
 import EditTripSaveButton from "./components/EditTripSaveButton";
 import TripSelector from "./components/TripSelector";
+import AdminModuleHeader from "./AdminModuleHeader";
+import { FaEdit } from "react-icons/fa";
 
 export default function EditTripFull({ themeName }) {
   return (
     <div
-      className={`p-6 ${
+      className={`admin-module admin-module-form p-6 ${
         themeName === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       } rounded-lg`}
     >
-      <h2 className="text-2xl font-bold mb-6">✏️ Edit Trip</h2>
+      <AdminModuleHeader icon={FaEdit} eyebrow="Catalogue / maintenance" title="Edit trip" description="Select a journey, update its content and publish the changes safely." />
       <TripSelector />
       {/* المعلومات الأساسية */}
       <EditTripBasicInfo />

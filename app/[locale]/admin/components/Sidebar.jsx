@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaChartBar, FaChartLine, FaClipboardList, FaCog, FaEnvelope, FaHome, FaMapMarkedAlt, FaPlus, FaSignOutAlt, FaSuitcase, FaTimes, FaUsers } from "react-icons/fa";
+import { FaCalendarAlt, FaChartBar, FaChartLine, FaClipboardList, FaEnvelope, FaHome, FaMapMarkedAlt, FaPlus, FaSignOutAlt, FaSuitcase, FaTimes, FaUsers } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 
 const items = [
@@ -14,6 +14,7 @@ const items = [
   ["reports", "Reports", FaChartLine],
   ["messages", "Inbox", FaEnvelope],
   ["currency", "Currency", FaChartBar],
+  ["seasonal", "Seasonal events", FaCalendarAlt],
 ];
 
 export default function Sidebar({ activeSection, setActiveSection, open, onClose, locale }) {

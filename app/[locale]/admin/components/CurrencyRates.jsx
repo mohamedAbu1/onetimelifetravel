@@ -2,6 +2,8 @@
 import React from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useCurrency } from "@/context/CurrencyContext";
+import AdminModuleHeader from "./AdminModuleHeader";
+import { FaCoins } from "react-icons/fa";
 
 export default function CurrencyRates() {
   const { themeName } = useTheme();
@@ -12,26 +14,18 @@ export default function CurrencyRates() {
 
   return (
     <div
-      className={`p-6 rounded-xl shadow-lg ${
+      className={`admin-module admin-module-rates p-6 rounded-xl shadow-lg ${
         themeName === "dark"
           ? "bg-black/40 border border-gold/30 text-white"
           : "bg-white/70 border border-[#c9a34a]/30 text-[#3a2c0a] backdrop-blur-sm"
       }`}
     >
-      <h2
-        className={`text-3xl font-bold mb-6 text-center ${
-          themeName === "dark"
-            ? "text-gold"
-            : "bg-gradient-to-r from-[#c9a34a] to-[#eab308] bg-clip-text text-transparent"
-        }`}
-      >
-        💱 Currency Rates
-      </h2>
+      <AdminModuleHeader icon={FaCoins} eyebrow="Finance / exchange" title="Currency rates" description="Keep public trip pricing aligned with the latest conversion values." />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* ✅ USD Card */}
         <div
-          className={`flex flex-col items-center justify-center p-6 rounded-xl shadow-lg ${
+          className={`admin-rate-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg ${
             themeName === "dark"
               ? "bg-gradient-to-r from-gray-800 to-gray-900 border border-gold/30"
               : "bg-gradient-to-r from-blue-100 to-blue-200 border border-blue-300"
@@ -51,7 +45,7 @@ export default function CurrencyRates() {
 
         {/* ✅ EUR Card */}
         <div
-          className={`flex flex-col items-center justify-center p-6 rounded-xl shadow-lg ${
+          className={`admin-rate-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg ${
             themeName === "dark"
               ? "bg-gradient-to-r from-gray-800 to-gray-900 border border-gold/30"
               : "bg-gradient-to-r from-yellow-100 to-yellow-200 border border-yellow-300"

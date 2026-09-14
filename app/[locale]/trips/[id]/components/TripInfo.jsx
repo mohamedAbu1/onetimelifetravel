@@ -5,6 +5,7 @@ import { usePurchase } from "@/context/PurchaseContext";
 import { motion } from "framer-motion";
 import { useCurrency } from "@/context/CurrencyContext"; // ✅ استدعاء الكونتكست
 import { useTranslation } from "react-i18next";
+import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 const translations = {
   en: {
@@ -68,32 +69,33 @@ export default function TripInfo({ trip, lang }) {
   const { currency } = usePurchase();
   const { rates, loading, error } = useCurrency(); // ✅ جلب أسعار العملات
   const { t: tc } = useTranslation("common");
+  const seasonalEvent = getSeasonalEventForDisplay();
   const t = translations[lang] || translations.en;
 
   if (loading) return <p className="text-center">⏳ {tc("loadingCurrency")}</p>;
   if (error) return <p className="text-center text-red-500">❌ {error}</p>;
 
   // ✅ تحويل الأسعار باستخدام CurrencyContext
-  let displayedSolo = trip.solo_price;
+  let displayedSolo = applySeasonalDiscount(trip.solo_price, seasonalEvent);
   if (currency === "EUR" && trip.currency === "USD") {
-    displayedSolo = (trip.solo_price * (rates.USD_EUR || 0.85)).toFixed(2);
+    displayedSolo = (displayedSolo * (rates.USD_EUR || 0.85)).toFixed(2);
   } else if (currency === "USD" && trip.currency === "EUR") {
-    displayedSolo = (trip.solo_price * (rates.EUR_USD || 1.18)).toFixed(2);
+    displayedSolo = (displayedSolo * (rates.EUR_USD || 1.18)).toFixed(2);
   } else if (currency === "EGP" && trip.currency === "USD") {
-    displayedSolo = (trip.solo_price * (rates.USD || 49.1)).toFixed(2);
+    displayedSolo = (displayedSolo * (rates.USD || 49.1)).toFixed(2);
   } else if (currency === "USD" && trip.currency === "EGP") {
-    displayedSolo = (trip.solo_price / (rates.USD || 49.1)).toFixed(2);
+    displayedSolo = (displayedSolo / (rates.USD || 49.1)).toFixed(2);
   }
 
-  let displayedGroup = trip.group_price;
+  let displayedGroup = applySeasonalDiscount(trip.group_price, seasonalEvent);
   if (currency === "EUR" && trip.currency === "USD") {
-    displayedGroup = (trip.group_price * (rates.USD_EUR || 0.85)).toFixed(2);
+    displayedGroup = (displayedGroup * (rates.USD_EUR || 0.85)).toFixed(2);
   } else if (currency === "USD" && trip.currency === "EUR") {
-    displayedGroup = (trip.group_price * (rates.EUR_USD || 1.18)).toFixed(2);
+    displayedGroup = (displayedGroup * (rates.EUR_USD || 1.18)).toFixed(2);
   } else if (currency === "EGP" && trip.currency === "USD") {
-    displayedGroup = (trip.group_price * (rates.USD || 49.1)).toFixed(2);
+    displayedGroup = (displayedGroup * (rates.USD || 49.1)).toFixed(2);
   } else if (currency === "USD" && trip.currency === "EGP") {
-    displayedGroup = (trip.group_price / (rates.USD || 49.1)).toFixed(2);
+    displayedGroup = (displayedGroup / (rates.USD || 49.1)).toFixed(2);
   }
 
   const displayedChild = (displayedGroup / 2).toFixed(2);
@@ -112,7 +114,7 @@ export default function TripInfo({ trip, lang }) {
       </motion.h2>
 
       <div className="space-y-3">
-        <PriceRow label={`${t.AdultPrivate}`} value={displayedSolo} currency={currency} theme={theme} />
+        <PriceRow label={`${t.AdultPrivate}${seasonalEvent ? ` (-${seasonalEvent.discount}%)` : ""}`} value={displayedSolo} currency={currency} theme={theme} />
         <PriceRow label={`${t.AdultGroup}`} value={displayedGroup} currency={currency} theme={theme} />
         <PriceRow label={t.Child} value={displayedChild} currency={currency} theme={theme} />
         <PriceRow label={t.ChildrenUnder6} value={t.Free} currency={currency} theme={theme} />

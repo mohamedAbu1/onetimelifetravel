@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
+import { normalizeGallery, normalizeImageUrl } from "@/lib/imageUrl";
 
 // ================== GET ==================
 export async function GET(req, context) {
@@ -85,7 +86,9 @@ export async function GET(req, context) {
       {
         success: true,
         trip: {
-          ...trip,
+        ...trip,
+          cover_image: normalizeImageUrl(trip.cover_image),
+          gallery_images: normalizeGallery(typeof trip.gallery_images === "string" ? JSON.parse(trip.gallery_images || "[]") : trip.gallery_images),
           cities: parsedCities,
           categories: parsedCategories,
           includes: parsedIncludes,

@@ -7,6 +7,8 @@ import { usePurchase } from "../context/PurchaseContext";
 import { motion } from "framer-motion";
 import DividerWithIcon from "@/components/layout/DividerWithIcon";
 import { useTranslation } from "react-i18next";
+import AdminModuleHeader from "./AdminModuleHeader";
+import { FaCalendarCheck } from "react-icons/fa";
 export default function BookingsList() {
   const { themeName } = useTheme();
   const { purchases, loading, error, fetchPurchases, handleStatusChange } =
@@ -31,7 +33,7 @@ export default function BookingsList() {
 
   return (
     <div
-      className={`rounded-xl shadow-lg p-6 ${
+      className={`admin-module admin-module-table rounded-xl shadow-lg p-6 ${
         themeName === "dark"
           ? "bg-black/40 border border-gold/30 text-white"
           : "bg-white/70 border border-[#c9a34a]/30 text-[#3a2c0a] backdrop-blur-sm"
@@ -39,37 +41,11 @@ export default function BookingsList() {
     >
       <EgyptianBackground />
 
-      {/* ✅ العنوان وعدد الحجوزات */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center justify-between mb-6"
-      >
-        <h2
-          className={`text-2xl font-bold ${
-            themeName === "dark"
-              ? "text-gold"
-              : "bg-gradient-to-r from-[#c9a34a] to-[#eab308] bg-clip-text text-transparent"
-          }`}
-        >
-          ✨ Bookings
-        </h2>
-        <div
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md ${
-            themeName === "dark"
-              ? "bg-gold/20 text-gold"
-              : "bg-[#fdf6e3] text-[#3a2c0a]"
-          }`}
-        >
-          <FaClipboardList />
-          <span className="font-semibold">Total: {purchases.length}</span>
-        </div>
-      </motion.div>
+      <AdminModuleHeader icon={FaCalendarCheck} eyebrow="Operations / reservations" title="Bookings" description="Review guest reservations, dates and payment status from one workspace." actions={<span className="admin-metric-pill"><FaClipboardList /> {purchases.length} total</span>} />
 
       <button
         onClick={fetchPurchases}
-        className="mb-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#c9a34a] to-[#eab308] text-white hover:scale-105 transition-transform shadow-md"
+        className="admin-action-button mb-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#c9a34a] to-[#eab308] text-white hover:scale-105 transition-transform shadow-md"
       >
         🔄 Refresh Bookings
       </button>

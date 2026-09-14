@@ -14,8 +14,9 @@ import MessagesList from "./components/MessagesList";
 import EditTrip from "./components/EditTrip";
 import UsersSection from "./components/UsersSection";
 import CurrencyRates from "./components/CurrencyRates";
+import SeasonalEvents from "./components/SeasonalEvents";
 
-const sections = { dashboard: ["Overview", DashboardHome], addTrip: ["Create trip", AddTrip], trips: ["Trip catalogue", TripsList], editTrip: ["Edit trips", EditTrip], users: ["Users", UsersSection], bookings: ["Bookings", BookingsList], reports: ["Reports", Reports], messages: ["Inbox", MessagesList], currency: ["Currency", CurrencyRates] };
+const sections = { dashboard: ["Overview", DashboardHome], addTrip: ["Create trip", AddTrip], trips: ["Trip catalogue", TripsList], editTrip: ["Edit trips", EditTrip], users: ["Users", UsersSection], bookings: ["Bookings", BookingsList], reports: ["Reports", Reports], messages: ["Inbox", MessagesList], currency: ["Currency", CurrencyRates], seasonal: ["Seasonal events", SeasonalEvents] };
 
 export default function DashboardPage() {
   const [activeSection, setActiveSection] = useState("dashboard");

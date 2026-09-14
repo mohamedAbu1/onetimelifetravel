@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
   const fetchUserFromServer = async () => {
     try {
       const res = await axios.get("/api/auth/me", { withCredentials: true });
+      setUser(res.data.user);
       setUserToken(res.data.user);
       setIsLoggedIn(true);
     } catch (err) {
@@ -41,6 +42,7 @@ export function AuthProvider({ children }) {
           {},
           { withCredentials: true },
         );
+        setUser(retry.data.user);
         setUserToken(retry.data.user);
         setIsLoggedIn(true);
       } catch (refreshErr) {

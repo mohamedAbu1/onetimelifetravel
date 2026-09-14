@@ -3,13 +3,11 @@ import { FaStar } from "react-icons/fa";
 
 export default function ReviewsHeader({ title, averageRating,average, reviewsCount, theme, t }) {
   return (
-    <div className={`flex flex-col lg:flex-row items-center justify-between mb-6 border-b p-2 ${theme.border}`}>
-      <h2 className={`text-2xl font-bold flex items-center gap-2 ${theme.title}`}>
-        {title}
-      </h2>
+    <div className="trip-reviews-header">
+      <div><span className="trip-reviews-eyebrow">✦ Traveller voices</span><h2 className={`trip-reviews-title ${theme.title}`}>{title}</h2><p className={`trip-reviews-subtitle ${theme.subText}`}>Real stories from guests who experienced this journey.</p></div>
       {reviewsCount > 0 && (
-        <div className="flex items-center gap-2">
-          <span className={`font-semibold ${theme.subText}`}>{average}</span>
+        <div className="trip-reviews-score">
+          <strong>{averageRating}</strong>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <FaStar
@@ -23,7 +21,7 @@ export default function ReviewsHeader({ title, averageRating,average, reviewsCou
               />
             ))}
           </div>
-          <span className={`ml-2 ${theme.subText}`}>({averageRating})</span>
+          <span className={`trip-reviews-count ${theme.subText}`}>{reviewsCount} reviews</span>
         </div>
       )}
     </div>

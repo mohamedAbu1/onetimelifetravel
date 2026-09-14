@@ -6,7 +6,7 @@ import NavBar from "./components/NavBar";
 import RightBar from "./components/RightBar";
 import Button from "@mui/material/Button";
 import { useAuth } from "@/context/AuthContext";
-import { FaSignOutAlt, FaUserPlus } from "react-icons/fa";
+import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useData } from "@/context/DataContext";
 import MobileHeaderAuth from "./components/MobileHeaderAuth";
 import LanguageSwitcher from "./components/LanguageSwitcher";
@@ -44,7 +44,7 @@ export default function Header() {
     >
       <div className={`header-journal container mx-auto flex h-[64px] min-w-0 max-w-7xl items-center justify-between gap-2 rounded-2xl border px-3 shadow-lg transition-colors duration-500 sm:h-[70px] sm:gap-4 sm:px-7 lg:h-[76px] lg:px-8 ${theme.border}`}>
         {/* شعار الموقع */}
-        <Logo />
+        <Logo mobileIconOnly />
 
         {/* روابط التنقل */}
         <NavBar />
@@ -88,11 +88,11 @@ export default function Header() {
               </>
             ) : (
               <>
-                <FaUserPlus
+                <FaSignInAlt
                   size={20}
                   className={`${theme.icon} hover:${theme.iconHover}`}
                 />
-                <span>{tc("signUp")}</span>
+                <span>{tc("signIn")}</span>
               </>
             )}
           </Button>

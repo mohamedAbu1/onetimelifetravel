@@ -48,29 +48,35 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
       });
     }
   }, [userData, messages]);
-  // ✅ فتح الدردشة بعد دقيقتين من تسجيل الدخول
-
+  // Send the onboarding message once per account, 20 seconds after login.
   useEffect(() => {
-    if (userData?.id) {
-      const timer = setTimeout(async () => {
-        setOpen(true); // يفتح نافذة الدردشة
+    const userId = userData?.id;
+    if (!userId || userData?.role?.toLowerCase() === "admin") return undefined;
 
-        // ✅ إرسال الرسالة باسم الأدمن وليس المستخدم
-        await sendMessage({
-          user_id: "c7674367-18c9-4d2a-b94c-eb80ac716005", // أو ID الأدمن الحقيقي
-          user_name: "👑  One Time Life Travel 👑",
+    const storageKey = `otl-welcome-message-sent:${userId}`;
+    if (window.localStorage.getItem(storageKey) === "1") return undefined;
 
+    const timer = setTimeout(async () => {
+      if (window.localStorage.getItem(storageKey) === "1") return;
+      try {
+        const result = await sendMessage({
+          user_id: userId,
+          user_name: "👑 One Time Life Travel 👑",
           user_image: "/HomePageImage/Copilot_20260613_134423.webp",
-          content:
-           t("welcomeMessage", { defaultValue: "👋 Hello and welcome! The  One Time Life Travel team is excited to help you plan your next unforgettable journey. How can we assist you today?" }),
-          sender_type: "admin", // مهم جداً لتظهر الرسالة بلون الأدمن
+          content: t("welcomeMessage", { defaultValue: "👋 Hello and welcome! The One Time Life Travel team is excited to help you plan your next unforgettable journey. How can we assist you today?" }),
+          sender_type: "admin",
           status: "sent",
         });
-      }, 30000); //  نص دقيقه
+        if (result?.error) return;
+        window.localStorage.setItem(storageKey, "1");
+        setOpen(true);
+      } catch (error) {
+        console.error("Welcome message failed:", error);
+      }
+    }, 20000);
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
+    return () => clearTimeout(timer);
+  }, [userData?.id, userData?.role]);
 
   // ✅ استعلام حالة الكتابة للأدمن
   useEffect(() => {
@@ -142,8 +148,10 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
           onClick={() => setOpen(!open)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className={`fixed bottom-6 right-6 p-4 rounded-full shadow-lg flex items-center justify-center ${theme.buttonPrimary}`}
+          aria-label={tc("openChat")}
+          className={`chat-fab fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full border border-[#e0bf78]/70 shadow-[0_16px_45px_rgba(0,0,0,.4)] transition sm:bottom-6 sm:right-6 ${theme.buttonPrimary}`}
         >
+          <span className="chat-fab-ring" />
           <FaComments size={22} color="#fff" />
         </motion.button>
       )}

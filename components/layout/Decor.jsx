@@ -2,9 +2,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { motion } from "framer-motion";
+import { getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 export default function Decor({ pos }) {
   const { theme } = useTheme();
+  const seasonalEvent = getSeasonalEventForDisplay();
   const containerRef = useRef(null);
   const [symbolsCount, setSymbolsCount] = useState(10);
 
@@ -38,7 +40,7 @@ export default function Decor({ pos }) {
             filter: `drop-shadow(0 0 6px ${theme.logoBorder || "#C2A878"})`,
           }}
         >
-          𓎛
+          {seasonalEvent?.symbols?.[i % seasonalEvent.symbols.length] || "𓎛"}
         </motion.span>
       ))}
     </div>

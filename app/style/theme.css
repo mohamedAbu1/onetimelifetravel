@@ -139,6 +139,133 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Seasonal campaign layer: the palette changes without disturbing the core brand. */
+:root[data-season="midnight"] { --season-main: #e0bf78; --season-accent: #536fa3; --season-glow: rgba(83,111,163,.22); }
+:root[data-season="rose"] { --season-main: #f1b1b8; --season-accent: #a85a73; --season-glow: rgba(241,177,184,.2); }
+:root[data-season="blossom"] { --season-main: #f0c58d; --season-accent: #b97955; --season-glow: rgba(240,197,141,.22); }
+:root[data-season="lantern"] { --season-main: #e7bd67; --season-accent: #3c9b91; --season-glow: rgba(231,189,103,.24); }
+:root[data-season="celebration"] { --season-main: #f4d27f; --season-accent: #458e7b; --season-glow: rgba(244,210,127,.24); }
+:root[data-season="desert-night"] { --season-main: #d79655; --season-accent: #743b7a; --season-glow: rgba(215,150,85,.2); }
+:root[data-season] { --season-border: color-mix(in srgb, var(--season-main) 58%, transparent); --season-surface: color-mix(in srgb, var(--season-accent) 12%, var(--background)); }
+:root[data-season] body { background-image: radial-gradient(circle at 14% 0%, var(--season-glow), transparent 27rem), radial-gradient(circle at 88% 25%, color-mix(in srgb, var(--season-main) 11%, transparent), transparent 30rem), linear-gradient(135deg, var(--background), var(--season-surface)); }
+.hero-journal { transition: background .5s ease, box-shadow .5s ease; }
+:root[data-season] .hero-journal { background: linear-gradient(135deg, var(--season-surface), var(--background)); box-shadow: inset 0 -8rem 8rem -8rem var(--season-glow); }
+:root[data-season] .hero-journal-grid { opacity: .8; background-image: linear-gradient(var(--season-border) 1px, transparent 1px), linear-gradient(90deg, var(--season-border) 1px, transparent 1px); }
+:root[data-season] .booking-panel, :root[data-season] .review-card, :root[data-season] .car-transfer-card { border-color: var(--season-border); box-shadow: 0 24px 70px color-mix(in srgb, var(--season-accent) 18%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--season-main) 8%, transparent); }
+.seasonal-campaign-panel { position: relative; display: flex; width: min(100%, 560px); min-height: 12rem; overflow: hidden; align-items: flex-end; border: 1px solid var(--season-border); border-radius: 1.25rem; padding: 1.1rem; isolation: isolate; background: #0b0c0c; box-shadow: 0 22px 55px color-mix(in srgb, var(--season-accent) 18%, transparent); animation: seasonal-campaign-in .5s ease-out; }
+.seasonal-campaign-panel::before { position: absolute; inset: 0; z-index: -2; background-image: linear-gradient(105deg, rgba(5,7,8,.96) 0%, rgba(5,7,8,.72) 43%, rgba(5,7,8,.22) 100%), var(--campaign-image); background-position: center; background-size: cover; content: ""; filter: saturate(.8); }
+.seasonal-campaign-panel::after { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 85% 20%, var(--season-glow), transparent 35%), repeating-linear-gradient(135deg, transparent 0 22px, color-mix(in srgb, var(--season-main) 8%, transparent) 23px 24px); content: ""; mix-blend-mode: screen; opacity: .75; }
+.seasonal-campaign-art { position: absolute; right: 1.25rem; top: 1.1rem; width: 5rem; height: 5rem; border: 1px solid var(--season-border); border-radius: 50%; opacity: .65; box-shadow: 0 0 0 10px color-mix(in srgb, var(--season-main) 6%, transparent), 0 0 36px var(--season-glow); }
+.seasonal-campaign-art::before, .seasonal-campaign-art::after { position: absolute; inset: 1.2rem; border: 1px solid var(--season-main); border-radius: 50%; content: ""; opacity: .5; }
+.seasonal-campaign-art::after { inset: 2rem; border-style: dashed; }
+.seasonal-campaign-content { max-width: 75%; }
+.seasonal-campaign-overline { display: inline-flex; align-items: center; gap: .45rem; color: var(--season-main); font-size: .62rem; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+.seasonal-campaign-content h2 { margin-top: .55rem; color: #f8eddb; font-family: Cinzel, Georgia, serif; font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 600; line-height: 1.08; }
+.seasonal-campaign-content p { max-width: 25rem; margin-top: .45rem; color: #cbbfae; font-size: .72rem; line-height: 1.65; }
+.seasonal-campaign-cta { display: inline-flex; align-items: center; gap: .55rem; margin-top: .8rem; border-bottom: 1px solid var(--season-main); padding-bottom: .22rem; color: var(--season-main); font-size: .65rem; font-weight: 900; text-transform: uppercase; }
+.seasonal-campaign-cta svg { font-size: .6rem; transition: transform .2s ease; }
+.seasonal-campaign-cta:hover svg { transform: translateX(3px); }
+.seasonal-campaign-offer { position: absolute; right: 1.2rem; bottom: 1.15rem; display: grid; justify-items: center; color: #15110b; }
+.seasonal-campaign-offer::before { position: absolute; inset: -.7rem -.8rem; z-index: -1; border-radius: 50%; background: var(--season-main); box-shadow: 0 0 30px var(--season-glow); content: ""; }
+.seasonal-campaign-offer strong { font-family: Cinzel, Georgia, serif; font-size: 1.5rem; line-height: 1; }
+.seasonal-campaign-offer span { margin-top: .15rem; font-size: .48rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.seasonal-rose .seasonal-campaign-art { border-radius: 1rem; transform: rotate(12deg); }
+.seasonal-blossom .seasonal-campaign-art { border-radius: 50% 50% 45% 10%; transform: rotate(-14deg); }
+.seasonal-lantern .seasonal-campaign-art { border-radius: 1.1rem 1.1rem .4rem .4rem; transform: rotate(45deg) scale(.76); }
+.seasonal-celebration .seasonal-campaign-art { border-style: dashed; transform: rotate(45deg) scale(.76); }
+.seasonal-desert-night .seasonal-campaign-art { border-radius: 50% 50% 10% 10%; transform: rotate(-10deg); }
+@keyframes seasonal-campaign-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.seasonal-banner { position: fixed; top: 5.5rem; left: 50%; z-index: 45; display: flex; width: min(34rem, calc(100vw - 2rem)); align-items: center; gap: .75rem; transform: translateX(-50%); border: 1px solid color-mix(in srgb, var(--season-main) 60%, transparent); border-radius: 1rem; padding: .7rem .85rem; color: #f9f0df; background: linear-gradient(110deg, color-mix(in srgb, var(--season-accent) 42%, #090909), rgba(9,9,9,.94)); box-shadow: 0 18px 50px rgba(0,0,0,.3), 0 0 35px var(--season-glow); backdrop-filter: blur(18px); animation: seasonal-in .45s ease-out; }
+.seasonal-banner-icon { display: grid; width: 2.2rem; height: 2.2rem; flex: 0 0 auto; place-items: center; border: 1px solid var(--season-main); border-radius: .7rem; color: var(--season-main); font-size: 1.2rem; }
+.seasonal-banner span:nth-child(2) { display: grid; min-width: 0; flex: 1; gap: .15rem; }
+.seasonal-banner strong { color: var(--season-main); font-size: .75rem; }
+.seasonal-banner small { overflow: hidden; color: #c9bead; font-size: .65rem; text-overflow: ellipsis; white-space: nowrap; }
+.seasonal-banner b { border-radius: 999px; padding: .42rem .58rem; color: #17120d; background: var(--season-main); font-size: .62rem; white-space: nowrap; }
+.seasonal-preview-picker { position: fixed; top: 5.5rem; left: 50%; z-index: 45; display: flex; width: min(42rem, calc(100vw - 2rem)); flex-wrap: wrap; justify-content: center; gap: .45rem; transform: translateX(-50%); border: 1px solid rgba(224,191,120,.5); border-radius: 1rem; padding: .7rem; background: rgba(9,9,9,.92); box-shadow: 0 18px 50px rgba(0,0,0,.35); backdrop-filter: blur(18px); }
+.seasonal-preview-link { border: 1px solid color-mix(in srgb, var(--season-main) 65%, transparent); border-radius: 999px; padding: .5rem .7rem; color: var(--season-main); background: color-mix(in srgb, var(--season-accent) 24%, #090909); font-size: .65rem; font-weight: 800; transition: transform .2s ease, background .2s ease; }
+.seasonal-preview-link:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--season-accent) 42%, #090909); }
+.seasonal-preview-reset { position: fixed; top: 5.5rem; right: 1rem; z-index: 46; border: 1px solid rgba(224,191,120,.5); border-radius: 999px; padding: .45rem .65rem; color: #ead39e; background: rgba(9,9,9,.9); font-size: .62rem; font-weight: 800; }
+@keyframes seasonal-in { from { opacity: 0; transform: translate(-50%, -10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (max-width: 640px) { .seasonal-banner, .seasonal-preview-picker { top: 5rem; } .seasonal-banner small { max-width: 12rem; } .seasonal-preview-reset { top: 9.4rem; right: .75rem; } }
+@media (max-width: 640px) { .seasonal-campaign-panel { min-height: 11rem; border-radius: 1rem; padding: .9rem; } .seasonal-campaign-content { max-width: 78%; } .seasonal-campaign-content h2 { font-size: 1.1rem; } .seasonal-campaign-content p { font-size: .66rem; } .seasonal-campaign-art { right: .7rem; top: .7rem; width: 4rem; height: 4rem; } .seasonal-campaign-offer { right: .85rem; bottom: .85rem; } }
+
+/* Full-site seasonal skins. Every public surface consumes the same campaign tokens. */
+:root[data-season="midnight"] { --background: #07111f; --text: #f7f0df; --sub-text: #b9c4d2; --heading: #f5d891; --card-bg: rgba(12, 27, 47, .84); --card-border: rgba(224, 191, 120, .52); --logo-border: #e0bf78; --primary-color: #e0bf78; --primary-gradient: linear-gradient(135deg, #f0d58f, #5477ac); --input-focus: #7ea8d7; }
+:root[data-season="rose"] { --background: #210d18; --text: #fff1ef; --sub-text: #e4bfc5; --heading: #ffd8d8; --card-bg: rgba(58, 17, 37, .84); --card-border: rgba(241, 177, 184, .56); --logo-border: #f1b1b8; --primary-color: #f1b1b8; --primary-gradient: linear-gradient(135deg, #ffd3d1, #a85a73); --input-focus: #ee8ca3; }
+:root[data-season="blossom"] { --background: #24150f; --text: #fff3e1; --sub-text: #ddc1a7; --heading: #ffe0a9; --card-bg: rgba(69, 36, 24, .82); --card-border: rgba(240, 197, 141, .56); --logo-border: #f0c58d; --primary-color: #f0c58d; --primary-gradient: linear-gradient(135deg, #ffe1ae, #b97955); --input-focus: #df9a68; }
+:root[data-season="lantern"] { --background: #071b1b; --text: #f7f0dd; --sub-text: #c5d0bf; --heading: #f5d486; --card-bg: rgba(13, 48, 45, .82); --card-border: rgba(231, 189, 103, .56); --logo-border: #e7bd67; --primary-color: #e7bd67; --primary-gradient: linear-gradient(135deg, #f6d991, #3c9b91); --input-focus: #64c0ae; }
+:root[data-season="celebration"] { --background: #071d22; --text: #f6f5e9; --sub-text: #bed2ce; --heading: #ffe09a; --card-bg: rgba(16, 59, 61, .82); --card-border: rgba(244, 210, 127, .58); --logo-border: #f4d27f; --primary-color: #f4d27f; --primary-gradient: linear-gradient(135deg, #ffe39a, #458e7b); --input-focus: #69c3b0; }
+:root[data-season="desert-night"] { --background: #160f20; --text: #f8eddf; --sub-text: #cfb8c9; --heading: #ffd18e; --card-bg: rgba(51, 26, 56, .82); --card-border: rgba(215, 150, 85, .56); --logo-border: #d79655; --primary-color: #d79655; --primary-gradient: linear-gradient(135deg, #f0b879, #743b7a); --input-focus: #c37db2; }
+:root[data-season] body:not(:has(.admin-shell)) { background-color: var(--background); color: var(--text); }
+:root[data-season] body:not(:has(.admin-shell)) .site-page,
+:root[data-season] body:not(:has(.admin-shell)) .site-section,
+:root[data-season] body:not(:has(.admin-shell)) .hero-journal,
+:root[data-season] body:not(:has(.admin-shell)) .pharaonic-page,
+:root[data-season] body:not(:has(.admin-shell)) .reviews-journal,
+:root[data-season] body:not(:has(.admin-shell)) .car-transfer-section { color: var(--text); background-color: var(--background); background-image: radial-gradient(circle at 12% 10%, var(--season-glow), transparent 24rem), linear-gradient(135deg, var(--background), var(--season-surface)); }
+:root[data-season] body:not(:has(.admin-shell)) .header-journal,
+:root[data-season] body:not(:has(.admin-shell)) .editorial-card,
+:root[data-season] body:not(:has(.admin-shell)) .card-theme,
+:root[data-season] body:not(:has(.admin-shell)) .filter-card,
+:root[data-season] body:not(:has(.admin-shell)) .search-bar,
+:root[data-season] body:not(:has(.admin-shell)) .booking-panel,
+:root[data-season] body:not(:has(.admin-shell)) .booking-journal,
+:root[data-season] body:not(:has(.admin-shell)) .trip-reviews-shell,
+:root[data-season] body:not(:has(.admin-shell)) .review-empty { border-color: var(--card-border) !important; background-color: var(--card-bg) !important; color: var(--text); }
+:root[data-season] body:not(:has(.admin-shell)) .footer-journal { border-color: var(--card-border); background: linear-gradient(145deg, color-mix(in srgb, var(--background) 82%, var(--season-accent)), var(--background)); color: var(--text); }
+:root[data-season] body:not(:has(.admin-shell)) .site-page h1,
+:root[data-season] body:not(:has(.admin-shell)) .site-page h2,
+:root[data-season] body:not(:has(.admin-shell)) .site-page h3,
+:root[data-season] body:not(:has(.admin-shell)) .site-section h1,
+:root[data-season] body:not(:has(.admin-shell)) .site-section h2,
+:root[data-season] body:not(:has(.admin-shell)) .site-section h3 { color: var(--heading); }
+:root[data-season] body:not(:has(.admin-shell)) .site-page a,
+:root[data-season] body:not(:has(.admin-shell)) .site-section a { color: var(--primary-color); }
+:root[data-season] body:not(:has(.admin-shell)) .site-page .btn-gradient,
+:root[data-season] body:not(:has(.admin-shell)) .site-page .pharaonic-button,
+:root[data-season] body:not(:has(.admin-shell)) .site-page .booking-submit,
+:root[data-season] body:not(:has(.admin-shell)) .site-section .editorial-button { background: var(--primary-gradient) !important; color: #15120e !important; }
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-page { --trip-ink: var(--text); --trip-muted: var(--sub-text); --trip-gold: var(--primary-color); --trip-paper: color-mix(in srgb, var(--card-bg) 92%, transparent); background: var(--background) !important; color: var(--text); }
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-main-image,
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-facts > div,
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-sticky > section,
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-sticky > div,
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-main .card-theme,
+:root[data-season] body:not(:has(.admin-shell)) .trip-world-main .editorial-card { border-color: var(--card-border); background-color: var(--card-bg); }
+:root[data-season] body:not(:has(.admin-shell)) .car-transfer-card { background: linear-gradient(145deg, color-mix(in srgb, var(--card-bg) 88%, var(--season-accent)), var(--background)); }
+:root[data-season] body:not(:has(.admin-shell)) .booking-control,
+:root[data-season] body:not(:has(.admin-shell)) .booking-popover,
+:root[data-season] body:not(:has(.admin-shell)) .booking-option { border-color: var(--card-border); background-color: color-mix(in srgb, var(--card-bg) 72%, transparent); color: var(--text); }
+:root[data-season] body:not(:has(.admin-shell)) .seasonal-campaign-panel,
+:root[data-season] body:not(:has(.admin-shell)) .seasonal-banner { border-color: var(--card-border); }
+
+/* Campaign-specific art direction: each occasion has its own visual language. */
+:root[data-season="midnight"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="midnight"] body:not(:has(.admin-shell)) .site-page { background-image: radial-gradient(circle at 12% 16%, rgba(126,168,215,.2) 0 1px, transparent 2px), radial-gradient(circle at 84% 24%, rgba(224,191,120,.28) 0 1px, transparent 2px), radial-gradient(circle at 72% 76%, rgba(126,168,215,.16) 0 1px, transparent 2px), linear-gradient(135deg, var(--background), var(--season-surface)); background-size: 180px 180px, 240px 240px, 310px 310px, auto; }
+:root[data-season="rose"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="rose"] body:not(:has(.admin-shell)) .site-page { background-image: radial-gradient(ellipse at 12% 12%, rgba(241,177,184,.14) 0 7%, transparent 30%), radial-gradient(ellipse at 90% 80%, rgba(168,90,115,.18) 0 5%, transparent 28%), linear-gradient(135deg, var(--background), var(--season-surface)); }
+:root[data-season="blossom"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="blossom"] body:not(:has(.admin-shell)) .site-page { background-image: radial-gradient(ellipse at 10% 20%, rgba(240,197,141,.18) 0 4%, transparent 25%), radial-gradient(ellipse at 90% 65%, rgba(185,121,85,.15) 0 5%, transparent 28%), linear-gradient(135deg, var(--background), var(--season-surface)); }
+:root[data-season="lantern"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="lantern"] body:not(:has(.admin-shell)) .site-page { background-image: linear-gradient(30deg, rgba(231,189,103,.055) 12%, transparent 12.5%, transparent 87%, rgba(231,189,103,.055) 87.5%, rgba(231,189,103,.055)), linear-gradient(150deg, rgba(60,155,145,.055) 12%, transparent 12.5%, transparent 87%, rgba(60,155,145,.055) 87.5%, rgba(60,155,145,.055)), linear-gradient(135deg, var(--background), var(--season-surface)); background-size: 42px 72px, 42px 72px, auto; }
+:root[data-season="celebration"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="celebration"] body:not(:has(.admin-shell)) .site-page { background-image: radial-gradient(circle at 8% 24%, rgba(244,210,127,.14) 0 2px, transparent 3px), radial-gradient(circle at 78% 72%, rgba(69,142,123,.18) 0 2px, transparent 3px), linear-gradient(135deg, var(--background), var(--season-surface)); background-size: 130px 130px, 190px 190px, auto; }
+:root[data-season="desert-night"] body:not(:has(.admin-shell)) .site-section,
+:root[data-season="desert-night"] body:not(:has(.admin-shell)) .site-page { background-image: radial-gradient(ellipse at 80% 12%, rgba(215,150,85,.2), transparent 25%), radial-gradient(circle at 15% 74%, rgba(116,59,122,.22), transparent 28%), repeating-linear-gradient(145deg, transparent 0 28px, rgba(215,150,85,.035) 29px 30px), linear-gradient(135deg, var(--background), var(--season-surface)); }
+:root[data-season="midnight"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: radial-gradient(circle at 74% 18%, var(--season-glow), transparent 28%), radial-gradient(circle at 18% 70%, rgba(126,168,215,.12) 0 1px, transparent 2px); background-size: auto, 54px 54px; }
+:root[data-season="rose"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: radial-gradient(circle at 82% 18%, rgba(241,177,184,.3), transparent 34%), repeating-radial-gradient(ellipse at 20% 80%, transparent 0 14px, rgba(241,177,184,.1) 15px 16px); }
+:root[data-season="blossom"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: radial-gradient(circle at 84% 18%, rgba(240,197,141,.3), transparent 32%), radial-gradient(ellipse at 16% 84%, rgba(185,121,85,.2), transparent 25%); }
+:root[data-season="lantern"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: linear-gradient(45deg, transparent 46%, rgba(231,189,103,.2) 47% 53%, transparent 54%), linear-gradient(-45deg, transparent 46%, rgba(60,155,145,.16) 47% 53%, transparent 54%), radial-gradient(circle at 82% 18%, var(--season-glow), transparent 30%); background-size: 34px 34px, 34px 34px, auto; }
+:root[data-season="celebration"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: radial-gradient(circle at 80% 16%, rgba(244,210,127,.35), transparent 30%), repeating-linear-gradient(120deg, transparent 0 12px, rgba(244,210,127,.14) 13px 14px, transparent 15px 26px); }
+:root[data-season="desert-night"] body:not(:has(.admin-shell)) .seasonal-campaign-panel::after { background: radial-gradient(circle at 80% 15%, rgba(215,150,85,.3), transparent 27%), linear-gradient(155deg, transparent 46%, rgba(116,59,122,.35) 47% 52%, transparent 53%); }
+:root[data-season] body:not(:has(.admin-shell)) .egyptian-background span { text-shadow: 0 0 18px var(--season-glow); }
+:root[data-season] body:not(:has(.admin-shell)) .reviews-journal .review-card,
+:root[data-season] body:not(:has(.admin-shell)) .car-transfer-section .car-transfer-card,
+:root[data-season] body:not(:has(.admin-shell)) .trip-reviews-shell { position: relative; overflow: hidden; }
+:root[data-season] body:not(:has(.admin-shell)) .reviews-journal .review-card::after,
+:root[data-season] body:not(:has(.admin-shell)) .car-transfer-section .car-transfer-card::after,
+:root[data-season] body:not(:has(.admin-shell)) .trip-reviews-shell::after { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 100% 0%, var(--season-glow), transparent 32%); content: ""; pointer-events: none; }
+
 /* Editorial travel system: warm paper, framed imagery, and quiet geometry. */
 .hero-journal {
   background: var(--background);
@@ -288,6 +415,25 @@ body {
 .reviews-journal .slick-slider { width: min(100%, 1240px); }
 .reviews-journal .slick-dots li button::before { color: var(--logo-border); opacity: 0.45; }
 .reviews-journal .slick-dots li.slick-active button::before { color: var(--logo-border); opacity: 1; }
+
+/* Trip reviews: a calm editorial review wall with clear hierarchy. */
+.trip-reviews-shell { border: 1px solid rgba(194,168,120,.34); border-radius: 1.6rem; background: linear-gradient(145deg, rgba(30,25,18,.96), rgba(9,9,9,.92)); box-shadow: 0 24px 70px rgba(0,0,0,.24); }
+.trip-reviews-inner { padding: clamp(1.1rem, 3vw, 2.25rem); }
+.trip-reviews-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(194,168,120,.2); }
+.trip-reviews-eyebrow { color: var(--logo-border); font-size: .64rem; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; }
+.trip-reviews-title { margin-top: .55rem; font-family: Cinzel, Georgia, serif; font-size: clamp(1.55rem, 3vw, 2.5rem); font-weight: 600; }
+.trip-reviews-subtitle { max-width: 34rem; margin-top: .55rem; font-size: .8rem; line-height: 1.7; }
+.trip-reviews-score { display: grid; min-width: 9rem; justify-items: center; gap: .25rem; border: 1px solid rgba(194,168,120,.3); border-radius: 1rem; padding: .8rem 1rem; background: rgba(194,168,120,.08); }
+.trip-reviews-score strong { color: var(--logo-border); font-family: Cinzel, Georgia, serif; font-size: 1.65rem; }
+.trip-reviews-score svg { color: var(--logo-border); font-size: .75rem; }
+.trip-reviews-count { font-size: .65rem; }
+.trip-review-form { margin-top: 1.5rem; border: 1px solid rgba(194,168,120,.22); border-radius: 1.2rem; padding: 1rem; background: rgba(255,255,255,.035); }
+.trip-review-form textarea { min-height: 5.5rem; resize: vertical; border: 1px solid rgba(194,168,120,.25); background: rgba(0,0,0,.18); color: var(--text); }
+.trip-review-form textarea:focus { border-color: var(--logo-border); box-shadow: 0 0 0 3px rgba(194,168,120,.1); }
+.trip-reviews-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.trip-review-card { width: 100% !important; min-height: 15rem; border-color: rgba(194,168,120,.22) !important; background: rgba(255,255,255,.035) !important; box-shadow: none !important; }
+.trip-review-card:hover { border-color: rgba(194,168,120,.62) !important; transform: translateY(-2px); }
+@media (max-width: 700px) { .trip-reviews-header { align-items: flex-start; flex-direction: column; } .trip-reviews-score { grid-template-columns: auto auto; width: 100%; justify-content: start; } .trip-reviews-score strong { grid-row: span 2; } .trip-reviews-list { grid-template-columns: 1fr; } }
 
 /* Booking and authentication share the hero's framed, ceremonial panel language. */
 .booking-journal {
@@ -679,6 +825,64 @@ button, a, input, select, textarea { font: inherit; }
 .admin-gate-card p { color: #9ca8a2; font-size: .8rem; }
 .admin-loader { width: 1.2rem; height: 1.2rem; border: 2px solid rgba(209,176,106,.25); border-top-color: #d1b06a; border-radius: 50%; animation: admin-spin .8s linear infinite; }
 @keyframes admin-spin { to { transform: rotate(360deg); } }
+
+/* Admin operations modules: consistent hierarchy, density and responsive behavior. */
+.admin-module { position: relative; overflow: hidden; border: 1px solid var(--admin-line); border-radius: 1.25rem; background: linear-gradient(145deg, rgba(17,26,28,.92), rgba(8,15,17,.82)); box-shadow: 0 22px 60px rgba(0,0,0,.18); }
+.admin-module > .egyptian-background { opacity: .16; }
+.admin-module-header { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; margin: -.25rem -.25rem 1.5rem; padding: .25rem .25rem 1.25rem; border-bottom: 1px solid var(--admin-line); }
+.admin-module-heading { display: flex; align-items: flex-start; gap: .8rem; min-width: 0; }
+.admin-module-icon { display: grid; width: 2.75rem; height: 2.75rem; flex: 0 0 auto; place-items: center; border: 1px solid rgba(209,176,106,.3); border-radius: .85rem; color: var(--admin-gold); background: rgba(209,176,106,.1); box-shadow: inset 0 0 20px rgba(209,176,106,.05); }
+.admin-module-header h2 { margin-top: .35rem; color: var(--admin-ink); font-family: Cinzel, Georgia, serif; font-size: clamp(1.35rem, 2.4vw, 2rem); font-weight: 600; line-height: 1.1; }
+.admin-module-header p { max-width: 42rem; margin-top: .45rem; color: var(--admin-muted); font-size: .75rem; line-height: 1.65; }
+.admin-module-actions { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.admin-metric-pill { display: inline-flex; align-items: center; gap: .45rem; border: 1px solid rgba(209,176,106,.28); border-radius: 999px; padding: .55rem .75rem; color: var(--admin-gold); background: rgba(209,176,106,.08); font-size: .68rem; font-weight: 800; white-space: nowrap; }
+.admin-action-button { border: 1px solid rgba(209,176,106,.45); border-radius: .7rem !important; font-weight: 800; }
+.admin-module-form { max-width: 70rem !important; }
+.admin-module-form > .admin-module-header { margin-bottom: 2rem; }
+.admin-module-form > section, .admin-module-form > div:not(.egyptian-background):not(.admin-module-header) { position: relative; z-index: 1; border: 1px solid rgba(209,176,106,.16); border-radius: 1rem; padding: 1rem; background: rgba(255,255,255,.025); }
+.admin-module-form button[type="submit"], .admin-module-form button { min-height: 2.5rem; }
+.admin-module-table { overflow: hidden; }
+.admin-table-scroll { position: relative; z-index: 1; overflow-x: auto; border: 1px solid var(--admin-line); border-radius: .9rem; }
+.admin-module-table table { min-width: 760px; }
+.admin-module-table thead th { padding: .9rem .75rem; background: rgba(209,176,106,.08); }
+.admin-module-table tbody td { padding: .9rem .75rem; }
+.admin-module-table tbody tr { background: rgba(255,255,255,.012); }
+.admin-module-table tbody tr:hover { background: rgba(209,176,106,.07) !important; }
+.admin-module-rates .admin-rate-card { min-height: 13rem; border: 1px solid rgba(209,176,106,.24); background: linear-gradient(145deg, rgba(209,176,106,.11), rgba(255,255,255,.025)); }
+.admin-module-rates .admin-rate-card input { width: min(100%, 15rem); border-color: rgba(209,176,106,.35) !important; text-align: center; font-size: 1.25rem; font-weight: 800; }
+.admin-module-reports .admin-chart-panel { border-color: var(--admin-line); background: rgba(4,10,12,.48); }
+.admin-module-reports .admin-chart-panel h3 { color: var(--admin-ink); font-size: .9rem; }
+.admin-module-messages { min-height: 42rem; background: transparent; border: 0; box-shadow: none; overflow: visible; }
+.admin-messages-workspace { position: relative; z-index: 1; overflow: hidden; border: 1px solid var(--admin-line); border-radius: 1.1rem; background: rgba(17,26,28,.72); box-shadow: 0 18px 55px rgba(0,0,0,.16); }
+.admin-module-users .admin-users-list { position: relative; z-index: 1; overflow: hidden; border: 1px solid var(--admin-line); border-radius: 1rem; }
+.admin-user-row { min-height: 5.5rem; transition: background .2s ease, transform .2s ease; }
+.admin-user-row:hover { background: rgba(209,176,106,.06); }
+.admin-user-row img { border-color: rgba(209,176,106,.35); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.admin-user-row button { border: 1px solid rgba(209,176,106,.28); background: rgba(209,176,106,.1); color: var(--admin-gold); }
+@media (max-width: 700px) { .admin-module-header { align-items: flex-start; flex-direction: column; } .admin-module-actions { width: 100%; } .admin-module-form { padding: 1rem !important; } .admin-module-messages { min-height: 34rem; } .admin-messages-workspace { flex-direction: column; } .admin-user-row { align-items: flex-start; flex-wrap: wrap; } .admin-user-row > div:first-of-type { min-width: calc(100% - 4rem); } }
+.admin-module-seasonal { max-width: 100% !important; }
+.admin-seasonal-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; border: 1px solid var(--admin-line); border-radius: .85rem; padding: .8rem 1rem; background: rgba(255,255,255,.025); color: var(--admin-muted); font-size: .72rem; }
+.admin-seasonal-toolbar label { display: flex; align-items: center; gap: .65rem; }
+.admin-seasonal-toolbar input { width: 5rem; border: 1px solid var(--admin-line); border-radius: .5rem; padding: .45rem; background: rgba(4,10,12,.58); color: var(--admin-ink); }
+.admin-seasonal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.admin-seasonal-card { position: relative; overflow: hidden; border: 1px solid var(--admin-line); border-radius: 1rem; padding: 1.15rem; background: linear-gradient(145deg, rgba(255,255,255,.055), rgba(4,10,12,.35)); }
+.admin-seasonal-card::after { position: absolute; right: -2rem; top: -2rem; width: 8rem; height: 8rem; border-radius: 50%; background: var(--season-glow, rgba(209,176,106,.12)); content: ""; filter: blur(18px); pointer-events: none; }
+.admin-seasonal-card-head { position: relative; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.admin-seasonal-card-head > div { display: flex; align-items: center; gap: .7rem; }
+.admin-seasonal-icon { display: grid; width: 2.4rem; height: 2.4rem; place-items: center; border: 1px solid var(--admin-line); border-radius: .7rem; color: var(--admin-gold); background: rgba(209,176,106,.1); font-size: 1.15rem; }
+.admin-seasonal-card h3 { color: var(--admin-ink); font-family: Cinzel, Georgia, serif; font-size: 1rem; }
+.admin-seasonal-card small { color: var(--admin-muted); font-size: .62rem; }
+.admin-seasonal-toggle { border: 1px solid rgba(209,176,106,.28); border-radius: 999px; padding: .4rem .65rem; color: var(--admin-muted); background: rgba(255,255,255,.04); font-size: .62rem; font-weight: 800; }
+.admin-seasonal-toggle.is-on { color: #071418; background: var(--admin-gold); }
+.admin-seasonal-fields { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin-top: 1.1rem; }
+.admin-seasonal-fields label { display: grid; gap: .35rem; color: var(--admin-muted); font-size: .62rem; font-weight: 800; }
+.admin-seasonal-fields input { width: 100%; border: 1px solid var(--admin-line); border-radius: .55rem; padding: .55rem .5rem; background: rgba(4,10,12,.7); color: var(--admin-ink); font-size: .7rem; }
+.admin-seasonal-save { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: .45rem; margin-top: 1rem; border: 1px solid rgba(209,176,106,.45); border-radius: .6rem; padding: .55rem .75rem; color: var(--admin-gold); background: rgba(209,176,106,.1); font-size: .68rem; font-weight: 800; }
+.admin-seasonal-save:disabled { cursor: wait; opacity: .55; }
+.admin-seasonal-note { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; color: var(--admin-muted); font-size: .7rem; }
+.admin-seasonal-note svg { color: #77c69b; }
+@media (max-width: 800px) { .admin-seasonal-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .admin-seasonal-toolbar { align-items: flex-start; flex-direction: column; } .admin-seasonal-fields { grid-template-columns: 1fr; } }
 .admin-overview { display: grid; gap: 1.25rem; }
 .admin-welcome { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; border: 1px solid var(--admin-line); border-radius: 1.2rem; padding: clamp(1.25rem, 3vw, 2rem); background: linear-gradient(120deg, rgba(209,176,106,.13), rgba(255,255,255,.025)); }
 .admin-welcome h2 { margin-top: .6rem; color: var(--admin-ink); font-family: Cinzel, Georgia, serif; font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 600; }

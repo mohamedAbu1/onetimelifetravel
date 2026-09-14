@@ -5,6 +5,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveLine } from "@nivo/line";
 import { FaChartBar } from "react-icons/fa";
+import AdminModuleHeader from "./AdminModuleHeader";
 import EgyptianBackground from "@/components/layout/EgyptianBackground";
 
 // ✅ استدعاء الـ contexts
@@ -36,7 +37,7 @@ export default function Reports() {
 
   return (
     <div
-      className={`rounded-xl shadow-lg p-6 ${
+      className={`admin-module admin-module-reports rounded-xl shadow-lg p-6 ${
         themeName === "dark"
           ? "bg-black/40 border border-gold/30 text-white"
           : "bg-white/70 border border-[#c9a34a]/30 text-[#3a2c0a] backdrop-blur-sm"
@@ -44,18 +45,10 @@ export default function Reports() {
     >
       <EgyptianBackground />
 
-      <h2
-        className={`flex items-center gap-2 text-2xl font-bold mb-6 ${
-          themeName === "dark"
-            ? "text-gold"
-            : "bg-gradient-to-r from-[#c9a34a] to-[#eab308] bg-clip-text text-transparent"
-        }`}
-      >
-        <FaChartBar /> Reports
-      </h2>
+      <AdminModuleHeader icon={FaChartBar} eyebrow="Analytics / overview" title="Reports" description="Understand catalogue volume, users, reservations and revenue at a glance." />
 
       {/* ✅ Bar Chart */}
-      <div className={`${sectionStyle} mb-6`} style={{ height: "350px" }}>
+      <div className={`${sectionStyle} admin-chart-panel mb-6`} style={{ height: "350px" }}>
         <h3 className="text-xl font-bold mb-4">📊 Users, Trips & Bookings</h3>
         <ResponsiveBar
           data={stats}
@@ -78,7 +71,7 @@ export default function Reports() {
       </div>
 
       {/* ✅ Pie Chart */}
-      <div className={`${sectionStyle} mb-6`} style={{ height: "350px" }}>
+      <div className={`${sectionStyle} admin-chart-panel mb-6`} style={{ height: "350px" }}>
         <h3 className="text-xl font-bold mb-4">🍩 Distribution</h3>
         <ResponsivePie
           data={stats}
@@ -98,7 +91,7 @@ export default function Reports() {
       </div>
 
       {/* ✅ Line Chart */}
-      <div className={sectionStyle} style={{ height: "350px" }}>
+      <div className={`${sectionStyle} admin-chart-panel`} style={{ height: "350px" }}>
         <h3 className="text-xl font-bold mb-4">📈 Bookings Over Time</h3>
         <ResponsiveLine
           data={[

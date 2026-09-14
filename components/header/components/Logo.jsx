@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function OneTimeLifeTravelLogo({ compact = false, className = "" }) {
+export default function OneTimeLifeTravelLogo({ compact = false, mobileIconOnly = false, className = "" }) {
   const gold = "#e0bf78";
   const ink = "#f7f1e6";
 
@@ -19,7 +19,7 @@ export default function OneTimeLifeTravelLogo({ compact = false, className = "" 
           <circle cx="25" cy="24" r="3.5" fill={gold} />
           <path d="M27 32c1 4 0 8-3 11M8 25 3 30" fill="none" stroke={gold} strokeWidth="2.4" strokeLinecap="round" />
         </svg>
-        <span className="flex flex-col leading-none">
+        <span className={`${mobileIconOnly ? "hidden lg:flex" : "flex"} flex-col leading-none`}>
           <span className={`font-[Cinzel] font-bold tracking-[0.12em] ${compact ? "text-[17px]" : "text-[15px]"}`} style={{ color: ink }}>ONE TIME LIFE</span>
           <span className={`mt-1 font-semibold uppercase tracking-[0.34em] ${compact ? "text-[11px]" : "text-[10px]"}`} style={{ color: gold }}>TRAVEL</span>
         </span>

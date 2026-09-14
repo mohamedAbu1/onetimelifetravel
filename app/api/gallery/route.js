@@ -26,7 +26,7 @@ export async function POST(req) {
 
         await fs.promises.writeFile(uploadPath, Buffer.from(await file.arrayBuffer()));
 
-        const fileUrl = `https://basttettravel.com/${folder}/${originalName}`;
+        const fileUrl = `/${folder}/${originalName}`;
 
         // ✅ استقبل أسماء اللغات من الـ formData
         const nameTranslations = {

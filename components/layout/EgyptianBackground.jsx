@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { motion } from "framer-motion";
+import { getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 const symbols = [
   "𓂀","𓋹","𓆣","𓇼","𓇯","𓏏","𓎛","𓊽",
@@ -11,12 +12,13 @@ const symbols = [
 export default function EgyptianBackground() {
   const [items, setItems] = useState([]);
   const { theme, themeName } = useTheme();
+  const seasonalEvent = getSeasonalEventForDisplay();
 
   useEffect(() => {
     const count = window.innerWidth < 768 ? 16 : 28;
     const generated = Array.from({ length: count }).map((_, i) => ({
       id: i,
-      symbol: symbols[Math.floor(Math.random() * symbols.length)],
+      symbol: (seasonalEvent?.symbols || symbols)[Math.floor(Math.random() * (seasonalEvent?.symbols || symbols).length)],
       top: Math.random() * 100,
       left: Math.random() * 100,
       size: 18 + Math.random() * 35,
@@ -46,7 +48,7 @@ export default function EgyptianBackground() {
             left: `${item.left}%`,
             fontSize: `${item.size}px`,
             transform: `rotate(${item.rotate}deg)`,
-            color: theme.icon,
+            color: seasonalEvent ? "var(--season-main)" : theme.icon,
             filter: "blur(0.5px)",
           }}
         >

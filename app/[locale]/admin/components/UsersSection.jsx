@@ -9,6 +9,7 @@ import UserCard from "./components/UserCard";
 import UserActions from "./components/UserActions";
 import UserDetails from "./components/UserDetails";
 import EgyptianBackground from "@/components/layout/EgyptianBackground";
+import AdminModuleHeader from "./AdminModuleHeader";
 
 const UsersSection = () => {
   const { users, fetchUsers, setUsers } = useUsers();
@@ -68,41 +69,23 @@ const UsersSection = () => {
 
   return (
     <motion.div
-      className={`p-6 rounded-lg shadow-lg ${theme.card} ${theme.text}`}
+      className={`admin-module admin-module-users p-6 rounded-lg shadow-lg ${theme.card} ${theme.text}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <EgyptianBackground />
 
-      {/* ✅ العنوان وعدد المستخدمين */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center justify-between mb-6"
-      >
-        <h2
-          className={`text-2xl font-bold flex items-center gap-2 ${theme.textAccent}`}
-        >
-          <FaUsers /> Users Management
-        </h2>
-        <div
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md ${theme.border}`}
-        >
-          <FaUsers />
-          <span className="font-semibold">Total: {users.length}</span>
-        </div>
-      </motion.div>
+      <AdminModuleHeader icon={FaUsers} eyebrow="People / access control" title="Users" description="Review customer profiles, activity and access roles from one place." actions={<span className="admin-metric-pill"><FaUsers /> {users.length} users</span>} />
 
-      <ul className={`mt-6 divide-y ${theme.border}`}>
+      <ul className={`admin-users-list mt-6 divide-y ${theme.border}`}>
         {users.map((user) => (
           <motion.li
             key={user.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className={`py-4 px-4 flex items-center gap-4`}
+            className="admin-user-row py-4 px-4 flex items-center gap-4"
           >
             {/* ✅ صورة المستخدم */}
             <img

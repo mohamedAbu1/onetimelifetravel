@@ -9,6 +9,7 @@ import { usePurchase } from "@/context/PurchaseContext";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/context/LanguageContext";
 import { useCurrency } from "@/context/CurrencyContext";
+import { applySeasonalDiscount, getSeasonalEventForDisplay } from "@/lib/seasonalEvents";
 
 export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
   const { rates } = useCurrency();
   const { t } = useTranslation("trips");
   const { lang } = useLanguage();
+  const seasonalEvent = getSeasonalEventForDisplay();
 
   const convertPrice = (price, tripCurrency) => {
     const amount = Number(price) || 0;
@@ -39,7 +41,7 @@ export default function TripsGrid({ trips = [], cardStyle = "vertical" }) {
       const images = (trip.images?.filter(Boolean).length ? trip.images : [trip.cover_image || "/default.jpg"]);
       return <motion.article key={trip.id || index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: Math.min(index * 0.05, 0.25) }} className={`group overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[#151515] shadow-[0_18px_50px_rgba(0,0,0,.16)] ${cardStyle === "horizontal" ? "md:flex" : ""}`}>
         <div className={`relative overflow-hidden ${cardStyle === "horizontal" ? "h-64 md:h-auto md:w-2/5" : "h-60"}`}><Image src={images[0]} alt={title} fill sizes={cardStyle === "horizontal" ? "(min-width: 768px) 40vw, 100vw" : "(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw"} className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" /><div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#ead39e] backdrop-blur-md">{trip.duration || "Egypt journey"}</div></div>
-        <div className="flex flex-1 flex-col justify-between p-5"><div><div className="mb-3 flex items-center justify-between gap-2"><span className="text-xs text-[#d1b06a]">{cities || "Egypt"}</span><span className="flex items-center gap-1 text-xs text-[#e5c878]"><FaStar /> {trip.rating || "4.5"}</span></div><h2 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h2><p className="mt-3 line-clamp-1 text-xs text-[#93897a]">{categories || t("NoCategory")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(trip.group_price, trip.currency)} {currency}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className="rounded-full bg-[#d1b06a] px-4 py-2.5 text-xs font-semibold text-[#15120e] transition hover:-translate-y-0.5 hover:bg-[#ead39e]">{purchased ? t("Tripdetails") : t("btn")}</button></div></div>
+        <div className="flex flex-1 flex-col justify-between p-5"><div><div className="mb-3 flex items-center justify-between gap-2"><span className="text-xs text-[#d1b06a]">{cities || "Egypt"}</span><span className="flex items-center gap-1 text-xs text-[#e5c878]"><FaStar /> {trip.rating || "4.5"}</span></div><h2 className="line-clamp-2 font-[Cinzel] text-xl font-semibold leading-snug text-[#f4ead8]">{title}</h2><p className="mt-3 line-clamp-1 text-xs text-[#93897a]">{categories || t("NoCategory")}</p></div><div className="mt-6 flex items-center justify-between gap-3"><p className="text-lg font-semibold text-[#d1b06a]">{convertPrice(applySeasonalDiscount(trip.group_price, seasonalEvent), trip.currency)} {currency}{seasonalEvent && <small className="ml-2 rounded-full bg-[#d1b06a]/15 px-2 py-1 text-[9px] text-[#ead39e]">-{seasonalEvent.discount}%</small>}</p><button type="button" onClick={() => router.push(`/${locale}/trips/${trip.id}`)} className="rounded-full bg-[#d1b06a] px-4 py-2.5 text-xs font-semibold text-[#15120e] transition hover:-translate-y-0.5 hover:bg-[#ead39e]">{purchased ? t("Tripdetails") : t("btn")}</button></div></div>
       </motion.article>;
     })}
   </div>;

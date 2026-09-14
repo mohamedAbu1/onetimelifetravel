@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { setAuthCookies } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
+import { normalizeImageUrl } from "@/lib/imageUrl";
 
 export async function POST(request) {
   const refreshToken = request.cookies.get("refresh-token")?.value;
@@ -19,6 +20,7 @@ export async function POST(request) {
     );
     if (!rows.length) return NextResponse.json({ error: "User not found" }, { status: 401 });
     const user = rows[0];
+    user.avatar_url = normalizeImageUrl(user.avatar_url, "/default-avatar.png");
     const newAccessToken = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15m" });
 
     const response = NextResponse.json({ message: "Token refreshed", user });

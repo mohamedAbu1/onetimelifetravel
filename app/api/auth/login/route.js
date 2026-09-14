@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { setAuthCookies } from "@/lib/auth";
+import { normalizeImageUrl } from "@/lib/imageUrl";
 
 export async function POST(request) {
   try {
@@ -38,7 +39,7 @@ export async function POST(request) {
       email: user.email,
       role: user.role,
       name: user.name,
-      avatar_url: user.avatar_url,
+      avatar_url: normalizeImageUrl(user.avatar_url, "/default-avatar.png"),
       gender: user.gender,
     };
 
@@ -60,7 +61,7 @@ export async function POST(request) {
           name: user.name,
           role: user.role,
           gender: user.gender,
-          avatar_url: user.avatar_url,
+          avatar_url: normalizeImageUrl(user.avatar_url, "/default-avatar.png"),
         },
       },
       { status: 200 }

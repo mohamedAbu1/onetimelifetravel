@@ -13,6 +13,8 @@ import DailyItinerary from "./components/DailyItinerary";
 import SaveButton from "./components/SaveButton";
 import TripClassification from "./components/TripClassification";
 import EgyptianBackground from "@/components/layout/EgyptianBackground";
+import AdminModuleHeader from "./AdminModuleHeader";
+import { FaPlus } from "react-icons/fa";
 
 export default function AddTrip() {
   const { themeName } = useTheme();
@@ -29,7 +31,7 @@ export default function AddTrip() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className={`space-y-8 max-w-3xl mx-auto p-8 rounded-2xl shadow-2xl ${
+      className={`admin-module admin-module-form space-y-8 mx-auto p-8 rounded-2xl shadow-2xl ${
         themeName === "dark"
           ? "bg-black/40 border border-gold/30"
           : "bg-white/70 border border-[#c9a34a]/30 backdrop-blur-sm"
@@ -37,16 +39,7 @@ export default function AddTrip() {
     >
       <EgyptianBackground />
 
-      {/* العنوان */}
-      <h2
-        className={`text-3xl font-extrabold text-center ${
-          themeName === "dark"
-            ? "text-gold"
-            : "bg-gradient-to-r from-[#c9a34a] to-[#eab308] bg-clip-text text-transparent"
-        }`}
-      >
-        Add New Trip
-      </h2>
+      <AdminModuleHeader icon={FaPlus} eyebrow="Catalogue / creation" title="Add new trip" description="Create a complete journey with pricing, media, inclusions and itinerary details." />
 
       {/* معلومات أساسية */}
       <BasicInfo />
