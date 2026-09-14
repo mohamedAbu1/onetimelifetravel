@@ -1,15 +1,17 @@
 "use client";
-import { useEffect } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { FaCheck, FaChevronDown, FaGlobe } from "react-icons/fa";
 
 const languages = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "it", label: "Italiano" },
-  { code: "zh", label: "中文" },
+  { code: "en", label: "English", native: "English", flag: "EN" },
+  { code: "es", label: "Spanish", native: "Español", flag: "ES" },
+  { code: "fr", label: "French", native: "Français", flag: "FR" },
+  { code: "de", label: "German", native: "Deutsch", flag: "DE" },
+  { code: "it", label: "Italian", native: "Italiano", flag: "IT" },
+  { code: "zh", label: "Chinese", native: "中文", flag: "中" },
 ];
 
 export default function LanguageSwitcher() {
@@ -17,7 +19,11 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { i18n } = useTranslation();
+  const { t: tc } = useTranslation("common");
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
   const currentLocale = pathname.split("/").filter(Boolean)[0] || "en";
+  const currentLanguage = languages.find(({ code }) => code === currentLocale) || languages[0];
 
   useEffect(() => {
     if (languages.some(({ code }) => code === currentLocale) && i18n.language !== currentLocale) {
@@ -25,22 +31,72 @@ export default function LanguageSwitcher() {
     }
   }, [currentLocale, i18n]);
 
-  const handleChange = (event) => {
-    const nextLocale = event.target.value;
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!wrapperRef.current?.contains(event.target)) setOpen(false);
+    };
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  const handleChange = (nextLocale) => {
     const segments = pathname.split("/").filter(Boolean);
     const pathWithoutLocale = languages.some(({ code }) => code === segments[0]) ? segments.slice(1) : segments;
     const query = searchParams.toString();
     i18n.changeLanguage(nextLocale);
+    setOpen(false);
     router.push(`/${nextLocale}/${pathWithoutLocale.join("/")}${query ? `?${query}` : ""}`.replace(/\/$/, ""));
   };
 
   return (
-    <label className="relative flex max-w-[102px] items-center rounded-full border border-[var(--logo-border)]/40 bg-black/10 px-2 py-1 sm:max-w-none">
-      <span className="sr-only">Select language</span>
-      <span aria-hidden="true" className="mr-1 text-xs text-[var(--primary-color)]">文</span>
-      <select value={currentLocale} onChange={handleChange} aria-label="Select language" className="w-full cursor-pointer appearance-none truncate bg-transparent pr-1 text-xs font-semibold text-[var(--text)] outline-none sm:w-auto">
-        {languages.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
-      </select>
-    </label>
+    <div ref={wrapperRef} className="language-menu relative shrink-0">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label="Change language"
+        onClick={() => setOpen((value) => !value)}
+        className={`language-trigger ${open ? "is-open" : ""}`}
+      >
+        <span className="language-globe"><FaGlobe size={12} /></span>
+        <span className="language-code">{currentLanguage.flag}</span>
+        <FaChevronDown className={`language-chevron ${open ? "rotate-180" : ""}`} size={9} />
+      </button>
+
+      {open && (
+        <div className="language-dropdown" role="listbox" aria-label="Available languages">
+          <div className="language-dropdown-head">
+            <span>{tc("language")}</span>
+            <span>{languages.length} {tc("languageOptions")}</span>
+          </div>
+          <div className="language-options">
+            {languages.map((language) => {
+              const selected = language.code === currentLocale;
+              return (
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  key={language.code}
+                  onClick={() => handleChange(language.code)}
+                  className={`language-option ${selected ? "is-selected" : ""}`}
+                >
+                  <span className="language-badge">{language.flag}</span>
+                  <span className="language-option-copy"><strong>{language.native}</strong><small>{language.label}</small></span>
+                  {selected && <FaCheck className="language-check" size={12} />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

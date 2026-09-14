@@ -3,8 +3,10 @@
 import { useState } from "react";
 import CalendarBooking from "./components/CalendarBooking";
 import BookingSummaryCard from "./components/BookingSummaryCard";
+import { useTranslation } from "react-i18next";
 
 export default function CalendarWidget({ trip, id }) {
+  const { t } = useTranslation("common");
   const [participants, setParticipants] = useState(0);
   const [childrenCount, setChildrenCount] = useState(0);
   const [checkInPrice, setCheckInPrice] = useState(null);
@@ -13,12 +15,12 @@ export default function CalendarWidget({ trip, id }) {
   const hasGuests = participants + childrenCount > 0;
 
   return <section className="w-full rounded-[1.35rem] border border-[#d1b06a]/45 bg-[#151515] p-5 text-[#f4ead8] shadow-[0_18px_50px_rgba(0,0,0,.3)]">
-    <div className="mb-5"><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">Plan your dates</p><h2 className="mt-2 font-[Cinzel] text-2xl font-semibold">Reserve your journey</h2><p className="mt-2 text-xs leading-5 text-[#a79d8d]">Choose your group size first, then select an available check-in and check-out date.</p></div>
+    <div className="mb-5"><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">{t("planDates")}</p><h2 className="mt-2 font-[Cinzel] text-2xl font-semibold">{t("reserveJourney")}</h2><p className="mt-2 text-xs leading-5 text-[#a79d8d]">{t("chooseGroupDates")}</p></div>
     <div className="grid gap-3 sm:grid-cols-2">
       <GuestCounter label="Adults" hint="Age 6+" value={participants} onDecrease={() => setParticipants(Math.max(0, participants - 1))} onIncrease={() => setParticipants(participants + 1)} />
       <GuestCounter label="Children" hint="Under 12" value={childrenCount} onDecrease={() => setChildrenCount(Math.max(0, childrenCount - 1))} onIncrease={() => setChildrenCount(childrenCount + 1)} />
     </div>
-    {!hasGuests ? <div className="my-5 rounded-xl border border-dashed border-white/15 px-4 py-8 text-center"><p className="text-sm text-[#ead39e]">Add guests to view booking dates</p><p className="mt-2 text-xs text-[#918879]">Your calendar will appear here once you choose at least one guest.</p></div> : <div className="mt-5"><CalendarBooking prise={trip.solo_price} checkInPrice={checkInPrice} setCheckInPrice={setCheckInPrice} setCheckOut={setCheckOut} checkOut={checkOut} checkIn={checkIn} setCheckIn={setCheckIn} tripId={id} /></div>}
+    {!hasGuests ? <div className="my-5 rounded-xl border border-dashed border-white/15 px-4 py-8 text-center"><p className="text-sm text-[#ead39e]">{t("addGuests")}</p><p className="mt-2 text-xs text-[#918879]">{t("calendarAppear")}</p></div> : <div className="mt-5"><CalendarBooking prise={trip.solo_price} checkInPrice={checkInPrice} setCheckInPrice={setCheckInPrice} setCheckOut={setCheckOut} checkOut={checkOut} checkIn={checkIn} setCheckIn={setCheckIn} tripId={id} /></div>}
     <div className="mt-4"><BookingSummaryCard tourName={trip.title?.en || "Egyptian journey"} checkInPrice={checkInPrice} participants={participants} childrenCount={childrenCount} checkOut={checkOut} checkIn={checkIn} tripId={id} /></div>
   </section>;
 }

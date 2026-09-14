@@ -5,11 +5,13 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { sites } from "@/constants/images";
 import reactStringReplace from "react-string-replace";
+import { useTranslation } from "react-i18next";
 
 export default function TripHeader({ trip, lang }) {
+  const { t: tc } = useTranslation("common");
   const [activeIndex, setActiveIndex] = useState(0);
   const images = trip?.gallery_images?.length ? trip.gallery_images : [{ url: "/default.jpg", name: {} }];
-  const title = trip.title?.[lang] || trip.title?.en || "Egypt journey";
+  const title = trip.title?.[lang] || trip.title?.en || tc("egyptJourney");
   const description = trip.description?.[lang] || trip.description?.en || "";
   const searchWords = sites.map((site) => site.name).filter(Boolean);
   const regex = searchWords.length ? new RegExp(`(${searchWords.join("|")})`, "gi") : null;
@@ -24,10 +26,10 @@ export default function TripHeader({ trip, lang }) {
   return (
     <motion.section className="trip-world-hero" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
       <div className="trip-world-hero-copy">
-        <div className="trip-world-eyebrow"><span>𓋹</span> One Time Life Travel <span>·</span> Egypt, curated</div>
+        <div className="trip-world-eyebrow"><span>𓋹</span> One Time Life Travel <span>·</span> {tc("egyptCurated")}</div>
         <h1>{title}</h1>
         <p className="trip-world-description">{highlightedDescription}</p>
-        <div className="trip-world-hero-meta"><span><b>𓂀</b> {images.length} {lang === "zh" ? "张照片" : "photos"}</span><span><b>𓏏</b> {lang === "zh" ? "私人体验" : "Private experience"}</span></div>
+        <div className="trip-world-hero-meta"><span><b>𓂀</b> {images.length} {tc("photos")}</span><span><b>𓏏</b> {tc("privateExperience")}</span></div>
       </div>
       <div className="trip-world-gallery">
         <div className="trip-world-main-image">

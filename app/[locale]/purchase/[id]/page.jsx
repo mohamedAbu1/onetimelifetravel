@@ -14,6 +14,7 @@ import TripSchedule from "../../trips/[id]/components/components/TripSchedule";
 import AdditionalDetails from "../../trips/[id]/components/components/AdditionalDetails";
 import TripDetails from "../../trips/[id]/components/components/TripDetails";
 import ConfirmButton from "../../trips/[id]/components/components/ConfirmButton";
+import { useTranslation } from "react-i18next";
 
 export default function PurchasePage() {
   const { id } = useParams();
@@ -21,6 +22,7 @@ export default function PurchasePage() {
   const { theme } = useTheme();
   const { lang } = useLanguage();
   const { user } = useAuth();
+  const { t } = useTranslation("common");
 
   const trip = getTripById(id);
   const [fullName, setFullName] = useState(user?.name || "");
@@ -39,7 +41,7 @@ export default function PurchasePage() {
   const [groupSize, setGroupSize] = useState(1);
 
   if (!trip) {
-    return <p className={`${theme.text}`}>Trip not found</p>;
+    return <p className={`${theme.text}`}>{t("tripNotFound")}</p>;
   }
 
   const tripTitle =
@@ -50,10 +52,10 @@ export default function PurchasePage() {
 
   const handlePurchase = () => {
     if (!fullName || !email || !cardNumber || !expiry || !cvv) {
-      toast.error("❌ Please fill all fields");
+      toast.error(`❌ ${t("fillAllFields")}`);
       return;
     }
-    toast.success("✅ Purchase completed successfully!");
+    toast.success(`✅ ${t("purchaseComplete")}`);
   };
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
 
@@ -192,21 +194,21 @@ export default function PurchasePage() {
           >
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder={t("fullName")}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               className="p-3 rounded-md border focus:outline-none"
             />
             <input
               type="email"
-              placeholder="Email Address"
+              placeholder={t("emailAddress")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="p-3 rounded-md border focus:outline-none"
             />
             <input
               type="text"
-              placeholder="Card Number"
+              placeholder={t("cardNumber")}
               value={cardNumber}
               onChange={(e) => setCardNumber(e.target.value)}
               className="p-3 rounded-md border focus:outline-none"
@@ -214,14 +216,14 @@ export default function PurchasePage() {
             <div className="flex gap-4">
               <input
                 type="text"
-                placeholder="MM/YY"
+                placeholder={t("expiryDate")}
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value)}
                 className="p-3 rounded-md border focus:outline-none flex-1"
               />
               <input
                 type="text"
-                placeholder="CVV"
+                placeholder={t("cvv")}
                 value={cvv}
                 onChange={(e) => setCvv(e.target.value)}
                 className="p-3 rounded-md border focus:outline-none flex-1"

@@ -1,7 +1,9 @@
-/* eslint-disable react-hooks/purity */
 "use client";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@/context/ThemeContext";
+
+import { useEffect, useState } from "react";
+import { FaBell, FaBars, FaLock, FaSearch } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "./context/AuthContext";
 import Sidebar from "./components/Sidebar";
 import DashboardHome from "./components/DashboardHome";
 import AddTrip from "./components/AddTrip";
@@ -9,75 +11,27 @@ import TripsList from "./components/TripsList";
 import BookingsList from "./components/BookingsList";
 import Reports from "./components/Reports";
 import MessagesList from "./components/MessagesList";
-import EditTrip from "./components/EditTrip"; 
-import EgyptianBackground from "@/components/layout/EgyptianBackground";
+import EditTrip from "./components/EditTrip";
 import UsersSection from "./components/UsersSection";
-import { useRouter } from "next/navigation";
-import { useAuth } from "./context/AuthContext";
 import CurrencyRates from "./components/CurrencyRates";
 
-const symbols = ["𓂀","𓋹","𓆣","𓇼","𓇯","𓏏","𓎛","𓊽","𓃾","𓅓","𓈇","𓉐","𓊹","𓌙","𓍿","𓎟"];
+const sections = { dashboard: ["Overview", DashboardHome], addTrip: ["Create trip", AddTrip], trips: ["Trip catalogue", TripsList], editTrip: ["Edit trips", EditTrip], users: ["Users", UsersSection], bookings: ["Bookings", BookingsList], reports: ["Reports", Reports], messages: ["Inbox", MessagesList], currency: ["Currency", CurrencyRates] };
 
 export default function DashboardPage() {
   const [activeSection, setActiveSection] = useState("dashboard");
-  const { theme, themeName } = useTheme();
-  const { userData } = useAuth(); // ✅ بيانات من الـ API
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { userData } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split("/").filter(Boolean)[0] || "en";
+  const isAdmin = userData?.role?.toLowerCase() === "admin";
+  const [title, Component] = sections[activeSection];
 
+  useEffect(() => {
+    if (userData && !isAdmin) router.replace(`/${locale}`);
+  }, [userData, isAdmin, locale, router]);
 
-  // ✅ تحقق من المستخدم وصلاحيته داخل useEffect
-  // useEffect(() => {
-  //   if (!userData || userData?.role?.toLowerCase() !== "admin") {
-  //     router.replace("/"); // رجعه للصفحة الرئيسية لو مش أدمن
-  //   }
-  // }, []);
+  if (!userData || !isAdmin) return <main className="admin-gate"><div className="admin-gate-card"><FaLock /><h1>Secured workspace</h1><p>Verifying your administrator session…</p><span className="admin-loader" /></div></main>;
 
-  // // لو المستخدم مش Admin، ما تعرضش أي محتوى
-  // if (!userData || userData?.role?.toLowerCase() !== "admin") {
-  //   return null;
-  // }
-
-  return (
-    <main className={`relative flex min-h-screen ${theme.background} ${theme.text} overflow-hidden`}>
-      <EgyptianBackground />
-
-      <div className="absolute inset-0 pointer-events-none z-10">
-        {Array.from({ length: 25 }).map((_, i) => (
-          <span
-            key={i}
-            className={`absolute ${
-              themeName === "dark" ? "text-gray-700" : "text-[#c9a34a]"
-            } opacity-20 text-7xl animate-pulse`}
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              transform: `rotate(${Math.random() * 360}deg)`,
-            }}
-          >
-            {symbols[Math.floor(Math.random() * symbols.length)]}
-          </span>
-        ))}
-      </div>
-
-      {/* Sidebar */}
-      <Sidebar setActiveSection={setActiveSection} activeSection={activeSection} themeName={themeName} />
-
-      {/* Main Content */}
-      <section
-        className={`flex-1 p-10 relative z-10 ${
-          themeName === "dark" ? "bg-black" : "bg-white"
-        } rounded-tl-3xl`}
-      >
-        {activeSection === "dashboard" && <DashboardHome themeName={themeName} />}
-        {activeSection === "addTrip" && <AddTrip themeName={themeName} />}
-        {activeSection === "trips" && <TripsList themeName={themeName} />}
-        {activeSection === "editTrip" && <EditTrip themeName={themeName} />}
-        {activeSection === "users" && <UsersSection themeName={themeName} />}
-        {activeSection === "bookings" && <BookingsList themeName={themeName} />}
-        {activeSection === "reports" && <Reports themeName={themeName} />}
-        {activeSection === "messages" && <MessagesList themeName={themeName} />}
-        {activeSection === "currency" && <CurrencyRates themeName={themeName} />}
-      </section>
-    </main>
-  );
+  return <main className="admin-shell"><Sidebar activeSection={activeSection} setActiveSection={setActiveSection} open={sidebarOpen} onClose={() => setSidebarOpen(false)} locale={locale} /><section className="admin-main"><header className="admin-topbar"><button type="button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)} className="admin-menu-button lg:hidden"><FaBars /></button><div><span className="admin-eyebrow">Control centre / {locale.toUpperCase()}</span><h1>{title}</h1></div><div className="admin-topbar-actions"><label className="admin-search"><FaSearch /><input aria-label="Search dashboard" placeholder="Search workspace" /></label><button type="button" aria-label="Notifications" className="admin-icon-button"><FaBell /><i /></button><div className="admin-topbar-avatar">{(userData.name || "A").slice(0, 1).toUpperCase()}</div></div></header><div className="admin-content admin-surface"><Component themeName="dark" /></div></section></main>;
 }

@@ -5,9 +5,11 @@ import BookingForm from "./components/BookingForm";
 import { useState } from "react";
 import DownloadAppSection from "./components/DownloadAppSection";
 import LeftSocialIcons from "./components/LeftSocialIcons";
+import { useTranslation } from "react-i18next";
 
 export default function HeroSection() {
   const [showTrips, setShowTrips] = useState(false);
+  const { t } = useTranslation("common");
   return (
     <section
       aria-labelledby="hero-title"
@@ -22,19 +24,19 @@ export default function HeroSection() {
         <div className="hero-copy flex flex-col items-center text-center lg:items-start lg:text-left">
           <HeroText />
           <div className="mt-9 grid w-full max-w-lg grid-cols-2 border-y border-[var(--logo-border)]/35 py-5 text-left text-[var(--text)]">
-            <div className="border-r border-[var(--logo-border)]/35 pr-5"><strong className="block font-[Cinzel] text-2xl text-[var(--logo-border)]">01</strong><span className="text-xs uppercase tracking-[0.18em] opacity-70">Curated journeys</span></div>
-            <div className="pl-5"><strong className="block font-[Cinzel] text-2xl text-[var(--logo-border)]">∞</strong><span className="text-xs uppercase tracking-[0.18em] opacity-70">Timeless memories</span></div>
+            <div className="border-r border-[var(--logo-border)]/35 pr-5"><strong className="block font-[Cinzel] text-2xl text-[var(--logo-border)]">01</strong><span className="text-xs uppercase tracking-[0.18em] opacity-70">{t("curatedJourneys")}</span></div>
+            <div className="pl-5"><strong className="block font-[Cinzel] text-2xl text-[var(--logo-border)]">∞</strong><span className="text-xs uppercase tracking-[0.18em] opacity-70">{t("timelessMemories")}</span></div>
           </div>
         </div>
 
         <div className="flex w-full flex-col items-center justify-center gap-4 lg:items-end">
-          <p className="w-full max-w-[560px] text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">Design your Egyptian story</p>
+          <p className="w-full max-w-[560px] text-xs font-bold uppercase tracking-[0.28em] text-[var(--logo-border)]">{t("designStory")}</p>
           <BookingForm setShowTrips={setShowTrips} />
         </div>
       </div>
 
       <div className="absolute bottom-7 left-1/2 z-20 hidden -translate-x-1/2 items-center gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--text)]/55 lg:flex">
-        <span className="h-px w-10 bg-[var(--logo-border)]" /> Scroll to explore <span className="h-px w-10 bg-[var(--logo-border)]" />
+        <span className="h-px w-10 bg-[var(--logo-border)]" /> {t("scrollExplore")} <span className="h-px w-10 bg-[var(--logo-border)]" />
       </div>
 
       <div className="relative z-20 w-full lg:hidden">

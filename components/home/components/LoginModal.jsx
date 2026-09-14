@@ -25,6 +25,7 @@ export default function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { t } = useTranslation("home");
+  const { t: tc } = useTranslation("common");
 
   const { login, loginWithGoogle, loading, handleClose } = useAuth();
   const { validateField } = useSecurity();
@@ -40,11 +41,11 @@ export default function LoginModal() {
 
     try {
       await login(email, password);
-      toast.success("✅ Logged in successfully!");
+      toast.success(`✅ ${tc("loggedIn")}`);
       handleLoginClose();
       handleClose();
     } catch (err) {
-      toast.error("❌ Error: The email or password is incorrect.");
+      toast.error(`❌ ${tc("invalidCredentials")}`);
     }
   }, [email, password, validateField, login, handleLoginClose, handleClose]);
 
@@ -74,7 +75,7 @@ export default function LoginModal() {
   >
     {/* Header */}
     <div className="text-center py-6">
-      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--logo-border)]">Welcome back</p>
+      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--logo-border)]">{tc("welcomeBack")}</p>
       <h2 className="mt-2 font-[Cinzel] text-3xl font-semibold tracking-[-0.02em] text-[var(--heading)]">{t("Login")}</h2>
     </div>
     <DividerWithIcon />
@@ -123,7 +124,7 @@ export default function LoginModal() {
         className="auth-google flex h-14 w-full max-w-[320px] items-center gap-3 bg-white font-semibold text-black shadow-md transition-all hover:bg-[#f5ecd9]"
         >
           <FcGoogle size={28} />
-          <span className="text-[#A68B5B]">Sign in with Google</span>
+          <span className="text-[#A68B5B]">{tc("signInGoogle")}</span>
         </IconButton>
       </motion.div>
 

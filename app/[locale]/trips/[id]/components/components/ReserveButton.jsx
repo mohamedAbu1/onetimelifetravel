@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation"; // ✅ الصح
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function ReserveButton({
   trip,
@@ -17,6 +18,7 @@ export default function ReserveButton({
   user,
 }) {
   const router = useRouter(); // ✅ استخدم router من next/navigation
+  const { t } = useTranslation("common");
 
   const handleReserve = async () => {
     await savePaymentData({
@@ -38,7 +40,7 @@ export default function ReserveButton({
       user_image : user.avatar_url || user.image
     });
 
-    toast.info("📌 Reservation saved. Payment pending.");
+    toast.info(`📌 ${t("reservationSaved")}`);
 
     // ✅ استخدم push بدل route.route
     router.replace(`/trips/${trip}`)
@@ -49,7 +51,7 @@ export default function ReserveButton({
       onClick={handleReserve}
       className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold mt-6"
     >
-      Reserve & Pay Later
+      {t("reservePayLater")}
     </button>
   );
 }

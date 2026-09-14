@@ -9,7 +9,7 @@ import { useCitiesCategories } from "@/context/CitiesCategoriesContext";
 
 const encodeData = (obj) => btoa(JSON.stringify(obj));
 
-function CityCard({ city, index, language, t }) {
+function CityCard({ city, index, language, t, tc }) {
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
@@ -49,7 +49,7 @@ function CityCard({ city, index, language, t }) {
         <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#d1b06a] backdrop-blur-md">0{index + 1} · Egypt</div>
         <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">
           <div>
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">Explore destination</p>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">{tc("exploreDestination")}</p>
             <h3 className="font-[Cinzel] text-2xl font-semibold text-[#f4ead8] md:text-3xl">{cityName}</h3>
           </div>
           <button type="button" onClick={handleExplore} className="shrink-0 rounded-full border border-[#d1b06a]/70 bg-[#d1b06a] px-4 py-2 text-xs font-semibold text-[#16130f] transition hover:bg-[#ead39e] focus:outline-none focus:ring-2 focus:ring-[#d1b06a] focus:ring-offset-2 focus:ring-offset-black">{t("Explore")}</button>
@@ -61,6 +61,7 @@ function CityCard({ city, index, language, t }) {
 
 export default function CitiesSection() {
   const { t, i18n } = useTranslation("home");
+  const { t: tc } = useTranslation("common");
   const { cities, loading } = useCitiesCategories();
   const language = i18n.language.split("-")[0];
 
@@ -73,9 +74,9 @@ export default function CitiesSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div><p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d1b06a]">One Time Life Travel · Destinations</p><h2 className="max-w-2xl font-[Cinzel] text-3xl font-semibold leading-tight text-[#f4ead8] md:text-5xl">{t("ExploreCities")}</h2></div>
-          <p className="max-w-md text-sm leading-7 text-[#b8b0a2] md:text-right">Discover the places, stories, and quiet details that make every Egyptian journey memorable.</p>
+          <p className="max-w-md text-sm leading-7 text-[#b8b0a2] md:text-right">{tc("destinationsCopy")}</p>
         </div>
-        {cities.length ? <div className="grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-4">{cities.map((city, index) => <CityCard key={city.id || city.name?.en || index} city={city} index={index} language={language} t={t} />)}</div> : <div className="rounded-[1.75rem] border border-[var(--border)] bg-white/[0.03] px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[#f4ead8]">Luxor, Aswan and beyond</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[#b8b0a2]">Our local experts are preparing the next destinations for you.</p></div>}
+        {cities.length ? <div className="grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-4">{cities.map((city, index) => <CityCard key={city.id || city.name?.en || index} city={city} index={index} language={language} t={t} tc={tc} />)}</div> : <div className="rounded-[1.75rem] border border-[var(--border)] bg-white/[0.03] px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[#f4ead8]">{tc("destinationsEmpty")}</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[#b8b0a2]">{tc("destinationsPreparing")}</p></div>}
       </div>
     </section>
   );

@@ -25,7 +25,7 @@ export default function HeroText() {
         {t("brand")}
       </h1>
       <p className="mt-4 max-w-xl text-sm font-semibold uppercase tracking-[0.12em] text-[var(--logo-border)]/90 sm:text-base">
-        {t("seoIntro", { defaultValue: "Luxor & Aswan tours, Nile cruises and private Egypt journeys" })}
+        {t("seoIntro")}
       </p>
       <p className="mt-6 max-w-xl text-base leading-8 text-[var(--text)]/70 sm:text-xl">
         {t("Discover")}

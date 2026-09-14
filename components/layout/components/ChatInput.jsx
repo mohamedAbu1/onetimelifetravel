@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 export default function ChatInput({ text, setText, handleSend, handleSendImage, user }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { t } = useTranslation("home");
+  const { t: tc } = useTranslation("common");
 
   const updateTyping = (value) => {
     setText(value);
@@ -24,8 +25,8 @@ export default function ChatInput({ text, setText, handleSend, handleSendImage, 
           <FaPaperclip />
           <input type="file" accept="image/*" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) handleSendImage(file); event.target.value = ""; }} />
         </label>
-        <input value={text} onChange={(event) => updateTyping(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); handleSend(); } }} placeholder="Write a message..." aria-label="Message" className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm text-[#f7f1e6] outline-none placeholder:text-[#716b61]" />
-        <button type="button" onClick={() => setShowEmojiPicker((visible) => !visible)} aria-label="Add emoji" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#8e8577] transition hover:bg-white/10 hover:text-[#e0bf78]"><FaSmile /></button>
+        <input value={text} onChange={(event) => updateTyping(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); handleSend(); } }} placeholder={tc("writeMessage")} aria-label={tc("message")} className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm text-[#f7f1e6] outline-none placeholder:text-[#716b61]" />
+        <button type="button" onClick={() => setShowEmojiPicker((visible) => !visible)} aria-label={tc("addEmoji")} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#8e8577] transition hover:bg-white/10 hover:text-[#e0bf78]"><FaSmile /></button>
         <motion.button type="button" whileTap={{ scale: 0.9 }} onClick={handleSend} aria-label={t("Send") || "Send"} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#c2a878] text-[#15120e] transition hover:bg-[#e0bf78]"><FaPaperPlane className="text-sm" /></motion.button>
       </div>
     </div>

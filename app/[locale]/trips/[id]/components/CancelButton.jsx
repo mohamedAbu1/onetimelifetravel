@@ -11,6 +11,7 @@ export default function CancelButton({ trip }) {
   const [error, setError] = useState(null);
   const { userData } = useAuth(); // ✅ جلب المستخدم الحالي
   const { t } = useTranslation("trips");
+  const { t: tc } = useTranslation("common");
 
   const cancelBooking = async () => {
     setLoading(true);
@@ -18,7 +19,7 @@ export default function CancelButton({ trip }) {
     try {
       const result = await cancelTrip(trip.id, userData.id);
       if (result.success) {
-        toast.success("✅ Booking cancelled successfully!");
+        toast.success(`✅ ${tc("bookingCancelled")}`);
       } else {
         throw new Error(result.error);
       }
@@ -40,7 +41,7 @@ export default function CancelButton({ trip }) {
       >
         {loading ? t("Cancelling") : t("CancelBooking")}
       </button>
-      {error && <p className="text-red-500 mt-2">Error: {error}</p>}
+      {error && <p className="text-red-500 mt-2">{tc("errorLabel")}: {error}</p>}
     </div>
   );
 }

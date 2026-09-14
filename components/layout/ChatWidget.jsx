@@ -29,6 +29,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
     setMessageses,
   } = useChat();
     const { t } = useTranslation("home");
+    const { t: tc } = useTranslation("common");
 
   // ✅ جلب رسائل المستخدم
   useEffect(() => {
@@ -165,12 +166,12 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
             {bookingMode ? (
               <div className="m-4 rounded-2xl border border-[#c2a878]/20 bg-[#17130e] p-5 shadow-inner">
                 <p className="mb-4 text-base font-semibold text-[#f7f1e6]">
-                  🚗 Where would you like to book the car from and to?
+                  🚗 {tc("carBookingPrompt")}
                 </p>
 
                 <input
                   type="text"
-                  placeholder="From"
+                  placeholder={tc("from")}
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
                   className="mb-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#8e8577] focus:border-[#c2a878] focus:ring-2 focus:ring-[#c2a878]/20"
@@ -178,7 +179,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
 
                 <input
                   type="text"
-                  placeholder="To"
+                  placeholder={tc("to")}
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
                   className="mb-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#8e8577] focus:border-[#c2a878] focus:ring-2 focus:ring-[#c2a878]/20"
@@ -194,14 +195,14 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
                       {
                         sender: "assistant",
                         content:
-                          "✅ Your request has been recorded. Please select the date and time.",
+                          tc("carRequestRecorded"),
                       },
                     ]);
                     setBookingMode(false);
                   }}
                   className="mt-4 w-full rounded-xl bg-[#c2a878] px-6 py-3 text-sm font-bold text-[#15120e] shadow-lg shadow-[#c2a878]/10 transition hover:bg-[#e0bf78]"
                 >
-                  Confirm Booking
+                  {tc("confirmBooking")}
                 </button>
               </div>
             ) : (

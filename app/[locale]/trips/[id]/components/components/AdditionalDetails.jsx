@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
 
 export default function AdditionalDetails({
   hasChildren,
@@ -27,6 +28,7 @@ export default function AdditionalDetails({
   setGuideLanguages,
 }) {
   const { theme } = useTheme();
+  const { t } = useTranslation("common");
 
   const availableLanguages = [
     "English",
@@ -44,7 +46,7 @@ export default function AdditionalDetails({
       if (guideLanguages.length < 2) {
         setGuideLanguages([...guideLanguages, lang]);
       } else {
-        alert("❌ You can select only up to 2 languages.");
+        alert(`❌ ${t("maxGuideLanguages")}`);
       }
     }
   };
@@ -79,7 +81,7 @@ export default function AdditionalDetails({
   return (
     <div className={`mb-6 p-6 rounded-xl shadow-lg ${theme.card}`}>
       <h3 className={`text-xl font-bold mb-4 ${theme.title}`}>
-        Additional Details
+        {t("additionalDetails")}
       </h3>
 
       {/* الأطفال */}
@@ -109,13 +111,13 @@ export default function AdditionalDetails({
             </svg>
           </span>
           <FaChild className={theme.icon} />
-          <span className={theme.subText}>Traveling with children</span>
+          <span className={theme.subText}>{t("travelingChildren")}</span>
         </label>
 
         {hasChildren && (
           <div className="flex flex-col gap-2">
             <label className={`font-medium ${theme.subText}`}>
-              Number of children:
+              {t("numberChildren")}:
             </label>
             <div className="grid grid-cols-5 gap-2">
               {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
@@ -161,7 +163,7 @@ export default function AdditionalDetails({
               </svg>
             </span>
             <FaDog className={theme.icon} />
-            <span className={theme.subText}>Traveling with pets</span>
+            <span className={theme.subText}>{t("travelingPets")}</span>
           </label>
 
           {/* ✅ اختيارات الحيوانات */}
@@ -198,7 +200,7 @@ export default function AdditionalDetails({
                     <path d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
-                <FaCat className={theme.icon} /> Cat
+                <FaCat className={theme.icon} /> {t("cat")}
               </label>
 
               {/* Dog */}
@@ -232,7 +234,7 @@ export default function AdditionalDetails({
                     <path d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
-                <FaDog className={theme.icon} /> Dog
+                <FaDog className={theme.icon} /> {t("dog")}
               </label>
             </div>
           )}
@@ -266,7 +268,7 @@ export default function AdditionalDetails({
               </svg>
             </span>
             <FaUserTie className={theme.icon} />
-            <span className={theme.subText}>Tour Guide</span>
+            <span className={theme.subText}>{t("tourGuide")}</span>
           </label>
 
           {/* ✅ اختيارات اللغات */}
@@ -315,7 +317,7 @@ export default function AdditionalDetails({
         <div className="flex flex-col gap-3">
           <label className="flex items-center gap-2">
             <FaUsers className={theme.icon} />
-            <span className={theme.subText}>Group Size</span>
+            <span className={theme.subText}>{t("groupSize")}</span>
           </label>
           <div className="grid grid-cols-5 gap-2">
             {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (

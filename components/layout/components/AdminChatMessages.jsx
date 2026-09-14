@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AdminChatMessages({ messages, adminTyping }) {
+  const { t } = useTranslation("common");
   const endRef = useRef(null);
   useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, adminTyping]);
 
@@ -23,8 +25,8 @@ export default function AdminChatMessages({ messages, adminTyping }) {
             <div className={`mt-1 flex items-center gap-1 px-1 text-[10px] text-[#8e8577] ${isAdmin ? "justify-end" : "justify-start"}`}>{msg.created_at ? new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}{isAdmin && (msg.status === "seen" ? <FaCheckDouble className="text-[#c2a878]" /> : <FaCheck />)}</div>
           </div>
         </motion.div>;
-      }) : <div className="flex h-full min-h-64 items-center justify-center text-sm text-[#8e8577]">No messages yet.</div>}
-      {adminTyping && <div className="text-xs text-[#8e8577]">Traveler is typing…</div>}
+      }) : <div className="flex h-full min-h-64 items-center justify-center text-sm text-[#8e8577]">{t("noMessages")}</div>}
+      {adminTyping && <div className="text-xs text-[#8e8577]">{t("travelerTyping")}</div>}
       <div ref={endRef} />
     </div>
   );

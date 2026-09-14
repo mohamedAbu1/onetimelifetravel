@@ -36,6 +36,7 @@ export default function TripPage({ params }) {
   const { userData, chatUser, setChatUser } = useAuth();
   const { purchases } = usePurchase();
   const { t } = useTranslation("header");
+  const { t: tc } = useTranslation("common");
   const { messages } = useMessages();
 
   useEffect(() => { if (!trips.length) fetchTrips(); }, [trips.length, fetchTrips]);
@@ -49,12 +50,12 @@ export default function TripPage({ params }) {
       <Header />
       <EgyptianBackground />
       <div className="trip-world-container relative z-10">
-        <nav className="trip-world-breadcrumb" aria-label="Breadcrumb"><Link href={`/${lang}`}>Home</Link><span>/</span><Link href={`/${lang}/trips`}>Journeys</Link><span>/</span><strong>{trip.title?.[lang] || trip.title?.en}</strong></nav>
+        <nav className="trip-world-breadcrumb" aria-label={tc("home")}><Link href={`/${lang}`}>{tc("home")}</Link><span>/</span><Link href={`/${lang}/trips`}>{tc("journeys")}</Link><span>/</span><strong>{trip.title?.[lang] || trip.title?.en}</strong></nav>
         <TripHeader trip={trip} lang={lang} />
-        <div className="trip-world-facts"><div><span>𓏏</span><small>Duration</small><b>{trip.duration} {trip.duration_unit?.[lang] || trip.duration_unit?.en || "days"}</b></div><div><span>𓉐</span><small>Style</small><b>Private journey</b></div><div><span>𓇼</span><small>Region</small><b>Nile & Egypt</b></div><div><span>𓆣</span><small>Travel pace</small><b>Curated</b></div></div>
+        <div className="trip-world-facts"><div><span>𓏏</span><small>{tc("duration")}</small><b>{trip.duration} {trip.duration_unit?.[lang] || trip.duration_unit?.en || "days"}</b></div><div><span>𓉐</span><small>{tc("style")}</small><b>{tc("privateJourney")}</b></div><div><span>𓇼</span><small>{tc("region")}</small><b>{tc("nileEgypt")}</b></div><div><span>𓆣</span><small>{tc("travelPace")}</small><b>{tc("curated")}</b></div></div>
         <div className="trip-world-layout">
           <div className="trip-world-main">
-            <section className="trip-world-section trip-world-overview"><div><p className="trip-world-label">THE EDIT</p><h2>Every day, thoughtfully composed.</h2></div><p>From timeless temples to quiet Nile mornings, this journey is designed to feel effortless, personal, and deeply connected to Egypt.</p></section>
+            <section className="trip-world-section trip-world-overview"><div><p className="trip-world-label">{tc("theEdit")}</p><h2>{tc("everyDay")}</h2></div><p>{tc("journeyDescription")}</p></section>
             <div className="trip-world-two-col"><TripCities trip={trip} lang={lang} /><TripCategories trip={trip} lang={lang} /></div>
             <AccessibilityInfo theme={theme} themeName={theme} />
             <div className="trip-world-two-col"><TripIncludes trip={trip} lang={lang} theme={theme} themeName={theme} /><TripExclusions trip={trip} lang={lang} theme={theme} themeName={theme} /></div>

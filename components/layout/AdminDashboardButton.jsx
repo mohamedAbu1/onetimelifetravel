@@ -1,36 +1,34 @@
 "use client";
 import React from "react";
 import { FaTachometerAlt } from "react-icons/fa"; // أيقونة الداش بورد
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
-import { useTheme } from "@/context/ThemeContext";
+import Link from "next/link";
 
-export default function AdminDashboardButton() {
+export default function AdminDashboardButton({ compact = false }) {
   const { userData } = useAuth();
-  const router = useRouter();
-  const { theme } = useTheme();
   // ✅ تحقق من أن المستخدم أدمن
   const isAdmin = userData?.role?.toLowerCase() === "admin";
-
-  const goToDashboard = () => {
-    router.push("/admin"); // المسار الخاص بلوحة التحكم
-  };
 
   if (!isAdmin) return null; // الزر يظهر فقط للأدمن
 
   return (
-     <motion.button
-      style={{ cursor: "pointer" ,zIndex:"999"}}
-      onClick={goToDashboard}
+     <motion.div
+      style={{ zIndex: 2 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 
-                 bg-gradient-to-r from-pink-400 to-pink-600 
-                 text-white font-bold tracking-wide hover:shadow-xl transition-all duration-300"
+      className={compact ? "hidden lg:block" : "fixed bottom-6 right-6 z-40"}
     >
-      <FaTachometerAlt size={22} />
-      <span>Dashboard</span>
-    </motion.button>
+      <Link
+        href="/admin"
+        aria-label="Open admin dashboard"
+        className={compact
+          ? "flex items-center gap-2 rounded-full border border-[var(--logo-border)]/60 bg-[var(--primary-gradient)] px-4 py-2 text-xs font-extrabold uppercase tracking-[.12em] text-[#18262b] shadow-lg transition hover:-translate-y-0.5"
+          : "flex items-center gap-3 rounded-full border border-[var(--logo-border)]/60 bg-[var(--primary-gradient)] px-5 py-3 font-bold tracking-wide text-[#18262b] shadow-xl transition hover:-translate-y-0.5"}
+      >
+        <FaTachometerAlt size={compact ? 15 : 20} />
+        <span>{compact ? "Dashboard" : "Dashboard"}</span>
+      </Link>
+    </motion.div>
   );
 }

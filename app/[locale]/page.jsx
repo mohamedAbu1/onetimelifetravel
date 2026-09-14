@@ -14,7 +14,6 @@ import ChatWidget from "@/components/layout/ChatWidget";
 import { useAuth } from "@/context/AuthContext"; // ✅ استدعاء الـ Auth
 import CurrencySelector from "@/components/layout/CurrencySelector";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import AdminDashboardButton from "@/components/layout/AdminDashboardButton";
 import AdminChatWindow from "@/components/layout/AdminChatWindow";
 import { useMessages } from "@/context/MessageContext";
 // import { useQueryFilters } from "@/context/QueryContext";
@@ -64,7 +63,6 @@ export default function Home() {
 
         {/* نافذة الدردشة تظهر فقط لو المستخدم مسجل دخول */}
          {userData && <ChatWidget />}
-        {userData && <AdminDashboardButton />}
 
         <CurrencySelector />
         {chatUser && (

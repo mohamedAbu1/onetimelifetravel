@@ -5,12 +5,14 @@ import { useTheme } from "@/context/ThemeContext";
 import { useTrip } from "@/context/TripContext";
 import { useCitiesCategories } from "@/context/CitiesCategoriesContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 export default function Packages({ showTrips }) {
   const { theme, themeName } = useTheme();
   const { trips, fetchTrips, loadingTrips } = useTrip();
   const { categories: allCategories } = useCitiesCategories();
   const { lang } = useLanguage();
+  const { t } = useTranslation("common");
   if (showTrips === true) return null; // ✅ إخفاء الكروت عند فتح التاريخ
 
   useEffect(() => {
@@ -70,9 +72,9 @@ export default function Packages({ showTrips }) {
     page * itemsPerPage + itemsPerPage,
   );
 
-  if (loadingTrips) return <p className="text-center">Loading trips...</p>;
+  if (loadingTrips) return <p className="text-center">{t("loadingTrips")}</p>;
   if (limitedTrips.length === 0)
-    return <p className="text-center">لا توجد رحلات متاحة حالياً</p>;
+    return <p className="text-center">{t("noTripsAvailable")}</p>;
   return (
     <motion.div
       initial={{ opacity: 0 }}

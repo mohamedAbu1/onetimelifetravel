@@ -10,6 +10,7 @@ import Logo from "../header/components/Logo";
 
 const Footer = () => {
   const { t } = useTranslation("footer");
+  const { t: tc } = useTranslation("common");
 
   const pathname = usePathname();
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
@@ -73,8 +74,8 @@ const Footer = () => {
       </div>
 
       <div className="relative z-10 mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-[var(--logo-border)]/20 pt-5 text-xs text-[var(--sub-text)] sm:flex-row sm:items-center sm:justify-between">
-        <span>© 2026 One Time Life Travel. All rights reserved.</span>
-        <span>Luxury Egypt travel from Luxor to Aswan.</span>
+        <span>© 2026 One Time Life Travel. {t("rightsReserved")}</span>
+        <span>{tc("travelEgypt")}</span>
       </div>
     </motion.footer>
   );

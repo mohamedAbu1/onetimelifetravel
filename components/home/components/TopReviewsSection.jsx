@@ -1,191 +1,25 @@
 "use client";
-import { useReviews } from "@/context/ReviewsContext";
-import { useTheme } from "@/context/ThemeContext";
-import { FaStar, FaUserCircle, FaQuoteLeft, FaHeart } from "react-icons/fa";
+import { useState } from "react";
+import { FaArrowLeft, FaArrowRight, FaHeart, FaQuoteLeft, FaStar, FaUserCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import EgyptianBackground from "@/components/layout/EgyptianBackground";
-import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { useState } from "react";
-import DividerWithIcon from "@/components/layout/DividerWithIcon";
+import { useReviews } from "@/context/ReviewsContext";
+import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
+import EgyptianBackground from "@/components/layout/EgyptianBackground";
 import Decor from "@/components/layout/Decor";
 
 export default function TopReviewsSection() {
   const { allReviews, likes } = useReviews();
   const { theme } = useTheme();
   const { t } = useTranslation("home");
-
-  const safeReviews = Array.isArray(allReviews) ? allReviews : [];
-
-  const topLikedReviews = safeReviews
-    .map((rev) => ({
-      ...rev,
-      likesCount: likes[rev.id]?.count || 0,
-    }))
-    .filter((rev) => rev.likesCount > 0)
-    .sort((a, b) => b.likesCount - a.likesCount)
-    .slice(0, 5);
-
-  const [expandedIds, setExpandedIds] = useState([]);
-  const toggleExpand = (id) => {
-    setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
-  };
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 700,
-    slidesToShow: 3, // ✅ الكمبيوتر: 3 كروت
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024, // أقل من 1024px (تابلت)
-        settings: {
-          slidesToShow: 2, // ✅ يعرض 2 كروت
-        },
-      },
-      {
-        breakpoint: 640, // أقل من 640px (موبايل)
-        settings: {
-          slidesToShow: 1, // ✅ يعرض كارت واحد
-        },
-      },
-    ],
-  };
-
-  return (
-    <section
-      className={`reviews-journal site-section ${theme.text} flex w-screen max-w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center`}
-      //  style={{
-      //   backgroundImage:
-      //     "url('/HomePageImage/421009550_cc929d60-b9e0-426e-84d8-74d70ab10d55.svg')",
-      // }}
-    >
-      <EgyptianBackground />
-      <h2
-        className="sc-title-first text-5xl font-extrabold tracking-wide drop-shadow-md text-left text-gradient"
-        style={{ textAlign: "center" }}
-      >
-        <span className="inline-block transform scale-x-[-1] mr-4">𓅓</span>
-        {t("h6")}
-        <span className="inline-block ml-4">𓅓</span>
-      </h2>
-
-      <DividerWithIcon />
-
-      {topLikedReviews.length > 0 ? (
-        <Slider {...settings}>
-          {topLikedReviews.map((rev, idx) => {
-            const expanded = expandedIds.includes(rev.id);
-            const comment =
-              rev.comment?.length > 150 && !expanded
-                ? rev.comment.slice(0, 150) + "..."
-                : rev.comment;
-
-            return (
-              <motion.div
-                key={rev.id || idx}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="editorial-card dust-interactive mx-3 my-4 flex min-h-[280px] flex-col gap-6 rounded-2xl border p-7"
-                style={{
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  border: `1px solid ${theme.logoBorder}`,
-                  boxShadow: theme.shadow,
-                }}
-              >
-                {/* Header */}
-                <div className="flex items-center gap-4 border-b pb-3">
-                  {rev.avatar_url ? (
-                    <img
-                      src={rev.avatar_url}
-                      alt={rev.name}
-                      className="w-16 h-16 rounded-full border-2 object-cover"
-                      style={{ borderColor: theme.logoBorder }}
-                    />
-                  ) : (
-                    <FaUserCircle size={64} className={theme.icon} />
-                  )}
-                  <div>
-                    <h3
-                      className="font-[Cinzel] text-lg font-semibold capitalize text-[var(--heading)]"
-                    >
-                      {rev.name || "Anonymous"}
-                    </h3>
-                    <div className="flex gap-1">
-                      {[...Array(rev.rating || 0)].map((_, i) => (
-                        <FaStar key={i} className={theme.icon} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Body */}
-                <div className="relative flex-1 mt-6">
-                  <FaQuoteLeft
-                    className={`absolute top-0 left-0 text-3xl opacity-20 ${theme.icon}`}
-                  />
-                  <p
-                    className="pl-10 text-base italic leading-relaxed text-[var(--sub-text)]"
-                    style={{ textAlign: "justify" }}
-                  >
-                    {comment}
-                  </p>
-                  {rev.comment?.length > 150 && (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => toggleExpand(rev.id)}
-                      className={`text-sm mt-2 font-semibold tracking-wide cursor-pointer transition-all duration-300 ${theme.buttonPrimary}`}
-                      style={{ border: `1px solid ${theme.logoBorder}` }}
-                    >
-                      {expanded ? "إخفاء" : "اقرأ المزيد"}
-                    </motion.button>
-                  )}
-                </div>
-
-                {/* Footer */}
-                <div className="flex justify-between items-center mt-6 border-t pt-4">
-                  <div
-                    className={`flex items-center gap-2 text-sm ${theme.subText}`}
-                  >
-                    <span>
-                      {rev.created_at
-                        ? format(new Date(rev.created_at), "dd MMM yyyy")
-                        : "Unknown date"}
-                    </span>
-                  </div>
-                  <div
-                    className={`flex items-center gap-2 font-semibold text-sm px-3 py-1 rounded-full shadow-sm ${theme.buttonPrimary}`}
-                  >
-                    <FaHeart />
-                    <span>{rev.likesCount}</span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </Slider>
-      ) : (
-        <div className="editorial-card reviews-empty mx-6 mt-8 flex w-full max-w-2xl flex-col items-center rounded-2xl border px-8 py-10 text-center">
-          <FaQuoteLeft className="mb-5 text-3xl text-[var(--logo-border)]/70" />
-          <p className="font-[Cinzel] text-2xl font-semibold text-[var(--heading)]">Your story belongs here</p>
-          <p className="mt-3 max-w-md text-sm leading-7 text-[var(--sub-text)]">{t("p6")}</p>
-          <span className="mt-6 text-xs font-bold uppercase tracking-[0.25em] text-[var(--logo-border)]">Travel. Remember. Share.</span>
-        </div>
-      )}
-      <Decor pos={"bottom"} />
-    </section>
-  );
+  const { t: tc } = useTranslation("common");
+  const [expanded, setExpanded] = useState([]);
+  const reviews = (Array.isArray(allReviews) ? allReviews : []).map((review) => ({ ...review, likesCount: likes[review.id]?.count || 0 })).sort((a, b) => b.likesCount - a.likesCount || (b.rating || 0) - (a.rating || 0)).slice(0, 6);
+  const settings = { dots: true, arrows: true, infinite: reviews.length > 3, speed: 600, slidesToShow: 3, slidesToScroll: 1, autoplay: true, autoplaySpeed: 5500, pauseOnHover: true, prevArrow: <button type="button" aria-label={tc("previousReview")} className="review-arrow"><FaArrowLeft /></button>, nextArrow: <button type="button" aria-label={tc("nextReview")} className="review-arrow"><FaArrowRight /></button>, responsive: [{ breakpoint: 1024, settings: { slidesToShow: 2 } }, { breakpoint: 640, settings: { slidesToShow: 1, arrows: false } }] };
+  const toggle = (id) => setExpanded((items) => items.includes(id) ? items.filter((item) => item !== id) : [...items, id]);
+  return <section className={`reviews-journal site-section relative w-full self-stretch overflow-hidden ${theme.text}`}><EgyptianBackground /><div className="relative container z-10 mx-auto w-full max-w-[82rem] px-4 sm:px-6 lg:px-8"><div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="booking-kicker">𓅓 {tc("voices")}</span><h2 className="mt-3 max-w-2xl font-[Cinzel] text-4xl font-semibold leading-tight text-[var(--heading)] sm:text-5xl">{tc("reviewsTitle")}</h2><p className="mt-3 max-w-xl text-sm leading-7 text-[var(--sub-text)]">{tc("reviewsCopy")}</p></div><div className="review-trust"><span className="flex items-center gap-1 text-[var(--primary-color)]"><FaStar /><FaStar /><FaStar /><FaStar /><FaStar /></span><strong>{reviews.length ? tc("lovedByTravellers") : tc("yourStoryMatters")}</strong></div></div>{reviews.length ? <div className="reviews-slider"><Slider {...settings}>{reviews.map((review, index) => { const isExpanded = expanded.includes(review.id); const text = review.comment || tc("reviewFallback"); return <motion.article key={review.id || index} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="review-card"><div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3">{review.avatar_url ? <img src={review.avatar_url} alt={review.name || tc("anonymousTraveller")} className="h-12 w-12 rounded-full border-2 object-cover" style={{ borderColor: theme.logoBorder }} /> : <FaUserCircle className="text-5xl text-[var(--primary-color)]" />}<div><h3 className="font-[Cinzel] text-base font-semibold text-[var(--heading)]">{review.name || tc("anonymousTraveller")}</h3><div className="mt-1 flex gap-0.5 text-xs text-[var(--primary-color)]">{Array.from({ length: Math.max(0, review.rating || 0) }, (_, i) => <FaStar key={i} />)}</div></div></div><FaQuoteLeft className="text-2xl text-[var(--primary-color)]/35" /></div><p className="review-copy">{isExpanded || text.length <= 150 ? text : `${text.slice(0, 150)}…`}</p>{text.length > 150 && <button type="button" onClick={() => toggle(review.id)} className="review-more">{isExpanded ? tc("showLess") : tc("readMore")}</button>}<div className="mt-auto flex items-center justify-between border-t border-[var(--card-border)]/50 pt-4 text-xs text-[var(--sub-text)]"><span>{review.created_at ? format(new Date(review.created_at), "dd MMM yyyy") : tc("verifiedJourney")}</span><span className="flex items-center gap-1.5 rounded-full bg-[var(--logo-border)]/10 px-2.5 py-1 font-bold text-[var(--primary-color)]"><FaHeart /> {review.likesCount}</span></div></motion.article>})}</Slider></div> : <div className="review-empty"><FaQuoteLeft className="text-3xl text-[var(--primary-color)]/50" /><h3>{t("h6")}</h3><p>{t("p6")}</p></div>}</div><Decor pos="bottom" /></section>;
 }

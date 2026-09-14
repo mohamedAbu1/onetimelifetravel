@@ -7,6 +7,7 @@ import { useQueryFilters } from "@/context/QueryContext";
 
 export default function TripsFilter({ allCities = [], allCategories = [], loading }) {
   const { i18n, t } = useTranslation("trips");
+  const { t: tc } = useTranslation("common");
   const { currency } = usePurchase();
   const { city, category, group_price: price, popular, updateValue } = useQueryFilters();
   const language = i18n.language.split("-")[0];
@@ -24,7 +25,7 @@ export default function TripsFilter({ allCities = [], allCategories = [], loadin
   return (
     <aside className="rounded-[1.5rem] border border-[var(--border)] bg-[#151515] p-5 text-[#f4ead8] shadow-[0_18px_50px_rgba(0,0,0,.18)] lg:sticky lg:top-28">
       <div className="mb-6 flex items-start justify-between gap-3">
-        <div><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">Refine</p><h2 className="mt-2 font-[Cinzel] text-2xl">{t("Filters")}</h2></div>
+        <div><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">{tc("refine")}</p><h2 className="mt-2 font-[Cinzel] text-2xl">{t("Filters")}</h2></div>
         <span className="rounded-full border border-[#d1b06a]/30 px-2.5 py-1 text-[10px] text-[#d1b06a]">{currency}</span>
       </div>
 

@@ -23,6 +23,7 @@ export default function SignUpModal() {
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
   const { t } = useTranslation("home");
+  const { t: tc } = useTranslation("common");
   const { register, loading, loginWithGoogle, handleClose } = useAuth();
 
   const handleSubmit = async () => {
@@ -31,13 +32,13 @@ export default function SignUpModal() {
     const passwordError = validateField("Password", password);
     if (nameError || emailError || passwordError || !gender) {
       toast.error(
-        nameError || emailError || passwordError || "Gender is required",
+        nameError || emailError || passwordError || tc("genderRequired"),
       );
       return;
     }
     try {
       await register(email, password, fullName, gender);
-      toast.success("✅ A confirmation message has been sent to your account.");
+      toast.success(`✅ ${tc("confirmationSent")}`);
       handleClose();
     } catch (err) {
       toast.error("❌ Error: " + err.message);

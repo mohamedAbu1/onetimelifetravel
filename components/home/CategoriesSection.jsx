@@ -18,7 +18,7 @@ function getDisplayName(category, language) {
   return category?.name || "Travel experience";
 }
 
-function CategoryCard({ category, language, theme }) {
+function CategoryCard({ category, language, theme, tc }) {
   const [imageIndex, setImageIndex] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
@@ -46,14 +46,14 @@ function CategoryCard({ category, language, theme }) {
       whileTap={{ scale: 0.985 }}
       className="category-card group relative isolate flex min-h-[280px] w-full overflow-hidden rounded-[1.35rem] border text-left shadow-[0_18px_50px_rgba(0,0,0,.22)] transition-shadow duration-300 hover:shadow-[0_24px_70px_rgba(0,0,0,.34)] sm:min-h-[320px]"
       style={{ borderColor: "rgba(194,168,120,.5)", background: theme.card }}
-      aria-label={`Explore ${name}`}
+      aria-label={`${tc("exploreJourneys")} ${name}`}
     >
       <Image src={image} alt={name} fill sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 23vw" className="object-cover transition duration-700 group-hover:scale-110" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
       <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
         <span className="mb-3 inline-flex rounded-full border border-[var(--logo-border)]/45 bg-black/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-[var(--logo-border)] backdrop-blur-sm">One Time Life</span>
         <h3 className="font-[Cinzel] text-xl font-semibold leading-tight text-[#f7f1e6] sm:text-2xl">{name}</h3>
-        <span className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-[#e0bf78]">Explore journeys <span aria-hidden="true">→</span></span>
+        <span className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-[#e0bf78]">{tc("exploreJourneys")} <span aria-hidden="true">→</span></span>
       </div>
     </motion.button>
   );
@@ -62,6 +62,7 @@ function CategoryCard({ category, language, theme }) {
 export default function CategoriesSection() {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation("home");
+  const { t: tc } = useTranslation("common");
   const { categories, loading } = useCitiesCategories();
   const language = i18n.language.split("-")[0];
 
@@ -75,7 +76,7 @@ export default function CategoriesSection() {
             <h2 className="mt-3 font-[Cinzel] text-3xl font-semibold leading-tight text-[var(--heading)] sm:text-4xl lg:text-5xl">{t("ExploreCategories")}</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--sub-text)] sm:text-base">{t("Discover")}</p>
           </div>
-          <a href="#featured-trips" className="self-start rounded-full border border-[var(--logo-border)]/60 px-5 py-3 text-xs font-bold uppercase tracking-[.16em] text-[var(--logo-border)] transition hover:bg-[var(--logo-border)] hover:text-[#15120e] sm:self-auto">View featured trips</a>
+          <a href="#featured-trips" className="self-start rounded-full border border-[var(--logo-border)]/60 px-5 py-3 text-xs font-bold uppercase tracking-[.16em] text-[var(--logo-border)] transition hover:bg-[var(--logo-border)] hover:text-[#15120e] sm:self-auto">{tc("viewFeaturedTrips")}</a>
         </div>
 
         {loading ? (
@@ -84,12 +85,12 @@ export default function CategoriesSection() {
           </div>
         ) : categories.length ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((category, index) => <CategoryCard key={category.id || index} category={category} language={language} theme={theme} />)}
+            {categories.map((category, index) => <CategoryCard key={category.id || index} category={category} language={language} theme={theme} tc={tc} />)}
           </div>
         ) : (
           <div className="rounded-3xl border border-[var(--logo-border)]/25 bg-black/10 p-10 text-center backdrop-blur-sm">
-            <h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">Your journey starts here</h3>
-            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">Explore private tours, Nile cruises, cultural escapes, and desert adventures with One Time Life Travel.</p>
+            <h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">{tc("journeyStarts")}</h3>
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">{tc("exploreCopy")}</p>
           </div>
         )}
       </div>

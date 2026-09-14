@@ -28,7 +28,7 @@ export default function Providers({ children }) {
     <SessionProvider>
       <I18nextProvider i18n={i18n}>
         <ThemeProvider>
-          <Suspense fallback={<div>Loading filters...</div>}>
+          <Suspense fallback={<div>Loading…</div>}>
             <NotificationsProvider>
               <CurrencyProvider>
                 <QueryProvider>

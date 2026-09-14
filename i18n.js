@@ -8,9 +8,10 @@ import fr from "./locales/fr/translation.json";
 import de from "./locales/de/translation.json";
 import it from "./locales/it/translation.json";
 import zh from "./locales/zh/translation.json";
+import common from "./locales/common";
 
-const resources = { en, es, fr, de, it, zh };
-const namespaces = ["header", "home", "footer", "trips", "about", "contact", "tripsId", "privacyPolicy", "cancellationPolicy"];
+const resources = { en: { ...en, common: common.en }, es: { ...es, common: common.es }, fr: { ...fr, common: common.fr }, de: { ...de, common: common.de }, it: { ...it, common: common.it }, zh: { ...zh, common: common.zh } };
+const namespaces = ["header", "home", "footer", "trips", "about", "contact", "tripsId", "privacyPolicy", "cancellationPolicy", "common"];
 
 if (!i18n.isInitialized) {
   i18n

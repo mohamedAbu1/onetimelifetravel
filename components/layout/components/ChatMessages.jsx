@@ -5,9 +5,11 @@ import { formatDistanceToNow } from "date-fns";
 import { saveAs } from "file-saver";
 import { FaCheck, FaCheckDouble, FaComments, FaDownload, FaExpand } from "react-icons/fa";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ChatMessages({ messages, adminTyping }) {
   const messagesEndRef = useRef(null);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,7 +25,7 @@ export default function ChatMessages({ messages, adminTyping }) {
     <div className="flex-1 space-y-4 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(194,168,120,.08),transparent_38%),#0d0d0d] px-4 py-5 sm:px-5">
       <div className="mx-auto mb-5 max-w-[280px] text-center text-[11px] leading-5 text-[#8e8577]">
         <span className="mx-auto mb-2 block h-8 w-px bg-[#c2a878]/40" />
-        Your private line to One Time Life Travel
+        {t("privateLine", "Your private line to One Time Life Travel")}
       </div>
       <AnimatePresence initial={false}>
         {messages.length ? messages.map((msg) => {
@@ -57,12 +59,12 @@ export default function ChatMessages({ messages, adminTyping }) {
         }) : (
           <div className="flex h-full min-h-64 flex-col items-center justify-center text-center text-[#8e8577]">
             <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl border border-[#c2a878]/25 bg-[#c2a878]/10 text-2xl text-[#e0bf78]"><FaComments /></span>
-            <p className="font-semibold text-[#f7f1e6]">Start your conversation</p>
-            <p className="mt-1 text-xs">Our travel team is ready to help.</p>
+            <p className="font-semibold text-[#f7f1e6]">{t("startConversation")}</p>
+            <p className="mt-1 text-xs">{t("teamReady")}</p>
           </div>
         )}
       </AnimatePresence>
-      {adminTyping && <div className="flex items-center gap-2 text-xs text-[#8e8577]"><span className="flex gap-1 rounded-full bg-white/5 px-3 py-2"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:120ms]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:240ms]" /></span>Travel team is typing</div>}
+      {adminTyping && <div className="flex items-center gap-2 text-xs text-[#8e8577]"><span className="flex gap-1 rounded-full bg-white/5 px-3 py-2"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:120ms]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#c2a878] [animation-delay:240ms]" /></span>{t("teamTyping")}</div>}
       <div ref={messagesEndRef} />
     </div>
   );

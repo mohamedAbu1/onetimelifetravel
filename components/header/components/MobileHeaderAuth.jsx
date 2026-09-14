@@ -7,11 +7,12 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
-import { signOut, signIn } from "next-auth/react"; // ✅ إضافة
+import { useTranslation } from "react-i18next";
 
 export default function MobileHeaderAuth() {
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:1023px)");
   const { userData, loginWithGoogle, logout } = useAuth();
+  const { t } = useTranslation("common");
   const [anchorEl, setAnchorEl] = useState(null);
 
   if (!isMobile) return null;
@@ -46,7 +47,7 @@ export default function MobileHeaderAuth() {
             open={Boolean(anchorEl)}
             onClose={handleCloseMenu}
           >
-            <MenuItem onClick={signOut}>Logout</MenuItem>
+            <MenuItem onClick={async () => { handleCloseMenu(); await logout(); }}>{t("logout")}</MenuItem>
           </Menu>
         </>
       )}

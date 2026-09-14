@@ -1,82 +1,30 @@
-/* eslint-disable react-hooks/static-components */
 "use client";
-import React from "react";
+
 import Link from "next/link";
-import {
-  FaHome,
-  FaPlus,
-  FaSuitcase,
-  FaUsers,
-  FaClipboardList,
-  FaChartBar,
-  FaEnvelope,
-  FaEdit,
-} from "react-icons/fa";
-import EgyptianBackground from "@/components/layout/EgyptianBackground";
+import { FaChartBar, FaChartLine, FaClipboardList, FaCog, FaEnvelope, FaHome, FaMapMarkedAlt, FaPlus, FaSignOutAlt, FaSuitcase, FaTimes, FaUsers } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 
-export default function Sidebar({ activeSection, setActiveSection }) {
-  // ✅ دالة لتوليد زر مع حالة Active
-  const NavButton = ({ section, icon, label }) => {
-    const isActive = activeSection === section;
-    return (
-      <button
-        onClick={() => setActiveSection(section)}
-        className={`flex items-center gap-3 px-4 py-2 rounded-lg font-semibold transition-all duration-300 relative cursor-pointer
-          ${
-            isActive
-              ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black shadow-lg border-l-4 border-yellow-500"
-              : "text-gold hover:text-yellow-400 hover:bg-black/20"
-          }`}
-      >
-        {/* ✅ خط جانبي يوضح الزر النشط */}
-        {isActive && (
-          <span className="absolute left-0 top-0 h-full w-1 bg-yellow-500 rounded-r"></span>
-        )}
+const items = [
+  ["dashboard", "Overview", FaHome],
+  ["addTrip", "Create trip", FaPlus],
+  ["trips", "Trip catalogue", FaMapMarkedAlt],
+  ["editTrip", "Edit trips", FaSuitcase],
+  ["users", "Users", FaUsers],
+  ["bookings", "Bookings", FaClipboardList],
+  ["reports", "Reports", FaChartLine],
+  ["messages", "Inbox", FaEnvelope],
+  ["currency", "Currency", FaChartBar],
+];
 
-        {/* ✅ نقطة ذهبية صغيرة بجانب الزر النشط */}
-        {isActive && (
-          <span className="absolute -left-3 w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
-        )}
-
-        {/* ✅ أيقونة مع تأثير عند النشط */}
-        <span
-          className={`text-lg transition-transform ${
-            isActive ? "scale-110 text-yellow-800 drop-shadow-md" : ""
-          }`}
-        >
-          {icon}
-        </span>
-        {label}
-      </button>
-    );
-  };
-
-  return (
-    <aside className="w-64 p-6 flex flex-col gap-6 bg-black/0 border-r border-gold/30">
-      <EgyptianBackground />
-
-      <h2 className="text-2xl font-bold mb-6 flex flex-row items-center justify-between">
-        <span>One Time Life Travel</span>
-      </h2>
-
-      <nav className="flex flex-col gap-3">
-        <Link
-          href="/"
-          className="flex items-center gap-3 font-bold text-gold hover:text-yellow-500 transition"
-        >
-          ⬅ Back to Home
-        </Link>
-
-        <NavButton section="dashboard" icon={<FaHome />} label="Dashboard" />
-        <NavButton section="addTrip" icon={<FaPlus />} label="Add New Trip" />
-        <NavButton section="trips" icon={<FaSuitcase />} label="All Trips" />
-        <NavButton section="editTrip" icon={<FaEdit />} label="Edit Trips" />
-        <NavButton section="users" icon={<FaUsers />} label="Users" />
-        <NavButton section="bookings" icon={<FaClipboardList />} label="Bookings" />
-        <NavButton section="reports" icon={<FaChartBar />} label="Reports" />
-        <NavButton section="messages" icon={<FaEnvelope />} label="Messages" />
-        <NavButton section="currency" icon={<FaChartBar />} label="Currency Rates" />
-      </nav>
+export default function Sidebar({ activeSection, setActiveSection, open, onClose, locale }) {
+  const { userData, logout } = useAuth();
+  return <>
+    {open && <button type="button" aria-label="Close menu" onClick={onClose} className="admin-sidebar-backdrop lg:hidden" />}
+    <aside className={`admin-sidebar ${open ? "is-open" : ""}`}>
+      <div className="admin-brand"><span className="admin-brand-mark">𓂀</span><span><strong>ONE TIME LIFE</strong><small>TRAVEL / CONTROL</small></span><button type="button" aria-label="Close menu" onClick={onClose} className="admin-mobile-close lg:hidden"><FaTimes /></button></div>
+      <div className="admin-workspace"><span className="admin-status-dot" /> Operations workspace</div>
+      <nav className="admin-nav" aria-label="Admin navigation">{items.map(([section, label, Icon]) => <button type="button" key={section} onClick={() => { setActiveSection(section); onClose?.(); }} className={`admin-nav-item ${activeSection === section ? "is-active" : ""}`}><Icon /><span>{label}</span>{activeSection === section && <i />}</button>)}</nav>
+      <div className="admin-sidebar-footer"><Link href={`/${locale}`} className="admin-nav-item"><FaHome /><span>Back to website</span></Link><button type="button" onClick={logout} className="admin-nav-item admin-logout"><FaSignOutAlt /><span>Sign out</span></button><div className="admin-user-mini"><span className="admin-avatar">{(userData?.name || "A").slice(0, 1).toUpperCase()}</span><span><strong>{userData?.name || "Administrator"}</strong><small>{userData?.email || "Secure session"}</small></span></div></div>
     </aside>
-  );
+  </>;
 }

@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { useData } from "@/context/DataContext";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const BookingSummaryCard = ({
   tourName,
@@ -14,6 +15,7 @@ const BookingSummaryCard = ({
   checkOut,
   tripId, // ✅ أضفنا معرف الرحلة
 }) => {
+  const { t } = useTranslation("common");
   const { theme } = useTheme();
   const { userData } = useAuth();
   const { handleLoginOpen } = useData();
@@ -64,13 +66,13 @@ let EGP = total * 49.85
 
   const handleBookingClick = async () => {
     if (!participants || !checkInPrice || !checkIn || !checkOut) {
-      toast.error("⚠️ Please complete all booking details before proceeding.");
+      toast.error(`⚠️ ${t("completeBooking")}`);
       return;
     }
 
     if (!userData) {
       handleLoginOpen();
-      toast.error("You must log in to book the trip");
+      toast.error(t("loginToBook"));
       return;
     }
 
@@ -97,7 +99,7 @@ let EGP = total * 49.85
 
       const bookingData = await bookingRes.json();
       if (!bookingRes.ok || !bookingData.success) {
-        throw new Error(bookingData.error || "Failed to save booking.");
+        throw new Error(bookingData.error || t("saveBookingFailed"));
       }
       // ✅ ثانياً: طلب الـ Hash من الـ API Route للدفع
       const res = await fetch("/api/kashier/hash", {
@@ -113,7 +115,7 @@ let EGP = total * 49.85
       const data = await res.json();
 
       if (!res.ok || !data.hash) {
-        throw new Error(data.error || "Failed to initialize payment hash.");
+        throw new Error(data.error || t("paymentInitFailed"));
       }
 
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
@@ -154,7 +156,7 @@ let EGP = total * 49.85
 
     } catch (error) {
       console.error("🔴 Booking Error:", error);
-      toast.error(error.message || "An error occurred while launching payment.");
+      toast.error(error.message || t("paymentError"));
     } finally {
       setLoading(false);
     }
@@ -162,7 +164,7 @@ let EGP = total * 49.85
 
   return (
     <div className={`${theme.card} p-6`}>
-      <h2 className={`${theme.title} mb-4`}>Booking Summary</h2>
+      <h2 className={`${theme.title} mb-4`}>{t("bookingSummary")}</h2>
 
       <div className={`${theme.border} p-4 flex justify-between`}>
         <div>
@@ -170,12 +172,12 @@ let EGP = total * 49.85
             {tourName ||
               "Private Cairo Tour – Giza Pyramids, Sphinx & Grand Egyptian Museum (GEM)"}
           </p>
-          <p className={theme.subText}>Participants: {participants || 0}</p>
-          <p className={theme.subText}>Children: {childrenCount || 0}</p>
+            <p className={theme.subText}>{t("participants")}: {participants || 0}</p>
+          <p className={theme.subText}>{t("children")}: {childrenCount || 0}</p>
         </div>
 
         <div>
-          <p className={theme.heading}>Total:</p>
+          <p className={theme.heading}>{t("totalLabel")}</p>
           <p className={`${theme.title} text-lg`}>
             {!isNaN(total) ? `$${total.toFixed(2)}` : "$0.00"}
           </p>
@@ -193,7 +195,7 @@ let EGP = total * 49.85
           }`}
         >
           <span className="text-xl">🛒</span>
-          <span>{loading ? "Processing..." : "Pay Trip"}</span>
+          <span>{loading ? t("processing") : t("payTrip")}</span>
         </motion.button>
       </div>
     </div>

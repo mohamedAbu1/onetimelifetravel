@@ -10,7 +10,6 @@ import LoginModal from "@/components/home/components/LoginModal";
 import SignUpButton from "@/components/home/components/SignUpButton";
 import ChatWidget from "@/components/layout/ChatWidget";
 import CurrencySelector from "../../../components/layout/CurrencySelector";
-import AdminDashboardButton from "@/components/layout/AdminDashboardButton";
 import AdminChatWindow from "@/components/layout/AdminChatWindow";
 import TripsFilter from "@/components/trips/TripsFilter";
 import TripsSearch from "@/components/trips/TripsSearch";
@@ -22,6 +21,7 @@ import { useCitiesCategories } from "@/context/CitiesCategoriesContext";
 import { useQueryFilters } from "@/context/QueryContext";
 import { usePurchase } from "@/context/PurchaseContext";
 import { useMessages } from "@/context/MessageContext";
+import { useTranslation } from "react-i18next";
 
 export default function TripsPage() {
   const { trips = [], fetchTrips, loadingTrips } = useTrip();
@@ -30,6 +30,7 @@ export default function TripsPage() {
   const { userData, chatUser, setChatUser } = useAuth();
   const { purchases = [] } = usePurchase();
   const { messages } = useMessages();
+  const { t } = useTranslation("common");
   const { city, category, group_price: price, popular } = useQueryFilters();
   const router = useRouter();
   const pathname = usePathname();
@@ -67,21 +68,21 @@ export default function TripsPage() {
     <Header />
     <section className="relative z-10 mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-12">
       <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="mb-10 max-w-3xl">
-        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.34em] text-[#d1b06a]">One Time Life Travel · Curated journeys</p>
-        <h1 className="font-[Cinzel] text-4xl font-semibold leading-tight text-[#f4ead8] md:text-6xl">Explore your next Egyptian story</h1>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-[#aaa092] md:text-base">Choose a destination, find your pace, and let our local team turn the journey into a memory worth keeping.</p>
+        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.34em] text-[#d1b06a]">{t("curatedJourneys")}</p>
+        <h1 className="font-[Cinzel] text-4xl font-semibold leading-tight text-[#f4ead8] md:text-6xl">{t("exploreNextStory")}</h1>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-[#aaa092] md:text-base">{t("choosePace")}</p>
       </motion.div>
-      <div className="mb-6 rounded-[1.5rem] border border-[#d1b06a]/20 bg-[#d1b06a]/[0.06] px-5 py-4 text-sm text-[#c5b9a7]"><span className="font-semibold text-[#ead39e]">{finalTrips.length}</span> journeys ready to explore</div>
+      <div className="mb-6 rounded-[1.5rem] border border-[#d1b06a]/20 bg-[#d1b06a]/[0.06] px-5 py-4 text-sm text-[#c5b9a7]"><span className="font-semibold text-[#ead39e]">{finalTrips.length}</span> {t("journeysReady")}</div>
       <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <TripsFilter allCities={allCities} allCategories={allCategories} loading={loading} />
         <div className="min-w-0 space-y-6">
           <TripsSearch search={search} setSearch={setSearch} cardStyle={cardStyle} setCardStyle={setCardStyle} resultCount={finalTrips.length} />
-          {loadingTrips ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[430px] animate-pulse rounded-[1.5rem] bg-white/10" />)}</div> : currentTrips.length ? <TripsGrid trips={currentTrips} cardStyle={cardStyle} /> : <div className="rounded-[1.5rem] border border-[var(--border)] bg-[#151515] px-6 py-20 text-center"><p className="text-4xl">𓂀</p><h2 className="mt-4 font-[Cinzel] text-2xl">No journeys found</h2><p className="mt-3 text-sm text-[#9c9385]">Try another search or adjust your filters.</p></div>}
+          {loadingTrips ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[430px] animate-pulse rounded-[1.5rem] bg-white/10" />)}</div> : currentTrips.length ? <TripsGrid trips={currentTrips} cardStyle={cardStyle} /> : <div className="rounded-[1.5rem] border border-[var(--border)] bg-[#151515] px-6 py-20 text-center"><p className="text-4xl">𓂀</p><h2 className="mt-4 font-[Cinzel] text-2xl">{t("noJourneys")}</h2><p className="mt-3 text-sm text-[#9c9385]">{t("tryAnotherSearch")}</p></div>}
           {totalPages > 1 && <nav aria-label="Trips pagination" className="flex justify-center gap-2 pt-2">{Array.from({ length: totalPages }, (_, index) => <button type="button" key={index} onClick={() => { setCurrentPage(index + 1); window.scrollTo({ top: 120, behavior: "smooth" }); }} className={`h-10 min-w-10 rounded-full border px-3 text-sm transition ${currentPage === index + 1 ? "border-[#d1b06a] bg-[#d1b06a] text-[#15120e]" : "border-white/10 bg-[#151515] text-[#aaa092] hover:border-[#d1b06a]/60"}`}>{index + 1}</button>)}</nav>}
         </div>
       </div>
     </section>
-    <Footer /><SignUpButton /><LoginModal />{userData && <ChatWidget />}{userData && <AdminDashboardButton />}{chatUser && <AdminChatWindow user={chatUser} admin={userData} messages={messages} onClose={() => setChatUser(null)} />}<CurrencySelector />
+    <Footer /><SignUpButton /><LoginModal />{userData && <ChatWidget />}{chatUser && <AdminChatWindow user={chatUser} admin={userData} messages={messages} onClose={() => setChatUser(null)} />}<CurrencySelector />
   </main>;
 }
 

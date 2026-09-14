@@ -1,24 +1,30 @@
 // api/gallery/route.js
 import fs from "fs";
 import path from "path";
+import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const user = getAuthenticatedUser(req);
+    if (!user) return unauthorized();
+    if (!isAdmin(user)) return forbidden();
     const formData = await req.formData();
     const galleryFiles = formData.getAll("gallery_images");
     const folder = "iamges";
     const uploadDir = path.join(process.cwd(), "public", folder);
+    await fs.promises.mkdir(uploadDir, { recursive: true });
 
     let galleryImageObjects = [];
 
     if (galleryFiles?.length > 0) {
       for (const file of galleryFiles) {
-        const originalName = file.name;
+        if (!file.type?.startsWith("image/") || file.size > 8 * 1024 * 1024) return new Response(JSON.stringify({ success: false, error: "Invalid image or file too large" }), { status: 413 });
+        const extension = path.extname(file.name).toLowerCase();
+        if (![".jpg", ".jpeg", ".png", ".webp", ".avif"].includes(extension)) return new Response(JSON.stringify({ success: false, error: "Unsupported image format" }), { status: 415 });
+        const originalName = `gallery-${Date.now()}-${crypto.randomUUID()}${extension}`;
         const uploadPath = path.join(uploadDir, originalName);
 
-        if (!fs.existsSync(uploadPath)) {
-          fs.writeFileSync(uploadPath, Buffer.from(await file.arrayBuffer()));
-        }
+        await fs.promises.writeFile(uploadPath, Buffer.from(await file.arrayBuffer()));
 
         const fileUrl = `https://basttettravel.com/${folder}/${originalName}`;
 

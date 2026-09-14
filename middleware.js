@@ -1,7 +1,8 @@
 // middleware.js
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(req) {
+export async function middleware(req) {
   const url = req.nextUrl.clone();
   const segments = url.pathname.split("/").filter(Boolean);
 
@@ -44,6 +45,21 @@ export function middleware(req) {
       : "en";
     url.pathname = `/${langToUse}${url.pathname}`;
     return NextResponse.redirect(url);
+  }
+
+  // Keep the admin route behind the same signed httpOnly session used by the APIs.
+  if (segments[1] === "admin") {
+    const token = req.cookies.get("access-token")?.value;
+    try {
+      if (!token || !process.env.JWT_SECRET) throw new Error("Missing admin session");
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload } = await jwtVerify(token, secret);
+      if (String(payload.role || "").toLowerCase() !== "admin") throw new Error("Not an admin");
+    } catch {
+      url.pathname = `/${segments[0]}`;
+      url.search = "?auth=required";
+      return NextResponse.redirect(url);
+    }
   }
 
   // لو اللغة موجودة بالفعل → لا تعمل أي إعادة توجيه

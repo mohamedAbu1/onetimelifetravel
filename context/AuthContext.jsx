@@ -4,8 +4,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useQueryFilters } from "./QueryContext";
 import { useRouter } from "next/navigation";
-import { useSession, signIn } from "next-auth/react"; // ✅ NextAuth
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useData } from "./DataContext";
+import { useTranslation } from "react-i18next";
 
 const AuthContext = createContext();
 
@@ -25,6 +26,7 @@ export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { handleSignUpClose } = useData();
   const { updateValue, getEncodedQuery } = useQueryFilters();
+  const { t } = useTranslation("common");
 
   const fetchUserFromServer = async () => {
     try {
@@ -43,6 +45,7 @@ export function AuthProvider({ children }) {
         setIsLoggedIn(true);
       } catch (refreshErr) {
         console.error("💥 Refresh failed:", refreshErr.message);
+        setUser(null);
         setUserToken(null);
         setIsLoggedIn(false);
       }
@@ -68,7 +71,7 @@ export function AuthProvider({ children }) {
       if (res.status !== 201)
         throw new Error(data.error || "Registration failed");
 
-      toast.success("✅ Account created successfully!");
+      toast.success(`✅ ${t("accountCreated")}`);
       handleSignUpClose();
       return data;
     } catch (err) {
@@ -114,7 +117,7 @@ export function AuthProvider({ children }) {
       const encodedQuery = getEncodedQuery();
       router.push(`/?data=${encodedQuery}`);
 
-      toast.success("✅ Logged in successfully!");
+      toast.success(`✅ ${t("loggedIn")}`);
       return user;
     } catch (err) {
       console.error("💥 خطأ أثناء تسجيل الدخول:", err.message);
@@ -149,7 +152,7 @@ export function AuthProvider({ children }) {
         name: userData.name,
       });
 
-      setUser(dbRes.data);
+      setUser({ ...userData, ...dbRes.data, role: userData.role });
       setIsLoggedIn(true);
       toast.success("✅ تم تسجيل الدخول بجوجل!");
     } catch (err) {
@@ -164,11 +167,15 @@ export function AuthProvider({ children }) {
       await axios.post("/api/auth/logout", {}, { withCredentials: true });
     } catch (err) {
       console.error("❌ Error clearing cookies on server:", err);
+    } finally {
+      // A Google account is managed by NextAuth while email accounts use our
+      // JWT cookies. Clear both stores so userData cannot remain truthy.
+      await signOut({ redirect: false });
     }
     setUser(null);
     setUserToken(null);
     setIsLoggedIn(false);
-    toast.info("🚪 Logged out successfully");
+    toast.info(`🚪 ${t("loggedOut")}`);
   };
 
   const userData = user || session?.user;
@@ -176,6 +183,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         userData, // بيانات من API أو من Google
+        user: userData, // Backwards-compatible alias used by admin contexts
         register,
         login,
         loginWithGoogle, // ✅ تسجيل الدخول بجوجل
