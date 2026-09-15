@@ -5,7 +5,7 @@ import { FaCalendarAlt, FaCheck, FaSave, FaToggleOn } from "react-icons/fa";
 import AdminModuleHeader from "./AdminModuleHeader";
 
 const currentYear = new Date().getFullYear();
-const annualEvents = new Set(["newYear", "womensDay", "mothersDay", "halloween"]);
+const annualEvents = new Set(["newYear", "valentinesDay", "womensDay", "mothersDay", "halloween"]);
 
 export default function SeasonalEvents({ themeName = "dark" }) {
   const [events, setEvents] = useState([]);

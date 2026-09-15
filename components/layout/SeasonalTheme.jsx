@@ -19,7 +19,7 @@ export default function SeasonalTheme() {
       return undefined;
     }
     let cancelled = false;
-    const apply = (settings) => {
+    const apply = (settings, activePayload = null) => {
       if (settings) {
         configureSeasonalEvents(settings);
         try { window.localStorage.setItem("seasonal-events-settings", JSON.stringify(settings)); } catch {}
@@ -27,7 +27,8 @@ export default function SeasonalTheme() {
       if (cancelled) return;
       const previewKey = new URLSearchParams(window.location.search).get("seasonPreview");
       const previewEvent = previewKey && previewKey !== "picker" ? getSeasonalEventByKey(previewKey) : null;
-      const active = previewEvent || getActiveSeasonalEvent();
+      const apiEvent = activePayload?.event?.key ? getSeasonalEventByKey(activePayload.event.key) : null;
+      const active = previewEvent || apiEvent || getActiveSeasonalEvent();
       setEvent(active);
       setPreviewMode(Boolean(previewEvent || previewKey === "picker"));
       document.documentElement.dataset.season = active?.theme || "default";
@@ -37,7 +38,10 @@ export default function SeasonalTheme() {
       const cached = window.localStorage.getItem("seasonal-events-settings");
       if (cached) apply(JSON.parse(cached)); else apply(null);
     } catch { apply(null); }
-    fetch(`/api/seasonal-events?_=${Date.now()}`, { cache: "no-store" }).then((response) => response.json()).then((data) => apply(data.events)).catch(() => {});
+    fetch(`/api/seasonal-events?_=${Date.now()}`, { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => fetch(`/api/seasonal-events/active?_=${Date.now()}`, { cache: "no-store" }).then((response) => response.json()).then((activeData) => apply(data.events, activeData)))
+      .catch(() => {});
     return () => { cancelled = true; delete document.documentElement.dataset.season; };
   }, [pathname]);
 
