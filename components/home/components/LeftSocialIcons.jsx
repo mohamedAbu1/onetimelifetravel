@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import React from "react";
-import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useTheme } from "@/context/ThemeContext";
 // لو مش لاقي أيقونات جاهزة ل Viator و Tripadvisor في react-icons
@@ -14,8 +14,9 @@ const LeftSocialIcons = () => {
   const { theme } = useTheme();
 
   const socialLinks = [
-    { Icon: FaFacebookF, url: "https://www.facebook.com/profile.php?id=61591222981163", label: "Facebook" },
-    { Icon: FaInstagram, url: "https://www.instagram.com/ismailharoun225/", label: "Instagram" },
+    { Icon: FaFacebookF, url: "https://www.facebook.com/share/19mMuVB5AH/", label: "Facebook" },
+    { Icon: FaInstagram, url: "https://www.instagram.com/onetimelive8?stkn=eXN0cnFzNXNlNm0w", label: "Instagram" },
+    { Icon: FaTiktok, url: "https://vm.tiktok.com/ZS9Ab87NaeXTJ-pZBfp/", label: "TikTok" },
     { Icon: FaWhatsapp, url: "https://wa.me/201100507802", label: "WhatsApp" },
     { Icon: MdEmail, url: "mailto:onetimelifetravel@gmail.com", label: "Email" },
     { Icon: FaGlobe, url: "https://www.viator.com/", label: "Viator" },
@@ -32,7 +33,7 @@ const LeftSocialIcons = () => {
       {socialLinks.map(({ Icon, url, label }) => (
         <motion.a
           whileHover={{ scale: 1.2, rotate: -5 }}
-          key={i}
+          key={label}
           href={url}
           target="_blank"
           rel="noopener noreferrer"

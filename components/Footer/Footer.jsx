@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaTripadvisor } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp, FaTripadvisor } from "react-icons/fa";
 import { MdEmail, MdLocationOn } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -34,8 +34,9 @@ const Footer = () => {
     ["privacyPolicy", `/${locale}/privacyPolicy`],
   ];
   const socialLinks = [
-    [FaFacebookF, "https://www.facebook.com/profile.php?id=61591222981163", "Facebook"],
-    [FaInstagram, "https://www.instagram.com/ismailharoun225/", "Instagram"],
+    [FaFacebookF, "https://www.facebook.com/share/19mMuVB5AH/", "Facebook"],
+    [FaInstagram, "https://www.instagram.com/onetimelive8?stkn=eXN0cnFzNXNlNm0w", "Instagram"],
+    [FaTiktok, "https://vm.tiktok.com/ZS9Ab87NaeXTJ-pZBfp/", "TikTok"],
     [FaWhatsapp, "https://wa.me/201100507802", "WhatsApp"],
     [MdEmail, "mailto:onetimelifetravel@gmail.com", "Email"],
     [FaTripadvisor, "https://www.tripadvisor.com/", "Tripadvisor"],
