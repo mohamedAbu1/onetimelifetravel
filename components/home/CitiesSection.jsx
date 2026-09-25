@@ -62,21 +62,21 @@ function CityCard({ city, index, language, t, tc }) {
 export default function CitiesSection() {
   const { t, i18n } = useTranslation("home");
   const { t: tc } = useTranslation("common");
-  const { cities, loading } = useCitiesCategories();
+  const { cities, loading, error, reload } = useCitiesCategories();
   const language = i18n.language.split("-")[0];
 
   if (loading) {
-    return <section className="site-section w-full px-6 py-20" aria-label="Loading destinations"><div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <div key={item} className="h-64 animate-pulse rounded-[1.75rem] bg-white/10" />)}</div></section>;
+    return <section className="site-section w-full px-6 py-20" aria-label="Loading destinations"><div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <div key={item} className="h-64 animate-pulse rounded-[1.75rem] border border-[var(--logo-border)]/20 bg-[var(--card-bg)]" />)}</div></section>;
   }
 
   return (
-    <section id="destinations" className="site-section w-full overflow-hidden bg-[#0d0d0d] px-5 py-20 text-[#f4ead8] md:px-8 lg:px-12">
+    <section id="destinations" className="site-section w-full overflow-hidden bg-[var(--background)] px-5 py-20 text-[var(--text)] md:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div><p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d1b06a]">One Time Life Travel · Destinations</p><h2 className="max-w-2xl font-[Cinzel] text-3xl font-semibold leading-tight text-[#f4ead8] md:text-5xl">{t("ExploreCities")}</h2></div>
           <p className="max-w-md text-sm leading-7 text-[#b8b0a2] md:text-right">{tc("destinationsCopy")}</p>
         </div>
-        {cities.length ? <div className="grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-4">{cities.map((city, index) => <CityCard key={city.id || city.name?.en || index} city={city} index={index} language={language} t={t} tc={tc} />)}</div> : <div className="rounded-[1.75rem] border border-[var(--border)] bg-white/[0.03] px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[#f4ead8]">{tc("destinationsEmpty")}</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[#b8b0a2]">{tc("destinationsPreparing")}</p></div>}
+        {error ? <div role="alert" className="rounded-[1.75rem] border border-red-700/30 bg-red-950/10 px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">{tc("dataUnavailable", { defaultValue: "Destinations are temporarily unavailable" })}</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">{tc("tryAgainLater", { defaultValue: "Please try again in a moment." })}</p><button type="button" onClick={reload} className="mt-5 rounded-full bg-[var(--primary-color)] px-5 py-3 text-xs font-bold uppercase tracking-[.16em] text-[#15120e]">{tc("retry", { defaultValue: "Try again" })}</button></div> : cities.length ? <div className="grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-4">{cities.map((city, index) => <CityCard key={city.id || city.name?.en || index} city={city} index={index} language={language} t={t} tc={tc} />)}</div> : <div className="rounded-[1.75rem] border border-[var(--border)] bg-[var(--card-bg)] px-6 py-16 text-center"><h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">{tc("destinationsEmpty")}</h3><p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">{tc("destinationsPreparing")}</p></div>}
       </div>
     </section>
   );

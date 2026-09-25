@@ -14,12 +14,12 @@ const LeftSocialIcons = () => {
   const { theme } = useTheme();
 
   const socialLinks = [
-    { Icon: FaFacebookF, url: "https://www.facebook.com/profile.php?id=61591222981163" },
-    { Icon: FaInstagram, url: "https://www.instagram.com/ismailharoun225/" },
-    { Icon: FaWhatsapp, url: "https://wa.me/201100507802" }, // رقم واتساب
-    { Icon: MdEmail, url: "https://account.microsoft.com/profile/" }, // فتح البريد
-    { Icon: FaGlobe, url: "https://www.viator.com/" }, // ✅ Viator
-    { Icon: FaTripadvisor, url: "https://www.tripadvisor.com/UserReviewEdit-g294205-d34512222-Basttet_Travel-Luxor_Nile_River_Valley.html" }, // ✅ Tripadvisor
+    { Icon: FaFacebookF, url: "https://www.facebook.com/profile.php?id=61591222981163", label: "Facebook" },
+    { Icon: FaInstagram, url: "https://www.instagram.com/ismailharoun225/", label: "Instagram" },
+    { Icon: FaWhatsapp, url: "https://wa.me/201100507802", label: "WhatsApp" },
+    { Icon: MdEmail, url: "mailto:onetimelifetravel@gmail.com", label: "Email" },
+    { Icon: FaGlobe, url: "https://www.viator.com/", label: "Viator" },
+    { Icon: FaTripadvisor, url: "https://www.tripadvisor.com/", label: "Tripadvisor" },
   ];
 
   return (
@@ -29,14 +29,14 @@ const LeftSocialIcons = () => {
       transition={{ duration: 1, delay: 0.7 }}
       className="relative z-30 mx-auto mt-2 flex flex-row gap-2.5 pb-5 lg:absolute lg:bottom-8 lg:left-12 lg:mx-0 lg:mt-0 lg:pb-0"
     >
-      {socialLinks.map(({ Icon, url }, i) => (
+      {socialLinks.map(({ Icon, url, label }) => (
         <motion.a
           whileHover={{ scale: 1.2, rotate: -5 }}
           key={i}
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Open social profile ${i + 1}`}
+          aria-label={label}
           className={`dust-interactive rounded-full border border-white/15 bg-black/20 p-2.5 backdrop-blur-md ${theme.shadow}`}
         >
           <Icon size={22} className={theme.icon} />

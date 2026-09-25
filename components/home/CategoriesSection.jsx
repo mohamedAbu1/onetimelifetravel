@@ -63,7 +63,7 @@ export default function CategoriesSection() {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation("home");
   const { t: tc } = useTranslation("common");
-  const { categories, loading } = useCitiesCategories();
+  const { categories, loading, error, reload } = useCitiesCategories();
   const language = i18n.language.split("-")[0];
 
   return (
@@ -81,7 +81,13 @@ export default function CategoriesSection() {
 
         {loading ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[1, 2, 3, 4].map((item) => <div key={item} className="h-[280px] animate-pulse rounded-[1.35rem] border border-[var(--logo-border)]/20 bg-white/5 sm:h-[320px]" />)}
+            {[1, 2, 3, 4].map((item) => <div key={item} className="flex h-[280px] animate-pulse items-end rounded-[1.35rem] border border-[var(--logo-border)]/20 bg-[var(--card-bg)] p-5 sm:h-[320px]"><span className="h-4 w-2/3 rounded-full bg-[var(--logo-border)]/20" /></div>)}
+          </div>
+        ) : error ? (
+          <div role="alert" className="rounded-3xl border border-red-700/30 bg-red-950/10 p-10 text-center">
+            <h3 className="font-[Cinzel] text-2xl text-[var(--heading)]">{tc("dataUnavailable", { defaultValue: "Travel experiences are temporarily unavailable" })}</h3>
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--sub-text)]">{tc("tryAgainLater", { defaultValue: "Please try again in a moment." })}</p>
+            <button type="button" onClick={reload} className="mt-5 rounded-full bg-[var(--primary-color)] px-5 py-3 text-xs font-bold uppercase tracking-[.16em] text-[#15120e] transition hover:brightness-105">{tc("retry", { defaultValue: "Try again" })}</button>
           </div>
         ) : categories.length ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

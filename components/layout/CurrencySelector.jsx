@@ -23,6 +23,8 @@ export default function CurrencySelector() {
       className="fixed bottom-6 left-6 z-[99]"
     >
       <Select
+        aria-label="Currency"
+        displayEmpty
         value={currency}
         onChange={(e) => setCurrency(e.target.value)}
         size="small"
@@ -51,13 +53,13 @@ export default function CurrencySelector() {
         }}
       >
         <MenuItem value="USD" sx={{ color: usdColor, fontWeight: "600" }}>
-          $
+          USD · $
         </MenuItem>
         <MenuItem value="EUR" sx={{ color: eurColor, fontWeight: "600" }}>
-          €
+          EUR · €
         </MenuItem>
         <MenuItem value="EGP" sx={{ color: egpColor, fontWeight: "600" }}>
-          £
+          EGP · £
         </MenuItem>
       </Select>
     </motion.div>

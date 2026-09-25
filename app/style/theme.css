@@ -435,6 +435,31 @@ html { color-scheme: light; }
   border-top: 1px solid rgba(194, 168, 120, 0.35);
 }
 
+/* Keep shared editorial surfaces readable when Light Mode is active. */
+:root:not([data-theme="dark"]) .footer-journal {
+  background: linear-gradient(135deg, #f4efe4 0%, #fffaf0 58%, #eadfc8 100%);
+  color: var(--text);
+}
+:root:not([data-theme="dark"]) .category-card h3,
+:root:not([data-theme="dark"]) .category-card > div:last-child > span:last-child {
+  color: #fffaf0 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .55);
+}
+:root:not([data-theme="dark"]) .trip-world-page,
+:root:not([data-theme="dark"]) .site-page {
+  background: var(--background) !important;
+  color: var(--text) !important;
+}
+:root:not([data-theme="dark"]) .trip-reviews-shell {
+  background: linear-gradient(145deg, rgba(255, 250, 240, .96), rgba(246, 239, 224, .94));
+  color: var(--text);
+}
+:root:not([data-theme="dark"]) .booking-journal,
+:root:not([data-theme="dark"]) .auth-journal {
+  background: linear-gradient(145deg, rgba(255, 250, 240, .98), rgba(244, 239, 228, .96)) !important;
+  color: var(--text) !important;
+}
+
 .reviews-journal {
   background:
     radial-gradient(circle at 12% 22%, rgba(194, 168, 120, 0.12), transparent 22rem),

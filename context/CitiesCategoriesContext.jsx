@@ -9,6 +9,8 @@ export function CitiesCategoriesProvider({ children }) {
   const [cities, setCities] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [requestVersion, setRequestVersion] = useState(0);
 
   const { i18n } = useTranslation(); // اللغة الحالية للموقع
   const getLangKey = (lang) => lang.split("-")[0];
@@ -17,6 +19,7 @@ export function CitiesCategoriesProvider({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const [citiesRes, categoriesRes] = await Promise.all([
           fetch("/api/cities"),
           fetch("/api/categories"),
@@ -25,17 +28,22 @@ export function CitiesCategoriesProvider({ children }) {
         const citiesData = await citiesRes.json();
         const categoriesData = await categoriesRes.json();
 
+        if (!citiesRes.ok || !categoriesRes.ok || !citiesData.success || !categoriesData.success) {
+          throw new Error("Unable to load travel data");
+        }
+
         if (citiesData.success) setCities(citiesData.cities);
         if (categoriesData.success) setCategories(categoriesData.categories);
       } catch (err) {
         console.error("Error fetching cities/categories:", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [requestVersion]);
 
   // ✅ فلترة المدن وتحويل الحقول من JSON string إلى كائن/مصفوفة
  // ✅ فلترة المدن وتحويل الحقول من JSON string إلى كائن/مصفوفة
@@ -101,6 +109,11 @@ const localizedCities = cities.map((city) => {
         cities: localizedCities,
         categories: localizedCategories,
         loading,
+        error,
+        reload: () => {
+          setLoading(true);
+          setRequestVersion((version) => version + 1);
+        },
       }}
     >
       {children}

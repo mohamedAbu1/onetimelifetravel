@@ -99,6 +99,8 @@ export function TripProvider({ children }) {
       if (result.success) {
         setTrips(result.trips);
         localStorage.setItem("trips", JSON.stringify(result.trips));
+      } else {
+        throw new Error(result.error || "Unable to load trips");
       }
     } catch (err) {
       console.error("Error fetching trips:", err);

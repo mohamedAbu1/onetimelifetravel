@@ -1,10 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function OneTimeLifeTravelLogo({ compact = false, mobileIconOnly = false, className = "" }) {
-  const gold = "#e0bf78";
-  const ink = "#f7f1e6";
+  const { themeName } = useTheme();
+  const gold = themeName === "dark" ? "#e0bf78" : "#9a6b20";
+  const ink = themeName === "dark" ? "#f7f1e6" : "#17343d";
 
   return (
     <motion.div
