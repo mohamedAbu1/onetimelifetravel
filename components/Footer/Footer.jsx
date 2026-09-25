@@ -37,7 +37,7 @@ const Footer = () => {
     [FaFacebookF, "https://www.facebook.com/share/19mMuVB5AH/", "Facebook"],
     [FaInstagram, "https://www.instagram.com/onetimelive8?stkn=eXN0cnFzNXNlNm0w", "Instagram"],
     [FaTiktok, "https://vm.tiktok.com/ZS9Ab87NaeXTJ-pZBfp/", "TikTok"],
-    [FaWhatsapp, "https://wa.me/201100507802", "WhatsApp"],
+    [FaWhatsapp, "https://wa.me/201009011178", "WhatsApp"],
     [MdEmail, "mailto:onetimelifetravel@gmail.com", "Email"],
     [FaTripadvisor, "https://www.tripadvisor.com/", "Tripadvisor"],
   ];

@@ -17,7 +17,7 @@ const LeftSocialIcons = () => {
     { Icon: FaFacebookF, url: "https://www.facebook.com/share/19mMuVB5AH/", label: "Facebook" },
     { Icon: FaInstagram, url: "https://www.instagram.com/onetimelive8?stkn=eXN0cnFzNXNlNm0w", label: "Instagram" },
     { Icon: FaTiktok, url: "https://vm.tiktok.com/ZS9Ab87NaeXTJ-pZBfp/", label: "TikTok" },
-    { Icon: FaWhatsapp, url: "https://wa.me/201100507802", label: "WhatsApp" },
+    { Icon: FaWhatsapp, url: "https://wa.me/201009011178", label: "WhatsApp" },
     { Icon: MdEmail, url: "mailto:onetimelifetravel@gmail.com", label: "Email" },
     { Icon: FaGlobe, url: "https://www.viator.com/", label: "Viator" },
     { Icon: FaTripadvisor, url: "https://www.tripadvisor.com/", label: "Tripadvisor" },
