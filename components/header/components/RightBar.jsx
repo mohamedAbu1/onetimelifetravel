@@ -100,6 +100,8 @@ export default function RightBar({ scrolled }) {
   return (
     <div className="flex items-center gap-4">
 
+      <ThemeToggle />
+
       {/* ✅ أيقونة الإشعارات العامة */}
       {userData?.role === "ADMIN" && (
         <Badge badgeContent={unreadCount} color="error">

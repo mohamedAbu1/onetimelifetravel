@@ -1,19 +1,19 @@
 export const desktopImages = [
-  "/luxor/magnific__egyptian-nile-background-montu-travel-golden-text-__61908.png",
-  "/HomePageImage/pexels-axp-photography-500641970-18934596.webp",
-  "/HomePageImage/pexels-axp-photography-500641970-18991537.webp",
-  "/HomePageImage/pexels-frans-van-heerden-201846-631339.webp",
-  "/HomePageImage/pexels-diego-f-parra-33199-15131539.webp",
-  "/HomePageImage/pexels-francesco-albanese-2150950215-31730178.webp",
+  "/HomePageImage/banner.62f1bfcb.jpg",
+  "/luxor/pexels-axp-photography-500641970-18934596.webp",
+  "/luxor/pexels-axp-photography-500641970-18991537.webp",
+  "/luxor/pexels-frans-van-heerden-201846-631339.webp",
+  "/luxor/pexels-diego-f-parra-33199-15131539.webp",
+  "/luxor/pexels-francesco-albanese-2150950215-31730178.webp",
 ];
 
 export const mobileImages = [
-  "/HomePageImage/pexels-oualid-soussi-2150533856-35050672.webp",
-  "/HomePageImage/pexels-ozgomz-7566890.webp",
-  "/HomePageImage/pexels-furknsaglam-1596977-21348185.webp",
-  "/HomePageImage/pexels-yasmine-qasem-1054896-2034684.webp",
+  "/luxor/pexels-oualid-soussi-2150533856-35050672.webp",
+  "/luxor/pexels-ozgomz-1755390.webp",
   "/HomePageImage/pexels-radwa-magdy-1718930-21668633.webp",
-  "/HomePageImage/pexels-ozgomz-7566888.webp",
+  "/HomePageImage/pexels-tima-miroshnichenko-6010456.webp",
+  "/HomePageImage/pexels-radwa-magdy-1718930-21668633.webp",
+  "/Nile_Cruise/peter-hansen-MeGmdPNe36w-unsplash.webp",
 ];
 // ? $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // ? $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

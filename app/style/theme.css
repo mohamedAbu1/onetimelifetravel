@@ -20,9 +20,9 @@
   --sub-text: #5d5548;
 
   /* العناوين */
-  --title: #fff;
+  --title: #6f5120;
   --title2: #b88a3b;
-  --heading: #1a1712;
+  --heading: #17343d;
 
   /* الكروت */
   --card-bg: rgba(255, 252, 242, 0.72);
@@ -30,7 +30,7 @@
   --card-blur: 16px;
 
   /* طبقة فوق الصور */
-  --overlay: rgba(18, 35, 39, 0.34);
+  --overlay: rgba(18, 35, 39, 0.2);
 
   /* الأزرار */
   --button-primary-bg: rgba(194, 168, 120, 0.25);
@@ -44,7 +44,7 @@
 
   /* الحدود والظلال */
   --border: rgba(194, 168, 120, 0.5);
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --shadow: 0 12px 32px rgba(47, 37, 20, 0.12);
 
   /* شعار */
   --logo-gradient-from: rgba(255, 255, 255, 0.6);
@@ -137,7 +137,31 @@ body {
   min-width: 320px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  transition: background-color .35s ease, color .35s ease;
 }
+
+html { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 2.35rem;
+  border: 1px solid color-mix(in srgb, var(--logo-border) 58%, transparent);
+  border-radius: 999px;
+  padding: .45rem .7rem;
+  color: var(--text);
+  background: color-mix(in srgb, var(--card-bg) 78%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--shadow) 18%, transparent);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+.theme-toggle:hover { transform: translateY(-1px); border-color: var(--primary-color); background: color-mix(in srgb, var(--primary-color) 15%, var(--card-bg)); }
+.theme-toggle:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+.theme-toggle-icon { display: grid; place-items: center; color: var(--primary-color); font-size: .8rem; }
 
 /* Seasonal campaign layer: the palette changes without disturbing the core brand. */
 :root[data-season="midnight"] { --season-main: #e0bf78; --season-accent: #536fa3; --season-glow: rgba(83,111,163,.22); }

@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import darkTheme from "@/constants/theme/darkTheme";
+import lightTheme from "@/constants/theme/lightTheme";
 
 const ThemeContext = createContext();
 
@@ -8,40 +9,26 @@ export function ThemeProvider({ children }) {
   const [themeName, setThemeName] = useState("dark");
   const [theme, setTheme] = useState(darkTheme);
 
-  // الموقع يستخدم الهوية الداكنة فقط.
   useEffect(() => {
-    localStorage.removeItem("theme");
-    applyTheme("dark");
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "light" ? "light" : "dark");
   }, []);
 
-  // ✅ دالة لتطبيق الثيم
   const applyTheme = (mode) => {
-    setThemeName("dark");
-    setTheme(darkTheme);
+    const nextTheme = mode === "light" ? "light" : "dark";
+    const nextThemeConfig = nextTheme === "light" ? lightTheme : darkTheme;
+    setThemeName(nextTheme);
+    setTheme(nextThemeConfig);
 
-    // تحديث الـ attribute على <html>
-    document.documentElement.setAttribute("data-theme", "dark");
-
-    // تحديث الـ class الخاصة بـ Tailwind (لو محتاج dark:)
-    document.documentElement.classList.add("dark");
-
-    // تحديث بعض الـ CSS variables العامة
-    document.documentElement.style.setProperty(
-      "--color",
-      "#c9a34a"
-    );
-    document.documentElement.style.setProperty(
-      "--foreground",
-      "#ededed"
-    );
-    document.documentElement.style.setProperty(
-      "--background",
-      "#050505"
-    );
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+    document.documentElement.style.setProperty("--color", nextTheme === "dark" ? "#c9a34a" : "#8a6426");
+    document.documentElement.style.setProperty("--foreground", nextTheme === "dark" ? "#ededed" : "#18343b");
+    document.documentElement.style.setProperty("--background", nextTheme === "dark" ? "#050505" : "#f7f3ea");
+    localStorage.setItem("theme", nextTheme);
   };
 
-  // الحفاظ على الواجهة البرمجية القديمة بدون السماح بتفعيل الوضع الفاتح.
-  const toggleThemeFun = () => applyTheme("dark");
+  const toggleThemeFun = () => applyTheme(themeName === "dark" ? "light" : "dark");
 
   return (
     <ThemeContext.Provider value={{ theme, themeName, toggleThemeFun }}>

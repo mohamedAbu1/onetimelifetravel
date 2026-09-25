@@ -67,7 +67,7 @@ export default function ChatWidget({ setShowEmojiPicker, showEmojiPicker }) {
         const result = await sendMessage({
           user_id: userId,
           user_name: "👑 One Time Life Travel 👑",
-          user_image: "/HomePageImage/Copilot_20260613_134423.webp",
+          user_image: "/HomePageImage/Copilot_20260613_180844.png",
           content: t("welcomeMessage", { defaultValue: "👋 Hello and welcome! The One Time Life Travel team is excited to help you plan your next unforgettable journey. How can we assist you today?" }),
           sender_type: "admin",
           status: "sent",
