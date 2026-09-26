@@ -4,11 +4,22 @@ import { v4 as uuidv4 } from "uuid";
 import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 import { normalizeGallery, normalizeImageUrl } from "@/lib/imageUrl";
 
+async function ensureExclusionsTable(db) {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS exclusions (
+      id VARCHAR(36) PRIMARY KEY,
+      trip_id VARCHAR(36) NOT NULL,
+      exclusions_translations TEXT NOT NULL
+    )
+  `);
+}
+
 // ================== GET ==================
 export async function GET(req, context) {
   try {
     const { id } = await context.params;
     const db = await connectDB();
+    await ensureExclusionsTable(db);
 
     const [rows] = await db.query(`SELECT * FROM trips WHERE id = ? LIMIT 1`, [
       id,
@@ -60,6 +71,17 @@ export async function GET(req, context) {
           ? JSON.parse(inc.include_translations)
           : inc.include_translations,
     }));
+    const [exclusions] = await db.query(
+      `SELECT id, exclusions_translations FROM exclusions WHERE trip_id = ?`,
+      [id],
+    );
+    const parsedExclusions = exclusions.map((item) => ({
+      ...item,
+      exclusions_translations:
+        typeof item.exclusions_translations === "string"
+          ? JSON.parse(item.exclusions_translations)
+          : item.exclusions_translations,
+    }));
 
     // ✅ جلب الأيام والأنشطة
     const [days] = await db.query(
@@ -92,6 +114,7 @@ export async function GET(req, context) {
           cities: parsedCities,
           categories: parsedCategories,
           includes: parsedIncludes,
+          exclusions: parsedExclusions,
           itinerary: days,
         },
       },
@@ -115,6 +138,7 @@ export async function PUT(req, context) {
     const { id } = await context.params;
     const body = await req.json();
     const db = await connectDB();
+    await ensureExclusionsTable(db);
 
     // ✅ تحديث بيانات الرحلة الأساسية
     await db.query(
@@ -191,6 +215,33 @@ export async function PUT(req, context) {
       }
     }
 
+    if (Array.isArray(body.exclusions)) {
+      const [existingExclusions] = await db.query(
+        "SELECT id FROM exclusions WHERE trip_id = ?",
+        [id],
+      );
+      const existingIds = existingExclusions.map((item) => item.id);
+      const incomingIds = body.exclusions.map((item) => item.id).filter(Boolean);
+      const toDelete = existingIds.filter((dbId) => !incomingIds.includes(dbId));
+      if (toDelete.length) {
+        await db.query("DELETE FROM exclusions WHERE id IN (?)", [toDelete]);
+      }
+      for (const item of body.exclusions) {
+        const translations = JSON.stringify(item.exclusions_translations ?? {});
+        if (item.id && existingIds.includes(item.id)) {
+          await db.query(
+            "UPDATE exclusions SET exclusions_translations = ? WHERE id = ? AND trip_id = ?",
+            [translations, item.id, id],
+          );
+        } else {
+          await db.query(
+            "INSERT INTO exclusions (id, trip_id, exclusions_translations) VALUES (?, ?, ?)",
+            [item.id || uuidv4(), id, translations],
+          );
+        }
+      }
+    }
+
     // ✅ تحديث الأيام والأنشطة
     if (Array.isArray(body.itinerary)) {
       for (const day of body.itinerary) {
@@ -255,6 +306,7 @@ export async function DELETE(req, context) {
     if (!isAdmin(user)) return forbidden();
     const { id } = await context.params;
     const db = await connectDB();
+    await ensureExclusionsTable(db);
 
     const [days] = await db.query(
       "SELECT id FROM trip_days WHERE trip_id = ?",
@@ -267,6 +319,7 @@ export async function DELETE(req, context) {
     await db.query("DELETE FROM trip_cities WHERE trip_id = ?", [id]);
     await db.query("DELETE FROM trip_categories WHERE trip_id = ?", [id]);
     await db.query("DELETE FROM includes WHERE trip_id = ?", [id]);
+    await db.query("DELETE FROM exclusions WHERE trip_id = ?", [id]);
     await db.query("DELETE FROM trip_days WHERE trip_id = ?", [id]);
     await db.query("DELETE FROM trips WHERE id = ?", [id]);
 

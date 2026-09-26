@@ -19,6 +19,7 @@ const emptyTrip = {
   cities: [],
   categories: [],
   includes: [],
+  exclusions: [],
   itinerary: [],
   solo_price: 0,
   group_price: 0,

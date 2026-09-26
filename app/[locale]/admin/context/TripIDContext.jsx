@@ -93,6 +93,15 @@ export function TripIDProvider({ children }) {
                     : inc.include_translations,
               }))
             : [],
+          exclusions: Array.isArray(data.trip.exclusions)
+            ? data.trip.exclusions.map((item) => ({
+                id: item.id,
+                exclusions_translations:
+                  typeof item.exclusions_translations === "string"
+                    ? JSON.parse(item.exclusions_translations)
+                    : item.exclusions_translations,
+              }))
+            : [],
         });
       } else {
         setError(data.error || "Failed to fetch trip");
@@ -172,6 +181,11 @@ export function TripIDProvider({ children }) {
       includes: (tripData.includes || []).map((inc) => ({
         id: inc.id,
         include_translations: inc.include_translations,
+      })),
+
+      exclusions: (tripData.exclusions || []).map((item) => ({
+        id: item.id,
+        exclusions_translations: item.exclusions_translations,
       })),
 
       itinerary: tripData.itinerary || [],

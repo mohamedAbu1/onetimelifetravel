@@ -3,6 +3,16 @@ import { v4 as uuidv4 } from "uuid";
 import { forbidden, getAuthenticatedUser, isAdmin, unauthorized } from "@/lib/auth";
 import { normalizeGallery, normalizeImageUrl } from "@/lib/imageUrl";
 
+async function ensureExclusionsTable(db) {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS exclusions (
+      id VARCHAR(36) PRIMARY KEY,
+      trip_id VARCHAR(36) NOT NULL,
+      exclusions_translations TEXT NOT NULL
+    )
+  `);
+}
+
 // دالة آمنة لتحويل أي قيمة إلى JSON نصي
 const safeStringify = (value) => {
   try {
@@ -21,6 +31,7 @@ export async function POST(req) {
     const tripId = uuidv4();
 
     const db = await connectDB();
+    await ensureExclusionsTable(db);
 
    await db.execute(
   `INSERT INTO trips 
@@ -54,6 +65,18 @@ export async function POST(req) {
       await db.query(
         "INSERT INTO includes (id, trip_id, include_translations) VALUES ?",
         [includesData]
+      );
+    }
+
+    if (body.exclusions?.length > 0) {
+      const exclusionsData = body.exclusions.map((item) => [
+        uuidv4(),
+        tripId,
+        safeStringify(item.exclusions_translations ?? item),
+      ]);
+      await db.query(
+        "INSERT INTO exclusions (id, trip_id, exclusions_translations) VALUES ?",
+        [exclusionsData],
       );
     }
 
@@ -122,6 +145,7 @@ export async function POST(req) {
 export async function GET() {
   try {
     const db = await connectDB();
+    await ensureExclusionsTable(db);
     const [trips] = await db.query(`
       SELECT 
         t.*,
@@ -150,6 +174,13 @@ export async function GET() {
           AS CHAR
         ), '[]'
         ) AS includes,
+        COALESCE(
+          CAST(
+            (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', exc.id, 'exclusions_translations', exc.exclusions_translations))
+             FROM exclusions exc WHERE exc.trip_id = t.id)
+          AS CHAR
+        ), '[]'
+        ) AS exclusions,
         COALESCE(
           CAST(
             (SELECT JSON_ARRAYAGG(
@@ -214,6 +245,7 @@ export async function GET() {
       cities: safeParse(trip.cities),
       categories: safeParse(trip.categories),
       includes: safeParse(trip.includes),
+      exclusions: safeParse(trip.exclusions),
       itinerary: safeParse(trip.days),
       reviews: safeParse(trip.reviews).map((review) => ({ ...review, avatar_url: normalizeImageUrl(review.avatar_url, "/default-avatar.png") })), // ✅ التعليقات الآن موجودة
       discountPercent: safeParse(trip.discount_percent)

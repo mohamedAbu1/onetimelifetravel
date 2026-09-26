@@ -5,6 +5,7 @@ import EditTripCoverImageUpload from "./components/EditTripCoverImageUpload";
 import EditTripGalleryUpload from "./components/EditTripGalleryUpload";
 import EditTripClassification from "./components/EditTripClassification";
 import EditTripIncludes from "./components/EditTripIncludes";
+import EditTripExclusions from "./components/EditTripExclusions";
 import EditTripDailyItinerary from "./components/EditTripDailyItinerary";
 import EditTripSaveButton from "./components/EditTripSaveButton";
 import TripSelector from "./components/TripSelector";
@@ -34,6 +35,8 @@ export default function EditTripFull({ themeName }) {
 
       {/* المتضمنات */}
       <EditTripIncludes />
+
+      <EditTripExclusions />
 
       {/* الجدول اليومي */}
       <EditTripDailyItinerary />

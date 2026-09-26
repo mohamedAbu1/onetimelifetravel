@@ -9,6 +9,7 @@ import BasicInfo from "./components/BasicInfo";
 import CoverImageUpload from "./components/CoverImageUpload";
 import GalleryUpload from "./components/GalleryUpload";
 import TripIncludes from "./components/TripIncludes";
+import TripExclusions from "./components/TripExclusions";
 import DailyItinerary from "./components/DailyItinerary";
 import SaveButton from "./components/SaveButton";
 import TripClassification from "./components/TripClassification";
@@ -70,6 +71,9 @@ export default function AddTrip() {
 
       {/* ما تحتوي عليه الرحلة */}
       <TripIncludes />
+
+      <TripExclusions />
+
 
       {/* البرنامج اليومي */}
       <DailyItinerary />
