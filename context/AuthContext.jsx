@@ -31,9 +31,10 @@ export function AuthProvider({ children }) {
   const fetchUserFromServer = async () => {
     try {
       const res = await axios.get("/api/auth/me", { withCredentials: true });
-      setUser(res.data.user);
-      setUserToken(res.data.user);
-      setIsLoggedIn(true);
+      const currentUser = res.data.user;
+      setUser(currentUser);
+      setUserToken(currentUser);
+      setIsLoggedIn(Boolean(currentUser));
     } catch (err) {
       if (err.response?.status === 401) {
         setUser(null);
