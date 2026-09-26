@@ -17,8 +17,8 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      { source: "/default.jpg", destination: "/HomePageImage/banner.62f1bfcb.jpg" },
-      { source: "/fallback.jpg", destination: "/HomePageImage/banner.62f1bfcb.jpg" },
+      { source: "/default.jpg", destination: "/HomePageImage/banner-optimized.webp" },
+      { source: "/fallback.jpg", destination: "/HomePageImage/banner-optimized.webp" },
       { source: "/default-avatar.png", destination: "/usa.webp" },
     ];
   },

@@ -1,5 +1,5 @@
 export const desktopImages = [
-  "/HomePageImage/banner.62f1bfcb.jpg",
+  "/HomePageImage/banner-optimized.webp",
   "/luxor/pexels-axp-photography-500641970-18934596.webp",
   "/luxor/pexels-axp-photography-500641970-18991537.webp",
   "/luxor/pexels-frans-van-heerden-201846-631339.webp",

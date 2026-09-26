@@ -11,13 +11,13 @@ export default function Background() {
   const seasonalEvent = useSeasonalEvent();
 
   const darkImages = [
-    "/HomePageImage/banner.62f1bfcb.jpg",
+    "/HomePageImage/banner-optimized.webp",
     "/HomePageImage/asdasdas.webp",
-    "/HomePageImage/banner.62f1bfcb.jpg",
+    "/HomePageImage/banner-optimized.webp",
   ];
 
   const lightImages = [
-    "/HomePageImage/banner.62f1bfcb.jpg",
+    "/HomePageImage/banner-optimized.webp",
     "/HomePageImage/_15900_MarsaMatruh.jpg",
     "/HomePageImage/_16106_Untitled-1.jpg",
     "/HomePageImage/_9272_banner-aboutus.jpg",
