@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { motion } from "framer-motion";
 import { useSeasonalEvent } from "./useSeasonalEvent";
 
 const symbols = [
@@ -15,7 +14,7 @@ export default function EgyptianBackground() {
   const seasonalEvent = useSeasonalEvent();
 
   useEffect(() => {
-    const count = window.innerWidth < 768 ? 16 : 28;
+    const count = window.innerWidth < 768 ? 6 : 10;
     const generated = Array.from({ length: count }).map((_, i) => ({
       id: i,
       symbol: (seasonalEvent?.symbols || symbols)[Math.floor(Math.random() * (seasonalEvent?.symbols || symbols).length)],
@@ -32,16 +31,8 @@ export default function EgyptianBackground() {
   return (
     <div className="egyptian-background absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
       {items.map((item) => (
-        <motion.span
+        <span
           key={item.id}
-          initial={{ y: 0, opacity: 0 }}
-          animate={{ y: [0, -10, 0], opacity: item.opacity }}
-          transition={{
-            duration: 6 + Math.random() * 4,
-            repeat: Infinity,
-            delay: item.delay,
-            ease: "easeInOut",
-          }}
           style={{
             position: "absolute",
             top: `${item.top}%`,
@@ -53,7 +44,7 @@ export default function EgyptianBackground() {
           }}
         >
           {item.symbol}
-        </motion.span>
+        </span>
       ))}
     </div>
   );

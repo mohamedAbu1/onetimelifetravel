@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { motion } from "framer-motion";
 import { useSeasonalEvent } from "./useSeasonalEvent";
 
 export default function Decor({ pos }) {
   const { theme } = useTheme();
   const seasonalEvent = useSeasonalEvent();
   const containerRef = useRef(null);
-  const [symbolsCount, setSymbolsCount] = useState(10);
+  const [symbolsCount, setSymbolsCount] = useState(8);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -17,9 +16,9 @@ export default function Decor({ pos }) {
       const width = entries[0].contentRect.width;
 
       // ✅ حساب عدد الرموز حسب عرض الـ container
-      let count = Math.floor(width / 600); // كل 70px رمز واحد
-      if (count < 6) count = 36;           // حد أدنى
-      if (count > 30) count = 80;         // حد أقصى
+      let count = Math.floor(width / 180);
+      if (count < 4) count = 4;
+      if (count > 10) count = 10;
       setSymbolsCount(count);
     });
 
@@ -30,18 +29,15 @@ export default function Decor({ pos }) {
   return (
     <div ref={containerRef} className={`absolute w-full ${pos}-0 flex justify-around`}>
       {Array.from({ length: symbolsCount }).map((_, i) => (
-        <motion.span
+        <span
           key={i}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 0.7, y: 0 }}
-          transition={{ duration: 1, delay: i * 0.05 }}
           className="text-4xl md:text-5xl lg:text-6xl text-gradient"
           style={{
             filter: `drop-shadow(0 0 6px ${theme.logoBorder || "#C2A878"})`,
           }}
         >
           {seasonalEvent?.symbols?.[i % seasonalEvent.symbols.length] || "𓎛"}
-        </motion.span>
+        </span>
       ))}
     </div>
   );

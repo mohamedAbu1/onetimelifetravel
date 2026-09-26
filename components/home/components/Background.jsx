@@ -49,8 +49,11 @@ export default function Background() {
             src={images[index]}
             alt="Egypt travel destination"
             fill
+            sizes="(max-width: 1023px) 100vw, 47vw"
+            quality={58}
+            priority={index === 0}
+            fetchPriority={index === 0 ? "high" : "auto"}
             className="object-cover saturate-[0.8] contrast-[1.08] brightness-[0.78]"
-            priority
           />
           <div className="absolute inset-0 bg-black/20"></div>
         </motion.div>

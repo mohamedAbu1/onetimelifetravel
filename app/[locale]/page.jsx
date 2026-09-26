@@ -1,22 +1,25 @@
 "use client";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/header/Header";
-import CarBookingSection from "@/components/home/CarBookingSection";
-import CategoriesSection from "@/components/home/CategoriesSection";
-import CitiesSection from "@/components/home/CitiesSection";
 import HeroSection from "@/components/home/HeroSection";
-import OurSection from "@/components/home/OurSection";
-import TopTripsSection from "@/components/home/TopTripsSection";
 import LoginModal from "@/components/home/components/LoginModal";
 import SignUpButton from "@/components/home/components/SignUpButton";
-import TopReviewsSection from "@/components/home/components/TopReviewsSection";
 import ChatWidget from "@/components/layout/ChatWidget";
 import { useAuth } from "@/context/AuthContext"; // ✅ استدعاء الـ Auth
 import CurrencySelector from "@/components/layout/CurrencySelector";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import AdminChatWindow from "@/components/layout/AdminChatWindow";
 import { useMessages } from "@/context/MessageContext";
+import dynamic from "next/dynamic";
 // import { useQueryFilters } from "@/context/QueryContext";
+
+const SectionLoading = () => <div className="min-h-[320px] w-full bg-[var(--background)]" aria-hidden="true" />;
+const CategoriesSection = dynamic(() => import("@/components/home/CategoriesSection"), { loading: SectionLoading });
+const TopTripsSection = dynamic(() => import("@/components/home/TopTripsSection"), { loading: SectionLoading });
+const CitiesSection = dynamic(() => import("@/components/home/CitiesSection"), { loading: SectionLoading });
+const OurSection = dynamic(() => import("@/components/home/OurSection"), { loading: SectionLoading });
+const TopReviewsSection = dynamic(() => import("@/components/home/components/TopReviewsSection"), { loading: SectionLoading });
+const CarBookingSection = dynamic(() => import("@/components/home/CarBookingSection"), { loading: SectionLoading });
 export default function Home() {
   const { userData, chatUser, setChatUser } = useAuth();
   const { messages } = useMessages();
