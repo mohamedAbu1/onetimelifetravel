@@ -2,6 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    localPatterns: [
+      { pathname: "/iamges/**" },
+      { pathname: "/HomePageImage/**" },
+      { pathname: "/Nile_Cruise/**" },
+    ],
     remotePatterns: [
       {
         protocol: "https",

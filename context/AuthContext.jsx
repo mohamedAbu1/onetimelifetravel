@@ -35,6 +35,12 @@ export function AuthProvider({ children }) {
       setUserToken(res.data.user);
       setIsLoggedIn(true);
     } catch (err) {
+      if (err.response?.status === 401) {
+        setUser(null);
+        setUserToken(null);
+        setIsLoggedIn(false);
+        return;
+      }
       console.warn("⚠️ Token expired or invalid, trying refresh...");
       try {
         const retry = await axios.post(

@@ -2,6 +2,7 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { normalizeImageUrl } from "@/lib/imageUrl";
 
 const CitiesCategoriesContext = createContext();
 
@@ -70,7 +71,7 @@ const localizedCities = cities.map((city) => {
       parsedName?.["en"] ||
       Object.values(parsedName)[0] ||
       city.name,
-    images: Array.isArray(parsedImages) ? parsedImages : ["/fallback.jpg"],
+    images: (Array.isArray(parsedImages) ? parsedImages : ["/fallback.jpg"]).map((image) => normalizeImageUrl(image)),
   };
 });
 
@@ -99,7 +100,7 @@ const localizedCities = cities.map((city) => {
         parsedName?.["en"] ||
         Object.values(parsedName)[0] ||
         cat.name,
-      images: Array.isArray(parsedImages) ? parsedImages : ["/fallback.jpg"],
+    images: (Array.isArray(parsedImages) ? parsedImages : ["/fallback.jpg"]).map((image) => normalizeImageUrl(image)),
     };
   });
 

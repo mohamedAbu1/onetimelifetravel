@@ -23,7 +23,7 @@ export default function CurrencySelector() {
       className="fixed bottom-6 left-6 z-[99]"
     >
       <Select
-        aria-label="Currency"
+        inputProps={{ "aria-label": "Currency selector" }}
         displayEmpty
         value={currency}
         onChange={(e) => setCurrency(e.target.value)}

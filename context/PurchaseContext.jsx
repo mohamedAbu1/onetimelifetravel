@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 const PurchaseContext = createContext();
 
@@ -8,9 +9,14 @@ export function PurchaseProvider({ children }) {
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currency, setCurrency] = useState("USD");
+  const { userData } = useAuth();
 
   // ✅ جلب المشتريات من API
   const fetchPurchases = async () => {
+    if (!userData?.id) {
+      setPurchases([]);
+      return;
+    }
     setLoading(true);
     try {
       const res = await axios.get("/api/purchases", { withCredentials: true });
@@ -68,7 +74,7 @@ export function PurchaseProvider({ children }) {
       localStorage.setItem("currency", "USD");
     }
     fetchPurchases();
-  }, []);
+  }, [userData?.id]);
 
   // ✅ حفظ العملة في localStorage عند تغييرها
   useEffect(() => {

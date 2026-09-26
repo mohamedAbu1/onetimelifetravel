@@ -153,7 +153,7 @@ export function ReviewsProvider({ children }) {
 
   // ✅ إزالة لايك
   const removeLike = async (reviewId) => {
-    if (!user?.id) return;
+    if (!reviewId || !userData?.id) return;
 
     try {
       const res = await axios.delete(`/api/reviews/${reviewId}/like`, {
@@ -193,8 +193,8 @@ export function ReviewsProvider({ children }) {
   };
 // ✅ حذف تعليق
 const deleteReview = async (reviewId) => {
-  if (!reviewId) {
-    return { success: false, error: "Missing reviewId or tripId" };
+  if (!reviewId || !userData?.id) {
+    return { success: false, error: "Missing reviewId or user" };
   }
 
   try {
@@ -207,7 +207,10 @@ const deleteReview = async (reviewId) => {
       // تحديث التعليقات الخاصة بالرحلة
       setReviewsByTrip((prev) => ({
         ...prev,
-        [tripId]: (prev[tripId] || []).filter((review) => review.id !== reviewId),
+        ...Object.fromEntries(Object.entries(prev).map(([tripId, reviews]) => [
+          tripId,
+          reviews.filter((review) => review.id !== reviewId),
+        ])),
       }));
 
       // تحديث جميع التعليقات
