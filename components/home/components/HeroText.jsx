@@ -2,7 +2,6 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export default function HeroText() {
@@ -12,12 +11,7 @@ export default function HeroText() {
   const locale = pathname.split("/").filter(Boolean)[0] || "en";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      className="hero-copy-content max-w-3xl"
-    >
+    <div className="hero-copy-content max-w-3xl">
       <p className="mb-5 text-xs font-bold uppercase tracking-[0.34em] text-[var(--logo-border)] sm:text-sm">
         {t("welcome")}
       </p>
@@ -38,6 +32,6 @@ export default function HeroText() {
           {t("Explore")}
         </Link>
       </div>
-    </motion.div>
+    </div>
   );
 }
