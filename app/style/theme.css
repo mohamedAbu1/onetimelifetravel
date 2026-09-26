@@ -450,6 +450,36 @@ html { color-scheme: light; }
   background: var(--background) !important;
   color: var(--text) !important;
 }
+:root:not([data-theme="dark"]) .trip-calendar-widget,
+:root:not([data-theme="dark"]) .trip-calendar-panel {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--text) !important;
+  box-shadow: 0 18px 45px rgba(47, 37, 20, .12);
+}
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="text-[#f4ead8]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#f4ead8]"] { color: var(--heading) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="text-[#a79d8d]"],
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="text-[#918879]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#9d9384]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#8f8678]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#aaa092]"] { color: var(--sub-text) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="text-[#d1b06a]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#d1b06a]"] { color: var(--primary-color) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#c8beaf]"] { color: var(--text) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#d9c28d]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#ead39e]"] { color: var(--primary-color) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="border-white/10"],
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="border-white/15"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="border-white/10"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="border-white/15"] { border-color: var(--card-border) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-widget [class~="bg-white/[0.03]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="bg-white/[0.03]"],
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="bg-black/20"] { background: rgba(255, 255, 255, .5) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#514b43]"] { color: rgba(93, 85, 72, .48) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="text-[#15120e]"] { color: #fffaf0 !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="bg-[#d1b06a]"] { background: var(--primary-color) !important; }
+:root:not([data-theme="dark"]) .trip-calendar-panel [class~="bg-[#d1b06a]/25"] { background: color-mix(in srgb, var(--primary-color) 20%, transparent) !important; color: var(--heading) !important; }
 :root:not([data-theme="dark"]) .trip-reviews-shell {
   background: linear-gradient(145deg, rgba(255, 250, 240, .96), rgba(246, 239, 224, .94));
   color: var(--text);
@@ -1024,5 +1054,5 @@ button, a, input, select, textarea { font: inherit; }
 .trip-world-main .card-theme h2 { font-family: Cinzel, Georgia, serif; }
 .trip-world-main .trip-world-two-col > section { min-height: 100%; }
 .trip-world-privacy { justify-self: start; color: var(--trip-gold); font-size: .8rem; font-weight: 800; text-decoration: underline; text-underline-offset: .25rem; }
-@media (max-width: 1023px) { .trip-world-container { padding-top: 6.5rem; } .trip-world-hero { grid-template-columns: 1fr; gap: 2rem; } .trip-world-hero-copy { order: 1; } .trip-world-gallery { order: 0; } .trip-world-hero h1 { max-width: 42rem; } .trip-world-description { max-width: 42rem; } .trip-world-layout { grid-template-columns: 1fr; } .trip-world-aside { order: -1; } .trip-world-sticky { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1023px) { .trip-world-container { padding-top: 6.5rem; } .trip-world-hero { grid-template-columns: 1fr; gap: 2rem; } .trip-world-hero-copy { order: 1; } .trip-world-gallery { order: 0; } .trip-world-hero h1 { max-width: 42rem; } .trip-world-description { max-width: 42rem; } .trip-world-layout { grid-template-columns: 1fr; } .trip-world-aside { order: 0; } .trip-world-sticky { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .trip-world-container { width: min(100% - 1.25rem, 80rem); } .trip-world-breadcrumb { font-size: .62rem; } .trip-world-main-image { min-height: 23rem; border-radius: 1.1rem 1.1rem .25rem 1.1rem; } .trip-world-main-image::before { inset: .7rem; } .trip-world-image-label { right: 1.5rem; bottom: 1.4rem; max-width: 55%; } .trip-world-image-count { bottom: 1.5rem; left: 1.5rem; } .trip-world-facts { grid-template-columns: repeat(2, 1fr); } .trip-world-facts > div:nth-child(2) { border-right: 0; } .trip-world-facts > div:nth-child(-n+2) { border-bottom: 1px solid var(--card-border); } .trip-world-facts > div { padding: 1rem .65rem; } .trip-world-facts b { font-size: .78rem; } .trip-world-overview { grid-template-columns: 1fr; gap: 1rem; padding-block: 2rem; } .trip-world-two-col { grid-template-columns: 1fr; } .trip-world-sticky { grid-template-columns: 1fr; } .trip-world-thumb { height: 3rem; } }
