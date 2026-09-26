@@ -48,7 +48,7 @@ function CategoryCard({ category, language, theme, tc }) {
       style={{ borderColor: "rgba(194,168,120,.5)", background: theme.card }}
       aria-label={`${tc("exploreJourneys")} ${name}`}
     >
-      <Image src={image} alt={name} fill sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 23vw" quality={58} className="object-cover transition duration-700 group-hover:scale-110" />
+      <Image unoptimized src={image} alt={name} fill sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 23vw" quality={58} className="object-cover transition duration-700 group-hover:scale-110" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
       <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
         <span className="mb-3 inline-flex rounded-full border border-[var(--logo-border)]/45 bg-black/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[.2em] text-[var(--logo-border)] backdrop-blur-sm">One Time Life</span>

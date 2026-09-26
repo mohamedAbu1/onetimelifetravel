@@ -42,7 +42,7 @@ function CityCard({ city, index, language, t, tc }) {
       <div className={`relative min-h-[245px] ${index === 0 ? "md:min-h-[510px]" : ""}`}>
         <AnimatePresence mode="wait">
           <motion.div key={imageSources[currentImage]} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="absolute inset-0">
-            <Image src={imageSources[currentImage]} alt={cityName || "Egyptian destination"} fill sizes={index === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 100vw"} quality={58} className="object-cover transition duration-700 group-hover:scale-105" />
+            <Image unoptimized src={imageSources[currentImage]} alt={cityName || "Egyptian destination"} fill sizes={index === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 100vw"} quality={58} className="object-cover transition duration-700 group-hover:scale-105" />
           </motion.div>
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-black/5" />
