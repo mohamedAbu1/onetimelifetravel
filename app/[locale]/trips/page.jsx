@@ -63,22 +63,22 @@ export default function TripsPage() {
   const totalPages = Math.ceil(finalTrips.length / tripsPerPage);
   const currentTrips = finalTrips.slice((currentPage - 1) * tripsPerPage, currentPage * tripsPerPage);
 
-  return <main className="site-page relative min-h-screen overflow-hidden bg-[#0d0d0d] text-[#f4ead8]">
+  return <main className="site-page relative min-h-screen overflow-hidden bg-[var(--background)] text-[var(--text)]">
     <EgyptianBackground />
     <Header />
     <section className="relative z-10 mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-12">
       <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="mb-10 max-w-3xl">
-        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.34em] text-[#d1b06a]">{t("curatedJourneys")}</p>
-        <h1 className="font-[Cinzel] text-4xl font-semibold leading-tight text-[#f4ead8] md:text-6xl">{t("exploreNextStory")}</h1>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-[#aaa092] md:text-base">{t("choosePace")}</p>
+        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.34em] text-[var(--primary-color)]">{t("curatedJourneys")}</p>
+        <h1 className="font-[Cinzel] text-4xl font-semibold leading-tight text-[var(--heading)] md:text-6xl">{t("exploreNextStory")}</h1>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--sub-text)] md:text-base">{t("choosePace")}</p>
       </motion.div>
-      <div className="mb-6 rounded-[1.5rem] border border-[#d1b06a]/20 bg-[#d1b06a]/[0.06] px-5 py-4 text-sm text-[#c5b9a7]"><span className="font-semibold text-[#ead39e]">{finalTrips.length}</span> {t("journeysReady")}</div>
+      <div className="mb-6 rounded-[1.5rem] border border-[var(--primary-color)]/20 bg-[var(--primary-color)]/[0.06] px-5 py-4 text-sm text-[var(--sub-text)]"><span className="font-semibold text-[var(--primary-color)]">{finalTrips.length}</span> {t("journeysReady")}</div>
       <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <TripsFilter allCities={allCities} allCategories={allCategories} loading={loading} />
         <div className="min-w-0 space-y-6">
           <TripsSearch search={search} setSearch={setSearch} cardStyle={cardStyle} setCardStyle={setCardStyle} resultCount={finalTrips.length} />
-          {loadingTrips ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[430px] animate-pulse rounded-[1.5rem] bg-white/10" />)}</div> : currentTrips.length ? <TripsGrid trips={currentTrips} cardStyle={cardStyle} /> : <div className="rounded-[1.5rem] border border-[var(--border)] bg-[#151515] px-6 py-20 text-center"><p className="text-4xl">𓂀</p><h2 className="mt-4 font-[Cinzel] text-2xl">{t("noJourneys")}</h2><p className="mt-3 text-sm text-[#9c9385]">{t("tryAnotherSearch")}</p></div>}
-          {totalPages > 1 && <nav aria-label="Trips pagination" className="flex justify-center gap-2 pt-2">{Array.from({ length: totalPages }, (_, index) => <button type="button" key={index} onClick={() => { setCurrentPage(index + 1); window.scrollTo({ top: 120, behavior: "smooth" }); }} className={`h-10 min-w-10 rounded-full border px-3 text-sm transition ${currentPage === index + 1 ? "border-[#d1b06a] bg-[#d1b06a] text-[#15120e]" : "border-white/10 bg-[#151515] text-[#aaa092] hover:border-[#d1b06a]/60"}`}>{index + 1}</button>)}</nav>}
+          {loadingTrips ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[430px] animate-pulse rounded-[1.5rem] border border-[var(--card-border)]/40 bg-[var(--card-bg)]" />)}</div> : currentTrips.length ? <TripsGrid trips={currentTrips} cardStyle={cardStyle} /> : <div className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-bg)] px-6 py-20 text-center"><p className="text-4xl">𓂀</p><h2 className="mt-4 font-[Cinzel] text-2xl text-[var(--heading)]">{t("noJourneys")}</h2><p className="mt-3 text-sm text-[var(--sub-text)]">{t("tryAnotherSearch")}</p></div>}
+          {totalPages > 1 && <nav aria-label="Trips pagination" className="flex justify-center gap-2 pt-2">{Array.from({ length: totalPages }, (_, index) => <button type="button" key={index} onClick={() => { setCurrentPage(index + 1); window.scrollTo({ top: 120, behavior: "smooth" }); }} className={`h-10 min-w-10 rounded-full border px-3 text-sm transition ${currentPage === index + 1 ? "border-[var(--primary-color)] bg-[var(--primary-color)] text-[#15120e]" : "border-[var(--card-border)]/50 bg-[var(--card-bg)] text-[var(--sub-text)] hover:border-[var(--primary-color)]/60"}`}>{index + 1}</button>)}</nav>}
         </div>
       </div>
     </section>

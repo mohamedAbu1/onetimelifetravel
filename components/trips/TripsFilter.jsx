@@ -20,13 +20,13 @@ export default function TripsFilter({ allCities = [], allCategories = [], loadin
 
   const getName = (item) => item.name?.[language] || item.name?.en || item.name || "";
 
-  if (loading) return <div className="h-80 animate-pulse rounded-[1.5rem] bg-white/10" />;
+  if (loading) return <div className="h-80 animate-pulse rounded-[1.5rem] border border-[var(--card-border)]/40 bg-[var(--card-bg)]" />;
 
   return (
-    <aside className="rounded-[1.5rem] border border-[var(--border)] bg-[#151515] p-5 text-[#f4ead8] shadow-[0_18px_50px_rgba(0,0,0,.18)] lg:sticky lg:top-28">
+    <aside className="rounded-[1.5rem] border border-[var(--card-border)]/70 bg-[var(--card-bg)] p-5 text-[var(--text)] shadow-[0_18px_50px_rgba(0,0,0,.18)] lg:sticky lg:top-28">
       <div className="mb-6 flex items-start justify-between gap-3">
-        <div><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d1b06a]">{tc("refine")}</p><h2 className="mt-2 font-[Cinzel] text-2xl">{t("Filters")}</h2></div>
-        <span className="rounded-full border border-[#d1b06a]/30 px-2.5 py-1 text-[10px] text-[#d1b06a]">{currency}</span>
+        <div><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--primary-color)]">{tc("refine")}</p><h2 className="mt-2 font-[Cinzel] text-2xl text-[var(--heading)]">{t("Filters")}</h2></div>
+        <span className="rounded-full border border-[var(--primary-color)]/30 px-2.5 py-1 text-[10px] text-[var(--primary-color)]">{currency}</span>
       </div>
 
       <FilterGroup icon={<FaMapMarkerAlt />} label={t("Cities")}>
@@ -42,8 +42,8 @@ export default function TripsFilter({ allCities = [], allCategories = [], loadin
       <FilterGroup icon={currency === "USD" ? <FaDollarSign /> : <FaEuroSign />} label={t("PriceRange")}>
         <div className="space-y-2">{ranges.map((range) => <CheckOption key={range.value} type="radio" name="priceRange" label={range.label} checked={price === range.value} onChange={() => updateValue("price", range.value)} />)}</div>
       </FilterGroup>
-      <label className="flex cursor-pointer items-center justify-between border-t border-white/10 pt-5 text-sm text-[#d8cebd]">
-        <span className="flex items-center gap-2"><FaFire className="text-[#d1b06a]" />{t("MostPopular")}</span>
+      <label className="flex cursor-pointer items-center justify-between border-t border-[var(--card-border)]/40 pt-5 text-sm text-[var(--sub-text)]">
+        <span className="flex items-center gap-2"><FaFire className="text-[var(--primary-color)]" />{t("MostPopular")}</span>
         <input type="checkbox" checked={popular === true} onChange={(event) => updateValue("popular", event.target.checked)} className="h-4 w-4 accent-[#d1b06a]" />
       </label>
     </aside>
@@ -51,9 +51,9 @@ export default function TripsFilter({ allCities = [], allCategories = [], loadin
 }
 
 function FilterGroup({ icon, label, children }) {
-  return <section className="border-t border-white/10 py-5 first:border-t-0 first:pt-0"><h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#d1b06a]">{icon}{label}</h3>{children}</section>;
+  return <section className="border-t border-[var(--card-border)]/40 py-5 first:border-t-0 first:pt-0"><h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-color)]">{icon}{label}</h3>{children}</section>;
 }
 
 function CheckOption({ label, checked, onChange, type = "checkbox", name }) {
-  return <label className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-[#bdb3a4] transition hover:bg-white/5 hover:text-[#f4ead8]"><input type={type} name={name} checked={checked} onChange={onChange} className="h-3.5 w-3.5 accent-[#d1b06a]" /><span className="truncate">{label}</span></label>;
+  return <label className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-[var(--sub-text)] transition hover:bg-[var(--primary-color)]/10 hover:text-[var(--text)]"><input type={type} name={name} checked={checked} onChange={onChange} className="h-3.5 w-3.5 accent-[#d1b06a]" /><span className="truncate">{label}</span></label>;
 }
