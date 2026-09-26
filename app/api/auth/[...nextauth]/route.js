@@ -17,6 +17,7 @@ export const authOptions = {
     async signIn({ user }) {
       const adminEmails = [
         "ismailharoun225@gmail.com",
+        "ontetimelifetravel@gmail.com",
         "mohamedahmed33m11@gmail.com",
       ];
 
