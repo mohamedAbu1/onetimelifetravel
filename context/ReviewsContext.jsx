@@ -83,11 +83,32 @@ export function ReviewsProvider({ children }) {
           ...prev,
           [review.trip_id]: [...(prev[review.trip_id] || []), data.review],
         }));
+        setAllReviews((prev) => [...prev, data.review]);
       }
       return data;
     } catch (err) {
       console.error("❌ Error adding review:", err);
       return { success: false, error: err.message };
+    }
+  };
+
+  const addCompanyReview = async (review) => {
+    if (!userData?.id) return { success: false, error: "No user" };
+
+    try {
+      const res = await axios.post(`/api/reviews`, {
+        company_review: true,
+        user_id: userData.id,
+        rating: review.rating,
+        comment: review.comment,
+        time: review.time,
+      });
+      const data = res.data;
+      if (data.success) setAllReviews((prev) => [...prev, data.review]);
+      return data;
+    } catch (err) {
+      console.error("❌ Error adding company review:", err);
+      return { success: false, error: err.response?.data?.error || err.message };
     }
   };
 
@@ -218,6 +239,7 @@ const deleteReview = async (reviewId) => {
         fetchReviewsByTrip,
         fetchAllReviews,
         addReview,
+        addCompanyReview,
         fetchLikes,
         addLike,
         removeLike,

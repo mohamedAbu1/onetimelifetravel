@@ -9,6 +9,7 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const tripId = searchParams.get("tripId");
+    const company = searchParams.get("company") === "true";
 
     const db = await connectDB();
     let query = "SELECT * FROM reviews";
@@ -17,6 +18,8 @@ export async function GET(req) {
     if (tripId) {
       query += " WHERE trip_id = ?";
       params.push(tripId);
+    } else if (company) {
+      query += " WHERE trip_id IS NULL";
     }
 
     query += " ORDER BY created_at DESC";
@@ -40,14 +43,17 @@ export async function POST(req) {
     console.log("📌 Parsed body:", body);
 
     const { trip_id, rating, comment, time } = body;
+    const isCompanyReview = body.company_review === true || trip_id === null || trip_id === "company";
+    const reviewTripId = isCompanyReview ? null : trip_id;
     const user_id = user.id;
     const name = user.name;
     const avatar_url = normalizeImageUrl(user.avatar_url, "/default-avatar.png");
-    if (!trip_id || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || !String(comment || "").trim()) {
+    if ((!isCompanyReview && !reviewTripId) || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || !String(comment || "").trim()) {
       return NextResponse.json({ success: false, error: "Invalid review data" }, { status: 400 });
     }
     console.log("✅ Extracted values:", {
-      trip_id,
+      trip_id: reviewTripId,
+      company_review: isCompanyReview,
       user_id,
       rating,
       comment,
@@ -67,7 +73,7 @@ export async function POST(req) {
       (id, trip_id, user_id, rating, comment, name, avatar_url, time, created_at) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
-    const params = [reviewId, trip_id, user_id, rating, comment, name, avatar_url, time];
+    const params = [reviewId, reviewTripId, user_id, rating, comment, name, avatar_url, time];
     console.log("📝 Executing query:", query);
     console.log("📊 With params:", params);
 
@@ -75,7 +81,7 @@ export async function POST(req) {
     console.log("✅ Insert successful");
 
     return NextResponse.json(
-      { success: true, review: { id: reviewId, ...body } },
+      { success: true, review: { id: reviewId, ...body, trip_id: reviewTripId } },
       { status: 201 }
     );
   } catch (err) {
