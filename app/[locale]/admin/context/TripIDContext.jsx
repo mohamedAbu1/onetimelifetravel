@@ -37,6 +37,55 @@ const STANDARD_EXCLUSIONS = [
   },
 ];
 
+const KARNAK_DEFAULT_INCLUDES = [
+  {
+    include_translations: {
+      en: "Hotel pickup and drop-off in Luxor.",
+      es: "Recogida y regreso al hotel en Luxor.",
+      fr: "Prise en charge et retour à l'hôtel à Louxor.",
+      de: "Abholung und Rücktransfer zum Hotel in Luxor.",
+      it: "Prelievo e rientro in hotel a Luxor.",
+      zh: "卢克索酒店接送。",
+    },
+  },
+  {
+    include_translations: {
+      en: "Qualified Egyptologist guide.",
+      es: "Guía egiptólogo cualificado.",
+      fr: "Guide égyptologue qualifié.",
+      de: "Qualifizierter Ägyptologe als Reiseleiter.",
+      it: "Guida egittologa qualificata.",
+      zh: "合格的埃及学家导游。",
+    },
+  },
+  {
+    include_translations: {
+      en: "Transportation by air-conditioned vehicle.",
+      es: "Transporte en vehículo con aire acondicionado.",
+      fr: "Transport en véhicule climatisé.",
+      de: "Transport in einem klimatisierten Fahrzeug.",
+      it: "Trasporto in veicolo climatizzato.",
+      zh: "空调车辆交通。",
+    },
+  },
+  {
+    include_translations: {
+      en: "Entrance fees to the sites listed in the itinerary.",
+      es: "Entradas a los lugares indicados en el itinerario.",
+      fr: "Frais d'entrée aux sites mentionnés dans l'itinéraire.",
+      de: "Eintrittsgebühren für die im Reiseplan aufgeführten Sehenswürdigkeiten.",
+      it: "Biglietti d'ingresso ai siti indicati nell'itinerario.",
+      zh: "行程中所列景点的门票。",
+    },
+  },
+];
+
+const MUSEUM_FLIGHT_DEFAULT_CATEGORIES = [
+  "7d792cf0-8e88-4aeb-a9ab-120ac007b3cd", // Family Friendly
+  "897806e2-7985-4e16-8d35-a8f3385f42bb", // Adventure Trips
+  "95c5d3a9-ed86-4f44-89c9-12e8ff5d5b09", // Historical
+];
+
 export function TripIDProvider({ children }) {
   const [tripData, setTripData] = useState(null);
   const [tripsList, setTripsList] = useState([]);
@@ -191,6 +240,14 @@ export function TripIDProvider({ children }) {
   const saveTrip = async () => {
     if (!tripData?.id) return { success: false, error: "No trip ID" };
 
+    const tripTitle = tripData.title?.en || "";
+    const hasKarnakSphinxTitle = tripTitle.includes(
+      "Karnak and Luxor Temples with the Sphinx Alley",
+    );
+    const hasMuseumFlightTitle = tripTitle.includes(
+      "Grand Museum and Giza Pyramids by Plane from Sharm El Sheikh",
+    );
+
     const tripPayload = {
       title: tripData.title,
       description: tripData.description,
@@ -202,7 +259,12 @@ export function TripIDProvider({ children }) {
       group_price: tripData.group_price,
       discountPercent: tripData.discountPercent,
 
-      categories: (tripData.categories || [])
+      categories: ((tripData.categories?.length
+        ? tripData.categories
+        : hasMuseumFlightTitle
+          ? MUSEUM_FLIGHT_DEFAULT_CATEGORIES
+          : [])
+      )
         .map((c) => (typeof c === "string" ? c : c?.category_id || c?.id))
         .filter(Boolean),
 
@@ -211,7 +273,12 @@ export function TripIDProvider({ children }) {
         .filter(Boolean),
 
       // ✅ إرسال includes مع UUID
-      includes: (tripData.includes || []).map((inc) => ({
+      includes: ((tripData.includes?.length
+        ? tripData.includes
+        : hasKarnakSphinxTitle
+          ? KARNAK_DEFAULT_INCLUDES
+          : [])
+      ).map((inc) => ({
         id: inc.id,
         include_translations: inc.include_translations,
       })),
