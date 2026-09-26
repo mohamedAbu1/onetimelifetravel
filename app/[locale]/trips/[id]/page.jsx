@@ -27,7 +27,6 @@ import TripExclusions from "./components/TripExclusions";
 import CalendarWidget from "./components/CalendarWidget";
 import { useMessages } from "@/context/MessageContext";
 import PharaohState from "@/components/layout/PharaohState";
-import PurchaseButton from "./components/PurchaseButton";
 
 export default function TripPage({ params }) {
   const { id } = use(params);
@@ -64,7 +63,7 @@ export default function TripPage({ params }) {
             <TripReviews trip={trip} lang={lang} theme={theme} />
             {userData && userData.role !== "ADMIN" && (hasActivePurchase ? <CancelButton trip={trip} theme={theme} /> : <Link href={`/${lang}/privacyPolicy`} className="trip-world-privacy">{t("PrivacyPolicy")}</Link>)}
           </div>
-          <aside className="trip-world-aside"><div className="trip-world-sticky"><TripInfo trip={trip} lang={lang} /><PurchaseButton trip={trip} /><CalendarWidget trip={trip} id={id} /></div></aside>
+          <aside className="trip-world-aside"><div className="trip-world-sticky"><TripInfo trip={trip} lang={lang} /><CalendarWidget trip={trip} id={id} /></div></aside>
         </div>
       </div>
       <Footer /><SignUpButton /><LoginModal />

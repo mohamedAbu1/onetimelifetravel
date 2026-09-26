@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-export default function WhatsAppBookingForm({ trip, onClose }) {
+export default function WhatsAppBookingForm({ trip, initialTravelers = "1", initialDate = "", onClose }) {
   const title = trip?.title?.en || trip?.title?.ar || "Egyptian journey";
-  const [form, setForm] = useState({ name: "", phone: "", travelers: "1", date: "", notes: "" });
+  const [form, setForm] = useState({ name: "", phone: "", travelers: String(initialTravelers || 1), date: initialDate || "", notes: "" });
 
   const update = (field, value) => setForm((current) => ({ ...current, [field]: value }));
   const submit = (event) => {
@@ -32,4 +32,3 @@ export default function WhatsAppBookingForm({ trip, onClose }) {
     </form>
   </div>;
 }
-

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CalendarBooking from "./components/CalendarBooking";
 import BookingSummaryCard from "./components/BookingSummaryCard";
+import WhatsAppBookingForm from "@/components/trips/WhatsAppBookingForm";
 import { useTranslation } from "react-i18next";
 import { applySeasonalDiscount } from "@/lib/seasonalEvents";
 import { useSeasonalEvent } from "@/components/layout/useSeasonalEvent";
@@ -15,6 +16,7 @@ export default function CalendarWidget({ trip, id }) {
   const [checkInPrice, setCheckInPrice] = useState(null);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
+  const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
   const hasGuests = participants + childrenCount > 0;
 
   return <section className="w-full rounded-[1.35rem] border border-[#d1b06a]/45 bg-[#151515] p-5 text-[#f4ead8] shadow-[0_18px_50px_rgba(0,0,0,.3)]">
@@ -24,7 +26,8 @@ export default function CalendarWidget({ trip, id }) {
       <GuestCounter label="Children" hint="Under 12" value={childrenCount} onDecrease={() => setChildrenCount(Math.max(0, childrenCount - 1))} onIncrease={() => setChildrenCount(childrenCount + 1)} />
     </div>
     {!hasGuests ? <div className="my-5 rounded-xl border border-dashed border-white/15 px-4 py-8 text-center"><p className="text-sm text-[#ead39e]">{t("addGuests")}</p><p className="mt-2 text-xs text-[#918879]">{t("calendarAppear")}</p></div> : <div className="mt-5"><CalendarBooking prise={applySeasonalDiscount(trip.solo_price, seasonalEvent)} checkInPrice={checkInPrice} setCheckInPrice={setCheckInPrice} setCheckOut={setCheckOut} checkOut={checkOut} checkIn={checkIn} setCheckIn={setCheckIn} tripId={id} /></div>}
-    <div className="mt-4"><BookingSummaryCard tourName={trip.title?.en || "Egyptian journey"} checkInPrice={checkInPrice} participants={participants} childrenCount={childrenCount} checkOut={checkOut} checkIn={checkIn} tripId={id} /></div>
+    <div className="mt-4"><BookingSummaryCard tourName={trip.title?.en || "Egyptian journey"} checkInPrice={checkInPrice} participants={participants} childrenCount={childrenCount} checkOut={checkOut} checkIn={checkIn} tripId={id} onBookingClick={() => setIsWhatsAppOpen(true)} /></div>
+    {isWhatsAppOpen && <WhatsAppBookingForm trip={trip} initialTravelers={participants + childrenCount} initialDate={checkIn} onClose={() => setIsWhatsAppOpen(false)} />}
   </section>;
 }
 

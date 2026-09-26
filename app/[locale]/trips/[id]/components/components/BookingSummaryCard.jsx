@@ -14,6 +14,7 @@ const BookingSummaryCard = ({
   childrenCount,
   checkOut,
   tripId, // ✅ أضفنا معرف الرحلة
+  onBookingClick,
 }) => {
   const { t } = useTranslation("common");
   const { theme } = useTheme();
@@ -65,6 +66,11 @@ let EGP = total * 49.85
   };
 
   const handleBookingClick = async () => {
+    if (onBookingClick) {
+      onBookingClick();
+      return;
+    }
+
     if (!participants || !checkInPrice || !checkIn || !checkOut) {
       toast.error(`⚠️ ${t("completeBooking")}`);
       return;
@@ -195,7 +201,7 @@ let EGP = total * 49.85
           }`}
         >
           <span className="text-xl">🛒</span>
-          <span>{loading ? t("processing") : t("payTrip")}</span>
+          <span>{loading ? t("processing") : onBookingClick ? t("btn") : t("payTrip")}</span>
         </motion.button>
       </div>
     </div>
