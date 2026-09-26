@@ -4,6 +4,39 @@ import { v4 as uuidv4 } from "uuid"; // ✅ استدعاء مكتبة UUID
 
 const TripIDContext = createContext();
 
+const STANDARD_EXCLUSIONS = [
+  {
+    exclusions_translations: {
+      en: "Personal expenses, shopping, and services not listed in the itinerary.",
+      es: "Gastos personales, compras y servicios no incluidos en el itinerario.",
+      fr: "Dépenses personnelles, achats et services non mentionnés dans l'itinéraire.",
+      de: "Persönliche Ausgaben, Einkäufe und nicht im Reiseplan aufgeführte Leistungen.",
+      it: "Spese personali, acquisti e servizi non indicati nell'itinerario.",
+      zh: "个人开支、购物以及行程中未列出的服务。",
+    },
+  },
+  {
+    exclusions_translations: {
+      en: "Tips and gratuities for guides and drivers.",
+      es: "Propinas para guías y conductores.",
+      fr: "Pourboires et gratifications pour les guides et les chauffeurs.",
+      de: "Trinkgelder für Reiseleiter und Fahrer.",
+      it: "Mance e gratifiche per guide e autisti.",
+      zh: "导游和司机的小费。",
+    },
+  },
+  {
+    exclusions_translations: {
+      en: "Optional tours and activities not listed in the itinerary.",
+      es: "Excursiones y actividades opcionales no incluidas en el itinerario.",
+      fr: "Excursions et activités facultatives non mentionnées dans l'itinéraire.",
+      de: "Optionale Ausflüge und Aktivitäten, die nicht im Reiseplan aufgeführt sind.",
+      it: "Escursioni e attività opzionali non indicate nell'itinerario.",
+      zh: "行程中未列出的可选游览和活动。",
+    },
+  },
+];
+
 export function TripIDProvider({ children }) {
   const [tripData, setTripData] = useState(null);
   const [tripsList, setTripsList] = useState([]);
@@ -183,7 +216,7 @@ export function TripIDProvider({ children }) {
         include_translations: inc.include_translations,
       })),
 
-      exclusions: (tripData.exclusions || []).map((item) => ({
+      exclusions: (tripData.exclusions?.length ? tripData.exclusions : STANDARD_EXCLUSIONS).map((item) => ({
         id: item.id,
         exclusions_translations: item.exclusions_translations,
       })),
