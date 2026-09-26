@@ -13,6 +13,7 @@ export async function middleware(req) {
     url.pathname === "/sitemap.xml" ||
     url.pathname.startsWith("/favicon.ico") ||
     url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/iamges") ||
     url.pathname.startsWith("/assets") ||
     url.pathname.startsWith("/HomePageImage") ||
     url.pathname.startsWith("/Aswan")||
