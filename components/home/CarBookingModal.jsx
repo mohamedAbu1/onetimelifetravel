@@ -23,6 +23,20 @@ export default function CarBookingModal({ open, onClose }) {
       const response = await fetch("/api/car-bookings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to save booking");
+      const message = [
+        "New car booking request",
+        `Vehicle: ${form.vehicleType}`,
+        `Service: ${form.serviceType}`,
+        `Passengers: ${form.passengers}`,
+        `Luggage: ${form.luggage}`,
+        `Pickup: ${form.pickupLocation}`,
+        `Drop-off: ${form.dropoffLocation}`,
+        `Date: ${form.pickupDate}`,
+        `Time: ${form.pickupTime}`,
+        form.flightNumber ? `Flight: ${form.flightNumber}` : "",
+        form.notes ? `Notes: ${form.notes}` : "",
+      ].filter(Boolean).join("\n");
+      window.open(`https://wa.me/201009011178?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
       toast.success(label("carBookingSaved", "Your car request was sent. Our team will confirm it shortly."));
       setForm(initialForm);
       onClose();

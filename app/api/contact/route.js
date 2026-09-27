@@ -45,7 +45,7 @@ export async function POST(req) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: "OneTimeLifeTravel@outlook.com" }], subject: `New Contact Form Submission from ${name}` }],
+        personalizations: [{ to: [{ email: "ontetimelifetravel@gmail.com" }, { email: "mohamedahmed33m11@gmail.com" }], subject: `New Contact Form Submission from ${name}` }],
         from: { email: "mohamedahmed33m11@gmail.com" },
         content: [{
           type: "text/html",

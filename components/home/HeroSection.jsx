@@ -14,7 +14,7 @@ export default function HeroSection() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="hero-journal relative isolate flex min-h-[760px] w-full flex-col overflow-hidden lg:min-h-[820px]"
+      className="hero-journal relative isolate flex min-h-[100svh] w-full flex-col overflow-hidden"
     >
       <div className="hero-journal-grid absolute inset-0" />
       <div className="hero-visual absolute right-0 top-0 h-[54%] w-full lg:h-full lg:w-[47%]"><Background /></div>

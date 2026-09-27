@@ -139,7 +139,14 @@
     "inp3": "输入您的电子邮箱",
     "lb4": "留言",
     "inp4": "写下您的留言...",
-    "btn": "发送消息"
+    "btn": "发送消息",
+    "contactDetails": "联系信息",
+    "ownerLabel": "所有者:",
+    "owner": "Omran Ahmed",
+    "emailLabel": "电子邮件:",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
+    "phoneLabel": "电话:",
+    "phone": "+20 1009011178 / +201018539889"
   },
   "footer": {
     "p": "© 2025 — 舒适与奢华探索埃及",
@@ -148,7 +155,7 @@
     "Tours": "旅游",
     "Contact": "联系我们",
     "privacyPolicy": "隐私政策",
-    "Footer": "© 2026  One Time Life Travel. 版权所有。所有权人: Ismail Haroun — 电话: +20 1100507802",
+    "Footer": "© 2026 One Time Life Travel. 版权所有。所有者: Omran Ahmed — 电话: +20 1009011178 / +201018539889 — 邮箱: ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "LuxorTours": "卢克索之旅",
     "AswanTours": "阿斯旺之旅",
     "heroTitle": "围绕你的故事打造埃及之旅。",
@@ -191,11 +198,11 @@
     "preventIssues": "检测和防止问题",
     "contactUs": "联系我们",
     "ownerLabel": "所有者:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "电子邮件:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "电话:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "cancellationPolicy": {
     "title": "付款和取消政策",
@@ -245,11 +252,11 @@
     "acceptanceText": "支付定金/尾款表示接受所有条款和条件。",
     "contact": "联系信息",
     "ownerLabel": "所有者:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "电子邮件:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "电话:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "destinations": {
     "luxor": {

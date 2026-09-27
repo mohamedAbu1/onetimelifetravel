@@ -139,15 +139,24 @@ export default function ContactPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <FaPhoneAlt className="icon-theme" />
-                  <span>+20 1009011178</span>
+                  <span><a href="tel:+201009011178" className="transition hover:text-[var(--logo-border)]">+20 1009011178</a> · <a href="tel:+201018539889" className="transition hover:text-[var(--logo-border)]">+201018539889</a></span>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaEnvelope className="icon-theme" />
-                  <span>ontetimelifetravel@gmail.com</span>
+                  <span><a href="mailto:ontetimelifetravel@gmail.com" className="transition hover:text-[var(--logo-border)]">ontetimelifetravel@gmail.com</a> · <a href="mailto:mohamedahmed33m11@gmail.com" className="transition hover:text-[var(--logo-border)]">mohamedahmed33m11@gmail.com</a></span>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaMapMarkerAlt className="icon-theme" />
                   <span>{t("sp")}</span>
+                </div>
+              </div>
+
+              <div className="mt-8 border-t border-[var(--card-border)] pt-6">
+                <h3 className="mb-3 text-xl font-bold text-gradient">{t("contactDetails")}</h3>
+                <div className="space-y-2 text-sm">
+                  <p><strong>{t("ownerLabel")}</strong> {t("owner")}</p>
+                  <p><strong>{t("emailLabel")}</strong> {t("email")}</p>
+                  <p><strong>{t("phoneLabel")}</strong> {t("phone")}</p>
                 </div>
               </div>
             </motion.div>

@@ -139,7 +139,14 @@
     "inp3": "Geben Sie Ihre E-Mail ein",
     "lb4": "Nachricht",
     "inp4": "Schreiben Sie Ihre Nachricht...",
-    "btn": "Nachricht senden"
+    "btn": "Nachricht senden",
+    "contactDetails": "Kontaktinformationen",
+    "ownerLabel": "Inhaber:",
+    "owner": "Omran Ahmed",
+    "emailLabel": "E-Mail:",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
+    "phoneLabel": "Telefon:",
+    "phone": "+20 1009011178 / +201018539889"
   },
   "footer": {
     "p": "© 2025 — Entdecken Sie Ägypten mit Komfort & Luxus",
@@ -148,7 +155,7 @@
     "Tours": "Touren",
     "Contact": "Kontakt",
     "privacyPolicy": "Datenschutzrichtlinie",
-    "Footer": "© 2026  One Time Life Travel. Alle Rechte vorbehalten. Eigentümer: Ismail Haroun — Telefon: +20 1100507802",
+    "Footer": "© 2026 One Time Life Travel. Alle Rechte vorbehalten. Eigentümer: Omran Ahmed — Telefone: +20 1009011178 / +201018539889 — E-Mails: ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "LuxorTours": "Luxor-Touren",
     "AswanTours": "Assuan-Touren",
     "heroTitle": "Ägyptenreisen, die zu Ihrer Geschichte passen.",
@@ -191,11 +198,11 @@
     "preventIssues": "Probleme erkennen und verhindern",
     "contactUs": "Kontaktieren Sie uns",
     "ownerLabel": "Eigentümer:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "E-Mail:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "Telefon:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "cancellationPolicy": {
     "title": "Zahlungs- und Stornierungsrichtlinie",
@@ -245,11 +252,11 @@
     "acceptanceText": "Die Zahlung der Anzahlung oder der Restzahlung bedeutet die Annahme aller Geschäftsbedingungen.",
     "contact": "Kontaktinformationen",
     "ownerLabel": "Eigentümer:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "E-Mail:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "Telefon:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "destinations": {
     "luxor": {

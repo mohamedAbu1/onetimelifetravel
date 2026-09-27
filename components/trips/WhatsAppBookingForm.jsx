@@ -19,7 +19,7 @@ export default function WhatsAppBookingForm({ trip, initialTravelers = "1", init
       form.notes ? `Notes: ${form.notes}` : "",
     ].filter(Boolean).join("\n");
 
-    window.open(`https://wa.me/201009011178?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    window.open(`https://wa.me/201018539889?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     onClose();
   };
 

@@ -111,7 +111,7 @@
     "Tours": "Tours",
     "Contact": "Contact",
     "privacyPolicy": "Privacy Policy",
-    "Footer": "© 2026  One Time Life Travel. All rights reserved. Owner: Ismail Haroun — Phone: +20 1100507802",
+    "Footer": "© 2026 One Time Life Travel. All rights reserved. Owner: Omran Ahmed — Phones: +20 1009011178 / +201018539889 — Emails: ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "LuxorTours": "Luxor Tours",
     "AswanTours": "Aswan Tours",
     "heroTitle": "Egypt tours shaped around your story.",
@@ -157,7 +157,14 @@
     "inp3": "Enter your email",
     "lb4": "Message",
     "inp4": "Write your message...",
-    "btn": "Send Message"
+    "btn": "Send Message",
+    "contactDetails": "Contact Information",
+    "ownerLabel": "Owner:",
+    "owner": "Omran Ahmed",
+    "emailLabel": "Email:",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
+    "phoneLabel": "Phone:",
+    "phone": "+20 1009011178 / +201018539889"
   },
   "tripsId": {
     "submitReview": "Submit Review",
@@ -191,11 +198,11 @@
     "preventIssues": "To detect and prevent issues",
     "contactUs": "Contact Us",
     "ownerLabel": "Owner:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "Email:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "Phone:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "cancellationPolicy": {
     "title": "Payment and Cancellation Policy",
@@ -245,11 +252,11 @@
     "acceptanceText": "Payment of deposit/final payment indicates acceptance of all terms and conditions.",
     "contact": "Contact Information",
     "ownerLabel": "Owner:",
-    "owner": "Ismail Haroun",
+    "owner": "Omran Ahmed",
     "emailLabel": "Email:",
-    "email": "OneTimeLifeTravel@outlook.com",
+    "email": "ontetimelifetravel@gmail.com / mohamedahmed33m11@gmail.com",
     "phoneLabel": "Phone:",
-    "phone": "+20 1100507802"
+    "phone": "+20 1009011178 / +201018539889"
   },
   "destinations": {
     "luxor": {

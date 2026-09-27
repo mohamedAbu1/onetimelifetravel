@@ -38,7 +38,7 @@ const Footer = () => {
     [FaInstagram, "https://www.instagram.com/onetimelive8?stkn=eXN0cnFzNXNlNm0w", "Instagram"],
     [FaTiktok, "https://vm.tiktok.com/ZS9Ab87NaeXTJ-pZBfp/", "TikTok"],
     [FaWhatsapp, "https://wa.me/201009011178", "WhatsApp"],
-    [MdEmail, "mailto:onetimelifetravel@gmail.com", "Email"],
+    [MdEmail, "mailto:mohamedahmed33m11@gmail.com", "Email"],
     [FaTripadvisor, "https://www.tripadvisor.com/", "Tripadvisor"],
   ];
 
@@ -70,7 +70,11 @@ const Footer = () => {
           <div className="mt-5 flex flex-wrap gap-3">
             {socialLinks.map(([Icon, href, label]) => <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} whileHover={{ scale: 1.08 }} className="dust-interactive rounded-full border border-[var(--logo-border)]/30 bg-black/10 p-3 text-[var(--logo-border)] transition hover:bg-[var(--logo-border)]/15"><Icon size={17} /></motion.a>)}
           </div>
-          <a href="mailto:onetimelifetravel@gmail.com" className="mt-5 flex items-center gap-2 text-sm text-[var(--sub-text)] hover:text-[var(--logo-border)]"><MdEmail className="text-lg text-[var(--logo-border)]" /> onetimelifetravel@gmail.com</a>
+          <div className="mt-5 space-y-1 text-sm text-[var(--sub-text)]">
+            <p><strong>Owner:</strong> Omran Ahmed</p>
+            <p><strong>Phone:</strong> <a href="tel:+201009011178" className="hover:text-[var(--logo-border)]">+20 1009011178</a> · <a href="tel:+201018539889" className="hover:text-[var(--logo-border)]">+201018539889</a></p>
+            <p className="flex items-center gap-2"><MdEmail className="text-lg text-[var(--logo-border)]" /><a href="mailto:ontetimelifetravel@gmail.com" className="hover:text-[var(--logo-border)]">ontetimelifetravel@gmail.com</a> · <a href="mailto:mohamedahmed33m11@gmail.com" className="hover:text-[var(--logo-border)]">mohamedahmed33m11@gmail.com</a></p>
+          </div>
         </motion.div>
       </div>
 

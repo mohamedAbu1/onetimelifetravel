@@ -10,6 +10,7 @@ import CurrencySelector from "@/components/layout/CurrencySelector";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import AdminChatWindow from "@/components/layout/AdminChatWindow";
 import { useMessages } from "@/context/MessageContext";
+import CinematicWelcome from "@/components/home/CinematicWelcome";
 import dynamic from "next/dynamic";
 // import { useQueryFilters } from "@/context/QueryContext";
 
@@ -26,6 +27,7 @@ export default function Home() {
 
   return (
     <>
+      <CinematicWelcome />
       <Header />
 
       <main
